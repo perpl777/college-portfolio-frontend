@@ -114,7 +114,7 @@ export default function Portfolio({ params: { id } }: Props) {
     useEffect(() => {
         const fetchPhoto = async () => {
             if (student?.attributes?.profilePicture.data?.attributes?.url) {
-                const response = await fetch(`http://localhost:1337${student?.attributes?.profilePicture.data?.attributes?.url}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}${student?.attributes?.profilePicture.data?.attributes?.url}`);
                 const fetchedBlob = await response.blob();
                 setBlob(fetchedBlob);
             }

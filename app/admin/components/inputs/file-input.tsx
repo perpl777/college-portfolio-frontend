@@ -14,7 +14,7 @@ const FileInput: React.FC<FileInputProps> = ({ value }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (value) {
-                const response = await fetch(`http://localhost:1337${value}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}${value}`);
                 const fetchedBlob = await response.blob();
                 setBlobFile(fetchedBlob);
             }

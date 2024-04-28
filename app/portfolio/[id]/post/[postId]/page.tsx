@@ -66,13 +66,13 @@ export default function Post({ params: { id, postId}}: Props) {
             const postResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/works/${postId}?populate=*`); 
             
             if (postResponse.data.attributes.photo && postResponse.data.attributes.photo.data && postResponse.data.attributes.photo.data.attributes.url) {
-                const photoResponse = await fetch(`http://localhost:1337${postResponse.data.attributes.photo.data.attributes.url}`);
+                const photoResponse = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}${postResponse.data.attributes.photo.data.attributes.url}`);
                 const fetchedBlobPhoto = await photoResponse.blob();
                 setBlobPhoto(fetchedBlobPhoto);
             }
             
             if (postResponse.data.attributes.file && postResponse.data.attributes.file.data && postResponse.data.attributes.file.data.attributes.url) {
-                const fileResponse = await fetch(`http://localhost:1337${postResponse.data.attributes.file.data.attributes.url}`);
+                const fileResponse = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}${postResponse.data.attributes.file.data.attributes.url}`);
                 const fetchedBlobFile = await fileResponse.blob();
                 setBlobFile(fetchedBlobFile);
             }
