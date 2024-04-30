@@ -22,7 +22,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
     useEffect(() => {
         const fetchPhoto = async () => {
             if (photo) {
-                const response = await fetch(`http://localhost:1337${photo}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
                 const fetchedBlob = await response.blob();
                 setBlob(fetchedBlob);
             }
