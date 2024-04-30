@@ -17,6 +17,10 @@ export default function RootLayout({
 }>) {
   return (
       <html lang="en" data-theme='light'>
+        <head>
+          <link rel="shortcut icon" href="/favicon.ico" />
+          <title>Портфолио</title>
+        </head>
         <body className={inter.className + 'p-5'}>
           {children}
         </body>

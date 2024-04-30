@@ -22,7 +22,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
     useEffect(() => {
         const fetchPhoto = async () => {
             if (photo) {
-                const response = await fetch(`http://localhost:1337${photo}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
                 const fetchedBlob = await response.blob();
                 setBlob(fetchedBlob);
             }
@@ -41,7 +41,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             <p className='text-sm uppercase max-sm:text-xs'>{work_type}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>
-                        <h1 className='titlePos font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-4xl max-md:text-xl max-sm:text-lg max-sm:leading-5 max-[372px]:text-sm max-[372px]:leading-4'>{title}</h1>
+                        <h1 className='titlePos font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-4xl max-md:text-xl max-md:leading-7 break-words break-word'>{title}</h1>
                     </div>
                     <div className='border-t border-r border-black w-1/2'>
                         <img 
@@ -63,7 +63,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             <p className='text-sm uppercase max-sm:text-xs'>{work_type}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>
-                        <h1 className='titlePos w-1/2 font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-4xl max-md:text-xl max-sm:text-lg max-sm:leading-5 max-[372px]:text-sm max-[372px]:leading-4'>{title}</h1>
+                        <h1 className='titlePos w-1/2 font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-4xl max-md:text-xl max-md:leading-7'>{title}</h1>
                     </div>
                 </>
                 )

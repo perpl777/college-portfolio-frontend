@@ -86,16 +86,16 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className="flex justify-between px-11 pt-16 pb-12 flex-wrap gap-10 lg:flex-nowrap">
+      <div className="flex justify-between px-11 pt-16 pb-12 flex-wrap gap-5 lg:flex-nowrap max-sm:p-6 max-sm:pt-11">
         <Search setSearchQuery={setSearchQuery} />
         
-        <div className='flex flex-wrap flex-auto justify-between items-end gap-14 sm:flex-nowrap'>
+        <div className='flex flex-wrap flex-auto justify-between items-end gap-10 sm:flex-nowrap'>
           <Checkbox updateFilteredCourse={setFilteredCourse} />
           <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
         </div>
       </div>
 
-      <div className='px-11'>
+      <div className='px-11 max-sm:p-6 max-sm:pt-11'>
         <Suspense fallback={<Loading />}>
           <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
         </Suspense>

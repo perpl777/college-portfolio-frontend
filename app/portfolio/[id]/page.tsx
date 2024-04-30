@@ -114,7 +114,7 @@ export default function Portfolio({ params: { id } }: Props) {
     useEffect(() => {
         const fetchPhoto = async () => {
             if (student?.attributes?.profilePicture.data?.attributes?.url) {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}${student?.attributes?.profilePicture.data?.attributes?.url}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${student?.attributes?.profilePicture.data?.attributes?.url}`);
                 const fetchedBlob = await response.blob();
                 setBlob(fetchedBlob);
             }
@@ -141,7 +141,7 @@ export default function Portfolio({ params: { id } }: Props) {
     <div className="flex flex-col">
         <Header />
 
-        <div className="pt-20 max-lg:m-auto p-11">
+        <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
             {student &&
                 <StudentCard 
                     surname={student.attributes?.surname}
@@ -158,13 +158,13 @@ export default function Portfolio({ params: { id } }: Props) {
             }
         </div>
 
-        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-[480px]:justify-center max-[480px]:text-base">
-            <div className='w-4/6'>
+        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:px-6 max-[480px]:justify-center">
+            <div className='w-4/6 max-[480px]:w-full'>
                 {student?.attributes?.description}
             </div>
         </div>
 
-        <div className="px-11 pb-3 max-sm:pb-0">
+        <div className="px-11 pb-3 max-sm:pb-0 max-sm:pt-4 max-sm:px-4">
             <MenuPosts values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         </div>
 

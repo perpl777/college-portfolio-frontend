@@ -147,23 +147,23 @@ const Menu = ({adminPage}: MenuProps) => {
                 <div className='flex justify-between align-text-bottom items-center py-3 border-b tracking-wide border-black'>
                     <div>
                         <Link href={`/`}>
-                            <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-5 max-sm:text-xs"}>
+                            <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-6"}>
                                 Главная
                             </span>
                         </Link>
                         {user ? (
                             <>
                                 <Link href={`/admin`}>
-                                    <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-5 max-sm:text-xs"}>
+                                    <span className={"menu-nav-elenemt ml-12 hover:text-gray-400"}>
                                         Профиль
                                     </span>
                                 </Link>
-                                <a onClick={logout} className='menu-nav-elenemt ml-12 hover:text-gray-400 cursor-pointer max-sm:ml-5 max-sm:text-xs'>Выйти</a>
+                                <a onClick={logout} className='menu-nav-elenemt ml-12 hover:text-gray-400 cursor-pointer max-sm:ml-6'>Выйти</a>
                             </>
                         ) : (
                             <>
                                 <Link href={`/auth`}>
-                                    <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-5 max-sm:text-xs"}>
+                                    <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-8"}>
                                         Кураторам
                                     </span>
                                 </Link>
@@ -171,7 +171,7 @@ const Menu = ({adminPage}: MenuProps) => {
                         )}
                     </div>
 
-                    <div className='menu-nav-elenemt mr-12 max-sm:mr-5 max-sm:text-xs'>{user}</div>
+                    <div className='menu-nav-elenemt mr-12 max-sm:mr-5'>{user}</div>
                 </div>
             </div>
         </div>

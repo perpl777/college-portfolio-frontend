@@ -66,7 +66,7 @@ const Auth = () => {
     }
 
     return (
-        <div className='p-11'>
+        <div className='p-11  max-sm:p-4'>
             <HeaderMin title='Вход'/>
 
             <form onSubmit={handleSubmit} className='flex justify-center flex-col gap-10 items-center'>
