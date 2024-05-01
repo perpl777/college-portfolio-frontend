@@ -158,13 +158,13 @@ export default function Portfolio({ params: { id } }: Props) {
             }
         </div>
 
-        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-2 max-lg:pb-8 max-[480px]:justify-center">
+        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-4 max-lg:pb-8 max-[480px]:justify-center">
             <div className='w-4/6 max-[480px]:w-full'>
                 {student?.attributes?.description}
             </div>
         </div>
 
-        <div className="px-11 pb-3 max-sm:pb-0 max-sm:pt-4 max-sm:px-4">
+        <div className="px-11 pb-3 max-sm:pb-0 max-sm:pt-4 max-sm:px-8">
             <MenuPosts values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         </div>
 

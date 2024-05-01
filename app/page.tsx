@@ -71,9 +71,11 @@ export default function Home() {
     // filteredData = filteredData.filter(student => student.attributes.course === Number(filteredCourse));
 
     // Поиск по запросу
+    // Поиск по запросу
     if (searchQuery) {
       const searchResults = filteredData.filter(student => 
-        student.attributes.surname.toLowerCase().includes(searchQuery.toLowerCase())
+        student.attributes.surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.attributes.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       filteredData = searchResults;
     }
