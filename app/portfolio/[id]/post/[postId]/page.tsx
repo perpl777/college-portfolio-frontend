@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
+import Loading from '@/app/loading';
+import { Suspense } from 'react';
 import PostWindow from './post';
 
 
@@ -88,16 +90,18 @@ export default function Post({ params: { id, postId}}: Props) {
         <>
             {post && 
                 <>
-                    <PostWindow
-                        postId={postId}
-                        title={post?.attributes.title}
-                        description={post?.attributes.description}
-                        link={post?.attributes.link}
-                        publishedAt={post?.attributes.publishedAt}
-                        work_type={post?.attributes.work_type.data.attributes.name}
-                        photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
-                        file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : ''}
-                    />
+                    <Suspense fallback={<Loading />}>
+                        <PostWindow
+                            postId={postId}
+                            title={post?.attributes.title}
+                            description={post?.attributes.description}
+                            link={post?.attributes.link}
+                            publishedAt={post?.attributes.publishedAt}
+                            work_type={post?.attributes.work_type.data.attributes.name}
+                            photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
+                            file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : null}
+                        />
+                    </Suspense>
                 </>
             }
         </>

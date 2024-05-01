@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetcher } from '@/lib/api';
+import Loading from '@/app/loading';
+import { Suspense } from 'react';
 import Header from '@/app/components/header';
 import MenuPosts from '@/app/components/posts/menu-post';
 import StudentCard from '@/app/components/student-card';
@@ -169,7 +171,7 @@ export default function Portfolio({ params: { id } }: Props) {
         </div>
 
         {filteredPosts && filteredPosts.length > 0 
-            ? (<Posts posts={filteredPosts} />) 
+            ? (<Suspense fallback={<Loading />}><Posts posts={filteredPosts} /></Suspense>) 
             : (<div className="text-center text-zinc-400 text-lg my-40">Здесь пока ничего нет</div>)
         }
     </div>

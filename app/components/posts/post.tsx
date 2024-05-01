@@ -48,7 +48,6 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                         <Image
                             src={blob ? URL.createObjectURL(blob) : ''}
                             alt="image" 
-                            loading="lazy"
                             quality={80}
                             width={500}
                             height={500}
