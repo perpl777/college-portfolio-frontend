@@ -25,8 +25,16 @@ const StudentCard = ({surname, name, course, description, technologies, linkToBe
     return (
         <div className='flex max-h-[566px] max-lg:inline-block max-lg:max-h-max'>
 
-            <Image src={profilePicture} alt="student" className='object-cover' width={602} height={566} />
-
+            {profilePicture && 
+                <Image src={profilePicture}
+                    alt="student" 
+                    className='object-cover'
+                    width={602} 
+                    height={566} 
+                    quality={80}
+                    priority
+                />
+            }
             <div className="bg-gray-50 flex flex-col flex-auto justify-between py-9 px-5">
                 <div className='flex justify-end gap-2 max-lg:pb-5'>
                     {linkToVK && 

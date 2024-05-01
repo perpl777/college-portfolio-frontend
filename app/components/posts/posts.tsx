@@ -64,7 +64,7 @@ const Posts = ({posts}: Props) => {
 
     const scrollToTop = () => {
         window.scrollTo({
-            top: 1200,
+            top: 0,
             behavior: 'smooth'
         });
     };
