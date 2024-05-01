@@ -83,15 +83,13 @@ const Posts = ({posts}: Props) => {
             {posts.map((post: any, index: number) => {
                 return  (
                     <Link key={index} href={`/portfolio/${post?.attributes.author.data.id}/post/${post?.id}`}>
-                        <Suspense fallback={<Loading />}>
-                            <Post
+                        <Post
                             title={post.attributes.title}
                             markupWithBackground={post.attributes.markupWithBackground}
                             publishedAt={post.attributes.publishedAt}
                             work_type={post.attributes.work_type.data?.attributes?.name}
                             photo={post?.attributes?.photo?.data?.attributes?.url}
-                            />
-                        </Suspense>
+                        />
                     </Link>
                 )
             })}

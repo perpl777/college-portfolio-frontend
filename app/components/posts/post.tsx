@@ -14,23 +14,24 @@ interface DataPost {
 
 const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: DataPost) => {
 
-
     const colors = ['bg-stone-800', 'bg-blue-800/40'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     const [blob, setBlob] = useState<Blob | null>(null);
 
+
     useEffect(() => {
-        const fetchPhoto = async () => {
+        const fetchPhoto = () => {
             if (photo) {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
-                const fetchedBlob = await response.blob();
-                setBlob(fetchedBlob);
+                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
+                response.then(resp => resp.blob())
+                    .then(fetchedBlob => setBlob(fetchedBlob));
             }
         };
-
+    
         fetchPhoto();
     }, [photo]);
+
 
     return (
         <div className='flex flex-row cursor-pointer'>

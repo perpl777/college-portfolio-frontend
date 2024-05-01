@@ -113,15 +113,17 @@ export default function Portfolio({ params: { id } }: Props) {
     fetchData();
     }, []);
 
+    
     useEffect(() => {
-        const fetchPhoto = async () => {
-            if (student?.attributes?.profilePicture.data?.attributes?.url) {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${student?.attributes?.profilePicture.data?.attributes?.url}`);
-                const fetchedBlob = await response.blob();
-                setBlob(fetchedBlob);
+        const fetchPhoto = () => {
+            const url = student?.attributes?.profilePicture.data?.attributes?.url;
+            if (url) {
+                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${url}`);
+                response.then(resp => resp.blob())
+                    .then(fetchedBlob => setBlob(fetchedBlob));
             }
         };
-
+    
         fetchPhoto();
     }, [student?.attributes?.profilePicture.data?.attributes?.url]);
 
@@ -171,7 +173,7 @@ export default function Portfolio({ params: { id } }: Props) {
         </div>
 
         {filteredPosts && filteredPosts.length > 0 
-            ? (<Suspense fallback={<Loading />}><Posts posts={filteredPosts} /></Suspense>) 
+            ? (<Posts posts={filteredPosts} />) 
             : (<div className="text-center text-zinc-400 text-lg my-40">Здесь пока ничего нет</div>)
         }
     </div>

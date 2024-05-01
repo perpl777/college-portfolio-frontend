@@ -60,14 +60,16 @@ export default function PostWindow({postId, title, description, link, publishedA
             </div>
     
             {photo && (
-                <Image 
-                    src={photo} 
-                    alt="image" 
-                    width={500}
-                    height={500}
-                    quality={80} 
-                    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                />
+                <Suspense fallback={""}>
+                    <Image 
+                        src={photo} 
+                        alt="image" 
+                        width={500}
+                        height={500}
+                        quality={80} 
+                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                    />
+                </Suspense>
             )}
         </div>
     );
