@@ -28,7 +28,7 @@ const StudentCard = ({surname, name, course, description, technologies, linkToBe
             <Image src={profilePicture} alt="student" className='object-cover' width={602} height={566} />
 
             <div className="bg-gray-50 flex flex-col flex-auto justify-between py-9 px-5">
-                <div className='flex justify-end gap-2 max-lg:pb-3'>
+                <div className='flex justify-end gap-2 max-lg:pb-5'>
                     {linkToVK && 
                         <Link href={linkToVK} target='_blank'><Image src={Vk} alt='vk' width={50} height={50} className='max-sm:w-8 max-sm:h-8'></Image> </Link>
                     }
@@ -41,23 +41,23 @@ const StudentCard = ({surname, name, course, description, technologies, linkToBe
                 </div>
 
                 <div>
-                    <h1 className='titleName font-medium text-6xl max-sm:text-5xl'>
+                    <h1 className='titleName font-medium text-6xl max-sm:text-4xl'>
                         {`${name} ${surname}`}
                     </h1>
 
                     <table className="table table-sm mt-12 max-sm:table-xs">
                         <tbody> 
                             <tr className='border-b border-black'> 
-                                <th className="p-0 text-xs font-normal text-gray-500 uppercase">Специальность</th> {/*выводим Специальность студента */}
-                                <th className="pl-20 text-base font-normal"> {specialty} </th>
+                                <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Специальность</th> {/*выводим Специальность студента */}
+                                <th className="pl-20 text-base font-normal max-sm:text-sm"> {specialty} </th>
                             </tr> 
                             <tr className='border-b border-black'> 
-                                <th className="p-0 text-xs font-normal text-gray-500 uppercase">Курс</th> {/*выводим Курс студента */}
-                                <th className="pl-20 text-base font-normal"> {course} </th>
+                                <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Курс</th> {/*выводим Курс студента */}
+                                <th className="pl-20 text-base font-normal max-sm:text-sm"> {course} </th>
                             </tr> 
                             <tr className='border-b border-black'> 
-                                <th className="p-0 text-xs font-normal text-gray-500 uppercase">Технологии</th> {/*выводим Технологии студента */}
-                                <th className="pl-20 text-base font-normal"> {technologies} </th>
+                                <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Технологии</th> {/*выводим Технологии студента */}
+                                <th className="pl-20 text-base font-normal max-sm:text-sm"> {technologies} </th>
                             </tr> 
                         </tbody> 
                     </table>

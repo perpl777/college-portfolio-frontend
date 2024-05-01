@@ -23,7 +23,7 @@ const MenuPosts = ({values, updateFilteredValues}: Props) => {
     };
 
     const stylesAdaptive = {
-        menu: 'overflow-x-auto whitespace-nowrap max-md:p-2 max-[500px]:gap-12',
+        menu: 'overflow-x-auto whitespace-nowrap max-md:p-2 max-[500px]:gap-10',
         button: 'max-[425px]:py-2 max-md:text-base max-md:underline-offset-[5px]',
     }
 
