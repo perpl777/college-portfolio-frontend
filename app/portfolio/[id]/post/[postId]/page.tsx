@@ -59,6 +59,7 @@ export default function Post({ params: { id, postId}}: Props) {
     const [post, setPost] = useState<DataPosts>();
     const [blobPhoto, setBlobPhoto] = useState<Blob | null>(null);
     const [blobFile, setBlobFile] = useState<Blob | null>(null);
+    const [fileLoaded, setFileLoaded] = useState(false);
 
 
     useEffect(() => {
@@ -75,6 +76,7 @@ export default function Post({ params: { id, postId}}: Props) {
                 const fileResponse = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${postResponse.data.attributes.file.data.attributes.url}`);
                 const fetchedBlobFile = await fileResponse.blob();
                 setBlobFile(fetchedBlobFile);
+                setFileLoaded(true);
             }
             setPost(postResponse.data);
         };
@@ -84,18 +86,20 @@ export default function Post({ params: { id, postId}}: Props) {
 
     return (
         <>
-        {post && 
-            <PostWindow
-                postId={postId}
-                title={post?.attributes.title}
-                description={post?.attributes.description}
-                link={post?.attributes.link}
-                publishedAt={post?.attributes.publishedAt}
-                work_type={post?.attributes.work_type.data.attributes.name}
-                photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
-                file={blobFile ? URL.createObjectURL(blobFile) : ''}
-            />
-        }
+            {post && 
+                <>
+                    <PostWindow
+                        postId={postId}
+                        title={post?.attributes.title}
+                        description={post?.attributes.description}
+                        link={post?.attributes.link}
+                        publishedAt={post?.attributes.publishedAt}
+                        work_type={post?.attributes.work_type.data.attributes.name}
+                        photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
+                        file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : ''}
+                    />
+                </>
+            }
         </>
     );
 }
