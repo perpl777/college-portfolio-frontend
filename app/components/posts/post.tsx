@@ -43,7 +43,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             <p className='text-sm uppercase max-sm:text-xs'>{work_type}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>
-                        <h1 className='titlePos font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-lg max-md:leading-7 break-words break-word'>{title}</h1>
+                        <h1 className='titlePos font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-base max-md:leading-5 break-words break-word'>{title}</h1>
                     </div>
                     <div className='border-t border-r border-black w-1/2'>
                         <Image
@@ -68,7 +68,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             <p className='text-sm uppercase max-sm:text-xs'>{work_type}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>
-                        <h1 className='titlePos w-1/2 font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-lg max-md:leading-7'>{title}</h1>
+                        <h1 className='titlePos w-1/2 font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-base max-md:leading-5'>{title}</h1>
                     </div>
                 </>
                 )

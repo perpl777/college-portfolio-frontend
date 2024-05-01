@@ -115,18 +115,16 @@ export default function Portfolio({ params: { id } }: Props) {
 
     
     useEffect(() => {
-        const fetchPhoto = () => {
-            const url = student?.attributes?.profilePicture.data?.attributes?.url;
-            if (url) {
-                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${url}`);
-                response.then(resp => resp.blob())
-                    .then(fetchedBlob => setBlob(fetchedBlob));
-            }
-        };
-    
-        fetchPhoto();
-    }, [student?.attributes?.profilePicture.data?.attributes?.url]);
+        const fetchPhoto = async () => {             
+            if (student?.attributes?.profilePicture.data?.attributes?.url) 
+                {                 
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${student?.attributes?.profilePicture.data?.attributes?.url}`);                 
+                    const fetchedBlob = await response.blob();                 
+                    setBlob(fetchedBlob);            
+                }         
+            };
 
+        fetchPhoto();     }, [student?.attributes?.profilePicture.data?.attributes?.url])
     
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
@@ -162,13 +160,13 @@ export default function Portfolio({ params: { id } }: Props) {
             }
         </div>
 
-        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-4 max-lg:pb-8 max-[480px]:justify-center">
-            <div className='w-4/6 max-[480px]:w-full'>
+        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-6">
+            <div className='w-4/6 max-[480px]:w-10/12'>
                 {student?.attributes?.description}
             </div>
         </div>
 
-        <div className="px-11 pb-3 max-sm:pb-0 max-sm:pt-4 max-sm:px-8">
+        <div className="px-11 pb-3 max-sm:pb-0 max-sm:px-4">
             <MenuPosts values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         </div>
 

@@ -36,15 +36,15 @@ const StudentCard = ({surname, name, course, description, technologies, linkToBe
                 />
             }
             <div className="bg-gray-50 flex flex-col flex-auto justify-between py-9 px-5">
-                <div className='flex justify-end gap-2 max-lg:pb-5'>
+                <div className='flex justify-end gap-3 max-lg:pb-8'>
                     {linkToVK && 
-                        <Link href={linkToVK} target='_blank'><Image src={Vk} alt='vk' width={50} height={50} className='max-sm:w-8 max-sm:h-8'></Image> </Link>
+                        <Link href={linkToVK} target='_blank'><Image src={Vk} alt='vk' width={50} height={50} className='max-sm:w-9 max-sm:h-9'></Image> </Link>
                     }
                     {linkToGit && 
-                        <Link href={linkToGit} target='_blank'><Image src={Github} alt='github' width={50} height={50} className='max-sm:w-8 max-sm:h-8'></Image></Link>
+                        <Link href={linkToGit} target='_blank'><Image src={Github} alt='github' width={50} height={50} className='max-sm:w-9 max-sm:h-9'></Image></Link>
                     }
                     {linkToBehance && 
-                        <Link href={linkToBehance} target='_blank'><Image src={Behance} alt='behance' width={50} height={50} className='max-sm:w-8 max-sm:h-8'></Image></Link>
+                        <Link href={linkToBehance} target='_blank'><Image src={Behance} alt='behance' width={50} height={50} className='max-sm:w-9 max-sm:h-9'></Image></Link>
                     }
                 </div>
 
