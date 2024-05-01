@@ -82,8 +82,8 @@ const Posts = ({posts}: Props) => {
         <div>
             {posts.map((post: any, index: number) => {
                 return  (
-                    <Suspense fallback={<Loading />}>
-                        <Link key={index} href={`/portfolio/${post?.attributes.author.data.id}/post/${post?.id}`}>
+                    <Suspense fallback={<Loading />} key={index}>
+                        <Link href={`/portfolio/${post?.attributes.author.data.id}/post/${post?.id}`}>
                             <Post
                                 title={post.attributes.title}
                                 markupWithBackground={post.attributes.markupWithBackground}
