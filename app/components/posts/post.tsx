@@ -19,7 +19,6 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
 
     const [blob, setBlob] = useState<Blob | null>(null);
 
-
     useEffect(() => {
         const fetchPhoto = () => {
             if (photo) {

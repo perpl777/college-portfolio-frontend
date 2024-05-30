@@ -123,6 +123,11 @@ const Menu = ({adminPage}: MenuProps) => {
                                 Главная
                             </span>
                         </Link>
+                        <Link href={`/students`}>
+                            <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-6"}>
+                                Студенты
+                            </span>
+                        </Link>
                         {user ? (
                             <>
                                 <Link href={`/admin`}>

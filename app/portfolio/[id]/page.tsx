@@ -1,10 +1,8 @@
 'use client'
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetcher } from '@/lib/api';
-import Loading from '@/app/loading';
-import { Suspense } from 'react';
 import Header from '@/app/components/header';
-import MenuPosts from '@/app/components/posts/menu-post';
+import SliderMenu from '@/app/components/slider-menu';
 import StudentCard from '@/app/components/student-card';
 import Posts from '@/app/components/posts/posts';
 
@@ -86,7 +84,6 @@ interface PostsProps {
 
 
 export default function Portfolio({ params: { id } }: Props) {
-
     let [student, setStudent] = useState<DataStudent>();
     const [posts, setPosts] = useState<PostsProps>();
     const [filteredPostType, setFilteredPostTypes] = useState<string | null>(null);
@@ -124,17 +121,16 @@ export default function Portfolio({ params: { id } }: Props) {
                 }         
             };
 
-        fetchPhoto();     }, [student?.attributes?.profilePicture.data?.attributes?.url])
+        fetchPhoto();     
+    }, [student?.attributes?.profilePicture.data?.attributes?.url])
     
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
         let filteredData = posts.data;
-        
         // Фильтрация по типам
         if (filteredPostType) {
             filteredData = filteredData.filter(post => post.attributes.work_type.data.attributes.name === filteredPostType);
         }
-    
         return filteredData;
     }, [posts, filteredPostType]);
 
@@ -142,7 +138,7 @@ export default function Portfolio({ params: { id } }: Props) {
     return (
     <div className="flex flex-col">
         <Header />
-
+        
         <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
             {student &&
                 <StudentCard 
@@ -167,7 +163,7 @@ export default function Portfolio({ params: { id } }: Props) {
         </div>
 
         <div className="px-11 pb-3 max-sm:pb-0 max-sm:px-4">
-            <MenuPosts values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
+            <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         </div>
 
         {filteredPosts && filteredPosts.length > 0 

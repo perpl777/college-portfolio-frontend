@@ -23,7 +23,7 @@ const Header = () => {
     }, []);
 
     return (
-        <div className='flex flex-col px-11 pt-8 max-sm:p-6'>
+        <div className='flex flex-col px-11 pt-4 max-sm:p-6'>
             <div className='flex items-start justify-between py-7 gap-5 border-b border-black'>
                 <Menu adminPage={false}/>
                 <div>

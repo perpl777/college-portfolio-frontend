@@ -1,8 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-import Loading from '@/app/loading';
-import { Suspense } from 'react';
 import PostWindow from './post';
 
 

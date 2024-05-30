@@ -11,7 +11,7 @@ interface Data {
         name: string;
         patronymic?: string;
         specialty: string;
-        };
+    };
 }
 
 interface StudentLinkProps {
@@ -60,7 +60,7 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                     <thead>
                     {
                         <tr>
-                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6 max-sm:hidden'></th>
+                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'>Студент</th>
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6 max-sm:hidden'>Специальность</th>
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
@@ -75,8 +75,8 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                         key={student.id} 
                                         className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
                                     >
-                                        <td className='w-2/12 max-sm:hidden'>{index + 1}</td>
-                                        <td className='w-4/12 max-sm:w-auto'> 
+                                        <td className='w-2/12 max-sm:w-8 max-sm:flex max-sm:items-start'>{index + 1}</td>
+                                        <td className='w-4/12 max-sm:w-auto max-sm:pr-0'> 
                                             <Link href={`/${studentLinks?.href}/${student.id}`}>
                                                 {`${student.attributes.surname} 
                                                 ${student.attributes.name} 
@@ -85,9 +85,9 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                             <p className='pt-4 sm:hidden'>{student.attributes.specialty}</p>
                                         </td>
                                         <td className='w-5/12 max-sm:hidden'>{student.attributes.specialty}</td>
-                                        <td className='max-sm:flex max-sm:items-start max-sm:pl-0'>
+                                        <td className='max-sm:flex max-sm:items-start'>
                                             {(index === 0 || index === 1 || index === 2)  &&
-                                                <div className='border border-gray-500 rounded-sm py-1 w-20 text-center montserrat text-xs'>ТОП {index + 1}</div>
+                                                <div className='border border-black rounded-sm py-1 w-20 text-center montserrat text-xs'>ТОП {index + 1}</div>
                                             }
                                         </td>
                                     </tr>
