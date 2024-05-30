@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Regular.ttf') format('truetype')
+  src: url('/fonts/Montserrat-Medium.ttf') format('truetype')
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@200;300;400;500;600;700;800&display=swap');

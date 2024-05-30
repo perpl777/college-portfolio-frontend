@@ -28,14 +28,6 @@ interface TableProps {
 
 
 const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TableProps) => {
-
-    const textsTh = [
-        {text: " "},
-        {text: "Студент"},
-        {text: "Специальность"},
-        {text: " "}
-    ]
-
     return (
         <>
             <div className='overflow-x-auto'>
@@ -61,16 +53,17 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                         </Suspense>
                     </tbody>
                 </table>
+
                 :
+
                 <table className='table table-lg m-auto'>
                     <thead>
                     {
                         <tr>
-                            {textsTh.map((textTh) => 
-                                <th key={textTh.text} className='border-b border-black text-sm text-slate-400  font-normal leading-6'> 
-                                    {textTh.text} 
-                                </th>
-                            )}
+                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6 max-sm:hidden'></th>
+                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'>Студент</th>
+                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6 max-sm:hidden'>Специальность</th>
+                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
                         </tr>
                     }
                     </thead>
@@ -82,18 +75,19 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                         key={student.id} 
                                         className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
                                     >
-                                        <td className='w-2/12'>{index + 1}</td>
-                                        <td className='w-4/12'> 
+                                        <td className='w-2/12 max-sm:hidden'>{index + 1}</td>
+                                        <td className='w-4/12 max-sm:w-auto'> 
                                             <Link href={`/${studentLinks?.href}/${student.id}`}>
                                                 {`${student.attributes.surname} 
                                                 ${student.attributes.name} 
                                                 ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
                                             </Link>
+                                            <p className='pt-4 sm:hidden'>{student.attributes.specialty}</p>
                                         </td>
-                                        <td  className='w-5/12'>{student.attributes.specialty}</td>
-                                        <td>
+                                        <td className='w-5/12 max-sm:hidden'>{student.attributes.specialty}</td>
+                                        <td className='max-sm:flex max-sm:items-start max-sm:pl-0'>
                                             {(index === 0 || index === 1 || index === 2)  &&
-                                                <div className='border w-20 border-gray-700 py-[5px] rounded-sm montserrat text-center text-gray-700 text-xs'>ТОП {index + 1}</div>
+                                                <div className='border border-gray-500 rounded-sm py-1 w-20 text-center montserrat text-xs'>ТОП {index + 1}</div>
                                             }
                                         </td>
                                     </tr>
