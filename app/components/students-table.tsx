@@ -10,7 +10,6 @@ interface Data {
         surname: string;
         name: string;
         patronymic?: string;
-        course: number;
         specialty: string;
         };
 }
@@ -31,9 +30,10 @@ interface TableProps {
 const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TableProps) => {
 
     const textsTh = [
-        {text: "Курс"},
+        {text: " "},
         {text: "Студент"},
         {text: "Специальность"},
+        {text: " "}
     ]
 
     return (
@@ -67,7 +67,7 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                     {
                         <tr>
                             {textsTh.map((textTh) => 
-                                <th key={textTh.text} className='border-b border-black text-sm text-slate-400 w-44 font-normal leading-6'> 
+                                <th key={textTh.text} className='border-b border-black text-sm text-slate-400  font-normal leading-6'> 
                                     {textTh.text} 
                                 </th>
                             )}
@@ -76,22 +76,27 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                     </thead>
                     <tbody>
                         <Suspense fallback={<Loading />}>
-                            {students && students.map((student: any) => {
+                            {students && students.map((student: any, index: number) => {
                                 return (
-                                <tr 
-                                    key={student.id} 
-                                    className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
-                                >
-                                    <td>{student.attributes.course}</td>
-                                    <td> 
-                                        <Link href={`/${studentLinks?.href}/${student.id}`}>
-                                            {`${student.attributes.surname} 
-                                            ${student.attributes.name} 
-                                            ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
-                                        </Link>
-                                    </td>
-                                    <td>{student.attributes.specialty}</td>
-                                </tr>
+                                    <tr 
+                                        key={student.id} 
+                                        className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
+                                    >
+                                        <td className='w-2/12'>{index + 1}</td>
+                                        <td className='w-4/12'> 
+                                            <Link href={`/${studentLinks?.href}/${student.id}`}>
+                                                {`${student.attributes.surname} 
+                                                ${student.attributes.name} 
+                                                ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
+                                            </Link>
+                                        </td>
+                                        <td  className='w-5/12'>{student.attributes.specialty}</td>
+                                        <td>
+                                            {(index === 0 || index === 1 || index === 2)  &&
+                                                <div className='border w-20 border-gray-700 py-[5px] rounded-sm montserrat text-center text-gray-700 text-xs'>ТОП {index + 1}</div>
+                                            }
+                                        </td>
+                                    </tr>
                                 )
                             })}
                         </Suspense>

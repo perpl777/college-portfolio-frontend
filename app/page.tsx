@@ -5,7 +5,6 @@ import Loading from './loading'
 import Header from './components/header';
 import Search from './components/search'
 import Filter from './components/filter'
-import Checkbox from './components/checkbox';
 import Table from './components/students-table';
 
 
@@ -71,7 +70,6 @@ export default function Home() {
     // filteredData = filteredData.filter(student => student.attributes.course === Number(filteredCourse));
 
     // Поиск по запросу
-    // Поиск по запросу
     if (searchQuery) {
       const searchResults = filteredData.filter(student => 
         student.attributes.surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -90,11 +88,7 @@ export default function Home() {
 
       <div className="flex justify-between px-11 pt-16 pb-12 flex-wrap gap-5 lg:flex-nowrap max-sm:p-6 max-sm:pt-11">
         <Search setSearchQuery={setSearchQuery} />
-        
-        <div className='flex flex-wrap flex-auto justify-between items-end gap-10 sm:flex-nowrap'>
-          <Checkbox updateFilteredCourse={setFilteredCourse} />
-          <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
-        </div>
+        <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
       </div>
 
       <div className='px-11 max-sm:p-6 max-sm:pt-11'>
