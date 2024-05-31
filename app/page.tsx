@@ -89,7 +89,7 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className='px-11 pt-4 pb-14'>
+      <div className='px-11 pt-14 pb-14 space-y-11'>
         <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         <Tags/>
       </div>
@@ -97,11 +97,13 @@ export default function Home() {
       <div className='px-11 grid grid-cols-3 gap-4'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
-            post.attributes.photo?.data?.attributes?.url && (
-              <div className='border-2 border-gray-300'>
-                  <ImagePost photo={post.attributes.photo?.data?.attributes?.url} />
+              <div className=''>
+                  <ImagePost 
+                    photo={post.attributes.photo?.data?.attributes?.url} 
+                    title={post.attributes.title}
+                    work_type={post.attributes.work_type.data?.attributes?.name}
+                  />
               </div>
-            )
           )
         })}
       </div>

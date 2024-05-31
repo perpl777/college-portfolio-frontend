@@ -156,13 +156,13 @@ export default function Portfolio({ params: { id } }: Props) {
             }
         </div>
 
-        <div className="flex justify-end pt-10 pb-16 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-6">
+        <div className="flex justify-end pt-10 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-6">
             <div className='w-4/6 max-[480px]:w-10/12'>
                 {student?.attributes?.description}
             </div>
         </div>
 
-        <div className="px-11 pb-3 max-sm:pb-0 max-sm:px-4">
+        <div className="px-11 pb-5 max-sm:pb-0 max-sm:px-4">
             <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         </div>
 

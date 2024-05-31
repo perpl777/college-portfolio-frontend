@@ -29,12 +29,12 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
     }
 
     return  (
-        <div className={`flex py-8 gap-8 ${stylesAdaptive.menu}`}>
+        <div className={`flex gap-9 ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
                     key={index}
                     onClick={() => handleVaSelection(value, index)}
-                    className={`text-left text-base text-black p-2 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
+                    className={`text-left text-lg text-black p-1 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
                 >
                     {value}
                 </button>
