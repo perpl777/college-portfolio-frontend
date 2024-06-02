@@ -39,7 +39,7 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
 
     const handleMouseEnter = () => {
         if (divRef.current) {
-            gsap.to(divRef.current, { height: 'auto', duration: 0.6 });
+            gsap.to(divRef.current, { height: 'auto', duration: 0.6});
         }
     };
 
@@ -70,16 +70,15 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
                     quality={80}
                     width={440}
                     height={350}
-                    style={{ objectFit: 'cover', width: '440px', height: '350px' }}
-                    className='relative bg-slate-200 '
+                    className='relative bg-slate-200 object-cover h-[350px] w-[440px] max-xl:w-full max-xl:h-[480px] max-lg:h-[400px] max-md:h-[280px] max-sm:h-[420px] max-[450px]:h-[300px]'
                 />
                 <div ref={divRef} className=' bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
-                    <p className='text-2xl titlePost uppercase py-6 px-8'>{title}</p>
+                    <p className='text-3xl titlePost uppercase py-6 px-8 max-lg:text-2xl'>{title}</p>
                 </div>
             </div>
             :
             <div className='cursor-pointer'>
-                <div className='p-5 border border-gray-400 rounded-sm' style={{ height: '350px' }}>
+                <div className='p-5 border border-gray-400 rounded-sm h-[350px]  max-xl:w-full max-xl:h-[480px] max-lg:h-[400px] max-md:h-[280px] max-sm:h-[420px] max-[450px]:h-[300px]'>
                 <div
                     className={`border rounded-sm border-gray-400 py-1 px-3 w-32 text-xs text-gray-600`}
                 >
@@ -87,7 +86,7 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
                 </div>
                 </div>
                 <div className='w-full absolute bottom-0 items-center'>
-                    <p className='text-2xl titlePost uppercase py-6 px-6'>{title}</p>
+                    <p className='text-3xl titlePost uppercase py-6 px-6  max-lg:text-2xl '>{title}</p>
                 </div>
             </div>
             }

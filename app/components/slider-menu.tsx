@@ -1,11 +1,13 @@
 'use client'
 import React, { useState } from 'react';
+import Checkbox from '../components/checkbox';
 
 
 interface Props {
     values: any;
     updateFilteredValues: (query: string) => void;
 }
+
 
 const SliderMenu = ({values, updateFilteredValues}: Props) => {
 
@@ -24,12 +26,12 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
     };
 
     const stylesAdaptive = {
-        menu: 'overflow-x-auto whitespace-nowrap max-md:p-1 max-[500px]:gap-10',
-        button: 'max-[425px]:py-2 max-md:text-base',
+        menu: 'overflow-x-auto whitespace-nowrap',
+        button: 'max-md:text-base',
     }
 
     return  (
-        <div className={`flex gap-9 ${stylesAdaptive.menu}`}>
+        <div className={`flex items-center space-x-9  ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
                     key={index}
@@ -39,6 +41,7 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
                     {value}
                 </button>
             ))}
+            <Checkbox/>
         </div>
     )
 }

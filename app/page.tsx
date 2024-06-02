@@ -89,12 +89,12 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className='px-11 pt-14 pb-14 space-y-11'>
+      <div className='px-11 pt-12 pb-10 space-y-9 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
         <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         <Tags/>
       </div>
 
-      <div className='px-11 grid grid-cols-3 gap-4'>
+      <div className='px-11 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
               <div className=''>
