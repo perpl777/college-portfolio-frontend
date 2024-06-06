@@ -56,7 +56,6 @@ interface PostsProps {
 export default function Home() {
 
   const [posts, setPosts] = useState<PostsProps>();
-
   const [filteredPostType, setFilteredPostTypes] = useState<string | null>(null);
 
   const postsTypes = [
@@ -66,6 +65,7 @@ export default function Home() {
     'Фотография',
   ]
 
+  //запрос ко всем постам 
   useEffect(() => {
     const fetchData = async () => {
         let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/works?populate=*`);   
@@ -73,6 +73,7 @@ export default function Home() {
       };
     fetchData();
   }, []);
+
 
 
   const filteredPosts = useMemo(() => {
@@ -89,7 +90,7 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className='px-11 pt-12 pb-10 space-y-9 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
+      <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
         <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         <Tags/>
       </div>
@@ -97,13 +98,11 @@ export default function Home() {
       <div className='px-11 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
-              <div className=''>
-                  <ImagePost 
-                    photo={post.attributes.photo?.data?.attributes?.url} 
-                    title={post.attributes.title}
-                    work_type={post.attributes.work_type.data?.attributes?.name}
-                  />
-              </div>
+            <ImagePost 
+              photo={post.attributes.photo?.data?.attributes?.url} 
+              title={post.attributes.title}
+              work_type={post.attributes.work_type.data?.attributes?.name}
+            />
           )
         })}
       </div>

@@ -52,8 +52,8 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             width={500}
                             height={500}
                             className={markupWithBackground
-                                ? `w-full h-full object-contain p-28 ${randomColor} max-lg:p-20 max-md:p-14 max-[500px]:p-8`
-                                : `w-full h-full object-cover`
+                                ? `w-full h-full object-contain aspect-square p-28 ${randomColor} max-lg:p-20 max-md:p-14 max-[500px]:p-8`
+                                : `w-full h-full object-cover aspect-square`
                             }
                         />
                     </div>
@@ -67,7 +67,7 @@ const Post = ({title, markupWithBackground, publishedAt, work_type, photo}: Data
                             <p className='text-sm uppercase max-sm:text-xs'>{work_type}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>
-                        <h1 className='titlePost w-1/2 font-semibold uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-base max-md:leading-5'>{title}</h1>
+                        <h1 className='titlePost w-1/2 uppercase text-6xl max-w-[500px] max-[1040px]:text-5xl max-md:text-base max-md:leading-5'>{title}</h1>
                     </div>
                 </>
                 )

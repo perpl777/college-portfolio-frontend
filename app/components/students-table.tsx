@@ -87,7 +87,7 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                         <td className='w-5/12 max-sm:hidden'>{student.attributes.specialty}</td>
                                         <td className='max-sm:flex max-sm:items-start'>
                                             {(index === 0 || index === 1 || index === 2)  &&
-                                                <div className='max-sm:w-20 max-sm:text-gray-500 max-sm:rounded-sm max-sm:border max-sm:border-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>
+                                                <div className='max-sm:w-20 max-sm:text-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>
                                             }
                                         </td>
                                     </tr>

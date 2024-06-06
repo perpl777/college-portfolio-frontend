@@ -14,10 +14,10 @@ interface DataPost {
 const ImagePost = ({photo, title, work_type}: DataPost) => {
 
     const [blob, setBlob] = useState<Blob | null>(null);
-
     const divRef = useRef<HTMLDivElement | null>(null);
 
-
+    
+    //запрос к фото поста
     useEffect(() => {
         const fetchPhoto = () => {
             if (photo) {
@@ -31,6 +31,7 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
     }, [photo]);
 
 
+    //анимация появления заголовка
     useEffect(() => {
         if (divRef.current) {
             gsap.set(divRef.current, { height: 0, overflow: 'hidden' });
@@ -57,7 +58,6 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
         }
     };
 
-
     
     return (
         <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -70,7 +70,7 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
                     quality={80}
                     width={440}
                     height={350}
-                    className='relative bg-slate-200 object-cover h-[350px] w-[440px] max-xl:w-full max-xl:h-[480px] max-lg:h-[400px] max-md:h-[280px] max-sm:h-[420px] max-[450px]:h-[300px]'
+                    className='relative bg-slate-200 object-cover aspect-square w-full'
                 />
                 <div ref={divRef} className=' bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
                     <p className='text-3xl titlePost uppercase py-6 px-8 max-lg:text-2xl'>{title}</p>
@@ -78,12 +78,12 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
             </div>
             :
             <div className='cursor-pointer'>
-                <div className='p-5 border border-gray-400 rounded-sm h-[350px]  max-xl:w-full max-xl:h-[480px] max-lg:h-[400px] max-md:h-[280px] max-sm:h-[420px] max-[450px]:h-[300px]'>
-                <div
-                    className={`border rounded-sm border-gray-400 py-1 px-3 w-32 text-xs text-gray-600`}
-                >
-                    # веб-разработка
-                </div>
+                <div className='p-5 border border-gray-400 rounded-sm aspect-square w-full'>
+                    <div
+                        className={`border rounded-sm border-gray-400 py-1 px-3 w-32 text-xs text-gray-600`}
+                    >
+                        # веб-разработка
+                    </div>
                 </div>
                 <div className='w-full absolute bottom-0 items-center'>
                     <p className='text-3xl titlePost uppercase py-6 px-6  max-lg:text-2xl '>{title}</p>
