@@ -35,6 +35,11 @@ h2{
   font-family: 'Montserrat', sans-serif;
 }
 
+.montserrat_regular {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
