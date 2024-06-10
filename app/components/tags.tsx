@@ -19,7 +19,7 @@ const Tags = () => {
         <div className="flex gap-3 max-lg:flex-wrap">
             <button
                 className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(0) ? 'bg-sky-100 border border-sky-100 ' : ''
+                activeButtons.has(0) ? 'bg-sky-100 zzborder border-sky-100 ' : ''
                 }`}
                 onClick={() => handleClick(0)}
             >
@@ -27,7 +27,7 @@ const Tags = () => {
             </button>
             <button
                 className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(1) ? 'bg-lime-100 border border-lime-100 ' : ''
+                activeButtons.has(1) ? 'bg-lime-100zz border border-lime-100 ' : ''
                 }`}
                 onClick={() => handleClick(1)}
             >
@@ -35,7 +35,7 @@ const Tags = () => {
             </button>
             <button
                 className={`border rounded-sm border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(2) ? 'bg-orange-100 border border-orange-100 ' : ''
+                activeButtons.has(2) ? 'bg-orange-1zz00 border border-orange-100 ' : ''
                 }`}
                 onClick={() => handleClick(2)}
             >
@@ -43,7 +43,7 @@ const Tags = () => {
             </button>
             <button
                 className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(3) ? 'bg-purple-100 border border-purple-100 ' : ''
+                activeButtons.has(3) ? 'bg-purple-1zz00 border border-purple-100 ' : ''
                 }`}
                 onClick={() => handleClick(3)}
             >

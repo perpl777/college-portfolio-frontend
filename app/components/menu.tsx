@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import { setAuthData, unsetAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
-import Modal from './modal';
+import ModalLogin from './modalLogin';
 import { title } from 'process';
 
 
@@ -160,12 +160,7 @@ const Menu = ({adminPage}: MenuProps) => {
                 </div>
             </div>
 
-            <Modal
-                props={{
-                    title: "Войти",
-                    inputText: ["Почта..", "Пароль.."],
-                    btnText: "Войти"
-                }}
+            <ModalLogin
                 openModal={openModal}
                 handleCloseModal={handleCloseModal}
             />

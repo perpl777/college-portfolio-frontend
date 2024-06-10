@@ -90,7 +90,7 @@ export default function Home() {
     <div>
       <Header />
 
-      <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
+      <div className='px-11 pt-14 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
         <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         <Tags/>
       </div>
