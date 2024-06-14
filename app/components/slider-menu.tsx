@@ -31,7 +31,7 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
     }
 
     return  (
-        <div className={`flex items-center space-x-9  ${stylesAdaptive.menu}`}>
+        <div className={`flex items-center space-x-11  ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
                     key={index}

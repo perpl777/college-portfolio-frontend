@@ -5,31 +5,15 @@ import Image from 'next/image';
 
 
 interface DataPost {
-    photo?: string
+    url_view?: string
     title: string
-    work_type: string
+    worktype: string
 }
 
 
-const ImagePost = ({photo, title, work_type}: DataPost) => {
+const ImagePost = ({url_view, title, worktype}: DataPost) => {
 
-    const [blob, setBlob] = useState<Blob | null>(null);
     const divRef = useRef<HTMLDivElement | null>(null);
-
-    
-    //запрос к фото поста
-    useEffect(() => {
-        const fetchPhoto = () => {
-            if (photo) {
-                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
-                response.then(resp => resp.blob())
-                    .then(fetchedBlob => setBlob(fetchedBlob));
-            }
-        };
-    
-        fetchPhoto();
-    }, [photo]);
-
 
     //анимация появления заголовка
     useEffect(() => {
@@ -57,23 +41,22 @@ const ImagePost = ({photo, title, work_type}: DataPost) => {
             });
         }
     };
-
     
     return (
         <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            { photo 
+            { url_view 
             ? 
             <div className='cursor-pointer'>
                 <Image
-                    src={blob ? URL.createObjectURL(blob) : ''}
-                    alt="image" 
-                    quality={80}
-                    width={440}
-                    height={350}
-                    className='relative bg-slate-200 object-cover aspect-square w-full'
+                    src={url_view}
+                    alt="image"
+                    className="relative bg-slate-200 object-cover aspect-square w-full"
+                    width={500}
+                    height={500}
+                    quality={75}
                 />
                 <div ref={divRef} className=' bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
-                    <p className='text-3xl titlePost uppercase py-6 px-8 max-lg:text-2xl'>{title}</p>
+                    <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
                 </div>
             </div>
             :

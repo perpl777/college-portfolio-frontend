@@ -7,55 +7,48 @@ import Tags from "./components/tags"
 import ImagePost from './components/posts/image-post';
 
 
+interface PostsProps {
+  data: DataPosts[]
+}
+
 interface DataPosts {
   id: number,
   attributes: {
-      title: string,
-      description?: string,
-      markupWithBackground: boolean,
-      publishedAt: string,
-      author: {
-          data: {
-              id: number
-          }
-      },
-      work_type: {
-          data: {
-              id: number,
-              attributes: {
-                  name: string
-              }
-          }
-      },
-      photo?: {
-          data: {
-              id: number,
-              attributes: {
-                  name: string,
-                  url: string
-              }
-          }
-      },
-      file?: {
-          data: {
-              id: number;
-              attributes: {
-                  name: string;
-                  url: string;
-              };
-          };
+    title: string,
+    url_view: string;
+    worktype: {
+        data: {
+            id: number,
+            attributes: {
+                name: string
+            }
+        }
+    };
+    post_tag: {
+      data: {
+          id: number
       }
+    };
   }
 }
 
-interface PostsProps {
-  data: DataPosts[]
+interface TagsPosts {
+  data: TagsProps[]
+}
+
+interface TagsProps {
+  id: number,
+  attributes: {
+    name: string,
+  }
 }
 
 
 export default function Home() {
 
   const [posts, setPosts] = useState<PostsProps>();
+  const [tags, setTags] = useState<TagsPosts>();
+  const [specialization, setSpecialization] = useState<PostsProps>();
   const [filteredPostType, setFilteredPostTypes] = useState<string | null>(null);
 
   const postsTypes = [
@@ -65,43 +58,40 @@ export default function Home() {
     'Фотография',
   ]
 
-  //запрос ко всем постам 
+  // запрос к названию, фото и типу работы постов
   useEffect(() => {
     const fetchData = async () => {
-        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/works?populate=*`);   
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,post_tag&fields=title&fields=url_view`);   
+        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?fields=name`);   
         setPosts(postsResponse);
+        setTags(tagsResponse)
+        // let specializationsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=specialization`);   
+        // setSpecialization(specializationsResponse);
       };
     fetchData();
   }, []);
 
-
-
   const filteredPosts = useMemo(() => {
     if (!posts) return [];
-    let filteredData = posts.data;
-    // if (filteredPostType) {
-    //     filteredData = filteredData.filter(post => post.attributes.work_type.data.attributes.name === filteredPostType);
-    // }
+      let filteredData = posts.data.filter(post => post.attributes.worktype.data.attributes.name === 'Проекты');
     return filteredData;
-  }, [posts, filteredPostType]);
+  }, [posts]);
 
 
   return (
     <div>
       <Header />
-
-      <div className='px-11 pt-14 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
+      <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
         <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
-        <Tags/>
+        <Tags tags={tags}/>
       </div>
-
-      <div className='px-11 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
+      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <ImagePost 
-              photo={post.attributes.photo?.data?.attributes?.url} 
+              url_view={post.attributes.url_view} 
               title={post.attributes.title}
-              work_type={post.attributes.work_type.data?.attributes?.name}
+              worktype={post.attributes.worktype.data?.attributes?.name}
             />
           )
         })}
