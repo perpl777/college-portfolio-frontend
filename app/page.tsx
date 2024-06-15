@@ -25,18 +25,16 @@ interface DataPosts {
         }
     };
     post_tag: {
-      data: {
-          id: number
-      }
+      id: number
     };
   }
 }
 
-interface TagsPosts {
-  data: TagsProps[]
+interface TagsProps {
+  data: TagsPosts[];
 }
 
-interface TagsProps {
+interface TagsPosts {
   id: number,
   attributes: {
     name: string,
@@ -47,33 +45,33 @@ interface TagsProps {
 export default function Home() {
 
   const [posts, setPosts] = useState<PostsProps>();
-  const [tags, setTags] = useState<TagsPosts>();
-  const [specialization, setSpecialization] = useState<PostsProps>();
+  const [tags, setTags] = useState<TagsProps>();
   const [filteredPostType, setFilteredPostTypes] = useState<string | null>(null);
 
   const postsTypes = [
     'Дизайн',
-    'Программирование',
     'Печать',
+    'Программирование',
     'Фотография',
   ]
 
   // запрос к названию, фото и типу работы постов
   useEffect(() => {
     const fetchData = async () => {
-        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,post_tag&fields=title&fields=url_view`);   
-        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?fields=name`);   
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,post_tag,student&fields=title&fields=url_view`);   
+        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?fields=name`);    
         setPosts(postsResponse);
         setTags(tagsResponse)
-        // let specializationsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=specialization`);   
-        // setSpecialization(specializationsResponse);
       };
     fetchData();
   }, []);
 
+
   const filteredPosts = useMemo(() => {
     if (!posts) return [];
-      let filteredData = posts.data.filter(post => post.attributes.worktype.data.attributes.name === 'Проекты');
+    
+    let filteredData = posts.data?.filter(post => post.attributes.worktype.data.attributes.name === 'Проекты');
+        
     return filteredData;
   }, [posts]);
 
@@ -82,7 +80,7 @@ export default function Home() {
     <div>
       <Header />
       <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
-        <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
+      <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
         <Tags tags={tags}/>
       </div>
       <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>

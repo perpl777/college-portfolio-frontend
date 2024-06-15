@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 
 
-interface TagsPosts {
-    data: TagsProps[]
-}
-
-interface TagsProps {
-    id: number,
-    attributes: {
-    name: string,
-    }
-}
-
-
-const Tags = ({tags}: TagsPosts) => {
+const Tags = ({ tags }: any) => {
     const [activeButtons, setActiveButtons] = useState<Set<number>>(new Set());
 
     const handleClick = (index: number) => {
@@ -33,7 +21,7 @@ const Tags = ({tags}: TagsPosts) => {
                     <button
                         key={index}
                         className={`border rounded-sm border-gray-200 py-1 px-3 text-sm text-gray-800  transition-colors ${
-                            activeButtons.has(index) ? 'bg-gray-100 border border-opacity-0' : ''
+                            activeButtons.has(index) ? 'bg-gray-200 border border-opacity-0' : ''
                         }`}
                         onClick={() => handleClick(index)}
                     >
