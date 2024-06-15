@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
 
 
-const Tags = ({ tags }: any) => {
-    const [activeButtons, setActiveButtons] = useState<Set<number>>(new Set());
+interface TagsProps {
+    tags: string[];
+    filteredPostTags: string[];
+    handleTagFilter: (tag: string) => void;
+    selectedTags: any;
+}
 
-    const handleClick = (index: number) => {
-        const newActiveButtons = new Set(activeButtons);
-        if (newActiveButtons.has(index)) {
-            newActiveButtons.delete(index);
-        } else {
-            newActiveButtons.add(index);
-        }
-        setActiveButtons(newActiveButtons);
-    };
 
+const Tags: React.FC<TagsProps> = ({ tags, filteredPostTags, handleTagFilter, selectedTags}) => {
+    
     return (
         <div className="flex gap-4 max-lg:flex-wrap">
-            {tags && tags.data?.map((tag: any, index: number) => {
+            {tags && tags?.map((tag: any) => {
                 return (
-                    <button
-                        key={index}
-                        className={`border rounded-sm border-gray-200 py-1 px-3 text-sm text-gray-800  transition-colors ${
-                            activeButtons.has(index) ? 'bg-gray-200 border border-opacity-0' : ''
-                        }`}
-                        onClick={() => handleClick(index)}
-                    >
-                        # {tag.attributes.name}
-                    </button>
+                    <label 
+                        key={tag} 
+                        className={`cursor-pointer px-3 border rounded-sm border-gray-300 py-1 text-sm text-gray-800 transition-colors ${selectedTags.includes(tag) ? 'bg-gray-200 border-gray-300/20' : ''}`} 
+                        style={{ userSelect: 'none' }}>
+                        <input
+                            type="checkbox"
+                            checked={filteredPostTags.includes(tag)}
+                            onChange={() => handleTagFilter(tag)}
+                            className="hidden"
+                        />
+                        # {tag}
+                    </label>
                 )
             })}
         </div>

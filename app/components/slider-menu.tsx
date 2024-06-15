@@ -8,7 +8,6 @@ interface Props {
     updateFilteredValues: (query: string) => void;
 }
 
-
 const SliderMenu = ({values, updateFilteredValues}: Props) => {
 
     const [selectedValues, setSelectedValues] = useState(null);
