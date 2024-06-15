@@ -36,20 +36,30 @@ interface DataPosts {
   }
 }
 
+interface CategoryProps {
+  id: number,
+  attributes: {
+    name: string,
+    tags: {
+      data: {
+        id: number,
+        attributes: {
+          name: string
+        }
+      }
+    };
+  }
+}
+
+
 export default function Home() {
 
   const [posts, setPosts] = useState<PostsProps>();
   const [tags, setTags] = useState<string[]>([]);  
+  const [categories, setCategories] = useState<CategoryProps[]>([]); 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [filteredPostTags, setFilteredPostTags] = useState<string[]>([]);
-
-  const postsTypes = [
-    'Дизайн',
-    'Печать',
-    'Программирование',
-    'Фотография',
-  ]
-
+  
   
   useEffect(() => {
     const fetchData = async () => {
@@ -57,8 +67,12 @@ export default function Home() {
         setPosts(postsResponse);
         
         let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?fields=name`);        
-        const names = tagsResponse.data.map((tag: any) => tag.attributes.name);         
-        setTags(names);       
+        const namesTags = tagsResponse.data.map((tag: any) => tag.attributes.name);         
+        setTags(namesTags);  
+        
+        let categoriesResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/categories?populate=*`);        
+        const namesCategories = categoriesResponse.data.map((category: any) => category.attributes.name);         
+        setCategories(namesCategories); 
       };     
       fetchData();   
     }, []);
@@ -73,12 +87,13 @@ export default function Home() {
         (filteredPostTags.length === 0 ||
           post.attributes.tags.data.some((tag: any) =>
             filteredPostTags.includes(tag.attributes.name)
-          ))
+          )) 
       );
     });
   
     return filteredData;
-  }, [posts, filteredPostTags]);
+  }, [posts, filteredPostTags, categories]);
+  
 
 
   const handleTagFilter = (tag: string) => {
@@ -95,12 +110,11 @@ export default function Home() {
     }
   };
 
-
   return (
     <div>
       <Header />
       <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pt-10 max-sm:space-y-6 max-lg:space-y-10'>
-        <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTags}/>
+        <SliderMenu values={categories}/>
         <Tags tags={tags} filteredPostTags={filteredPostTags} handleTagFilter={handleTagFilter} selectedTags={selectedTags}/>
       </div>
       <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
@@ -109,7 +123,6 @@ export default function Home() {
             <ImagePost 
               url_view={post.attributes.url_view} 
               title={post.attributes.title}
-              worktype={post.attributes.worktype.data?.attributes?.name}
             />
           )
         })}

@@ -4,15 +4,21 @@ import { FC } from 'react';
 import Link from 'next/link';
 
 
-interface Data {
+interface DataStudents {
     id: number;
     attributes: {
         surname: string;
         name: string;
-        patronymic?: string;
-        specialty: string;
-    };
-}
+        patronymic: string;
+        specialization: {
+            data: {
+                attributes: {
+                    name: string
+                }
+            }
+        }
+    }
+};
 
 interface StudentLinkProps {
     href: string;
@@ -21,7 +27,7 @@ interface StudentLinkProps {
 /*отображаем ФИО, курс и группу либо только ФИО */
 type type = 'all' | 'only_name'
 interface TableProps {
-    students?: Data[];
+    students?: DataStudents[];
     studentLinks?: StudentLinkProps;
     type?: type;
 }
@@ -84,7 +90,7 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                             </Link>
                                             <p className='pt-4 sm:hidden  max-sm:text-gray-600'>{student.attributes.specialty}</p>
                                         </td>
-                                        <td className='w-5/12 max-sm:hidden'>{student.attributes.specialty}</td>
+                                        <td className='w-5/12 max-sm:hidden'>{student.attributes.specialization.data.attributes.name}</td>
                                         <td className='max-sm:flex max-sm:items-start'>
                                             {(index === 0 || index === 1 || index === 2)  &&
                                                 <div className='max-sm:w-20 max-sm:text-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>

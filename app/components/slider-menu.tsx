@@ -5,22 +5,13 @@ import Checkbox from '../components/checkbox';
 
 interface Props {
     values: any;
-    updateFilteredValues: (query: string) => void;
 }
 
-const SliderMenu = ({values, updateFilteredValues}: Props) => {
+const SliderMenu = ({values}: Props) => {
 
-    const [selectedValues, setSelectedValues] = useState(null);
     const [activeButton, setActiveButton] = useState(0);
 
-    const handleVaSelection = (Values: any, index: any) => {
-        if (Values === values[0]) {
-            setSelectedValues(null); 
-            updateFilteredValues("");
-        } else {
-            setSelectedValues(Values);
-            updateFilteredValues(Values);
-        }
+    const handleVaSelection = (index: any) => {
         setActiveButton(index);
     };
 
@@ -30,11 +21,11 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
     }
 
     return  (
-        <div className={`flex items-center space-x-10  ${stylesAdaptive.menu}`}>
+        <div className={`flex items-center space-x-9 ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
                     key={index}
-                    onClick={() => handleVaSelection(value, index)}
+                    onClick={() => handleVaSelection(index)}
                     className={`text-left text-lg text-black p-1 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
                 >
                     {value}

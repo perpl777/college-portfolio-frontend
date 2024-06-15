@@ -7,11 +7,10 @@ import Image from 'next/image';
 interface DataPost {
     url_view?: string
     title: string
-    worktype: string
 }
 
 
-const ImagePost = ({url_view, title, worktype}: DataPost) => {
+const ImagePost = ({url_view, title}: DataPost) => {
 
     const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,14 +59,7 @@ const ImagePost = ({url_view, title, worktype}: DataPost) => {
                 </div>
             </div>
             :
-            <div className='cursor-pointer'>
-                <div className='p-5 border border-gray-400 rounded-sm aspect-square w-full'>
-                    <div
-                        className={`border rounded-sm border-gray-400 py-1 px-3 w-32 text-xs text-gray-600`}
-                    >
-                        # веб-разработка
-                    </div>
-                </div>
+            <div className='cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50'>
                 <div className='w-full absolute bottom-0 items-center'>
                     <p className='text-3xl titlePost uppercase py-6 px-6  max-lg:text-2xl '>{title}</p>
                 </div>
