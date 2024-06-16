@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 
@@ -22,7 +22,7 @@ const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) =>
             {url_view 
             ? (
                 <>
-                    <div className='p-11 flex flex-col w-1/2 justify-between gap-14 border-t border-x border-black max-[1040px]:gap-5 max-md:p-3 hover:bg-slate-200 transition-all'>
+                    <div className='p-11 flex flex-col w-1/2 justify-between gap-14 border-t border-x border-black max-[1040px]:gap-5  max-md:py-5 max-md:p-4 hover:bg-slate-200 transition-all'>
                         <div className='flex justify-between'>
                             <p className='text-sm uppercase max-sm:text-xs'>{worktype}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
@@ -47,8 +47,8 @@ const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) =>
             :
                 (
                 <>
-                    <div className='p-11 flex flex-col w-full justify-between gap-24 border-t border-x border-black max-[1040px]:gap-5 max-md:p-3  hover:bg-slate-200 transition-all'>
-                        <div className='flex justify-between'>
+                    <div className='p-11 flex flex-col w-full justify-between gap-24 border-t border-x border-black max-[1040px]:gap-5 max-md:p-4 max-md:py-5  hover:bg-slate-200 transition-all'>
+                        <div className='flex justify-between max-sm:space-y-6'>
                             <p className='text-sm uppercase max-sm:text-xs'>{worktype}</p>
                             <p className='text-sm opacity-50 max-sm:text-xs'>@{publishedAt.slice(0,4)}</p>
                         </div>

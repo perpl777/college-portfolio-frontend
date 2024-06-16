@@ -7,7 +7,6 @@ import StudentCard from '@/app/components/student-card';
 import Posts from '@/app/components/posts/posts';
 
 
-
 interface Props {
     params: {id: number};
 }
@@ -75,6 +74,7 @@ interface DataPosts {
 }
 
 interface PostsProps {
+    some: any;
     data: DataPosts[]
 }
 
@@ -83,29 +83,25 @@ interface PostsProps {
 export default function Portfolio({ params: { id } }: Props) {
     let [student, setStudent] = useState<DataStudent>();
     const [posts, setPosts] = useState<PostsProps>();
-    const [filteredPostType, setFilteredPostTypes] = useState<string | null>(null);
+    const [worktypes, setWorktypes] = useState<string[]>([]);
+    const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
+    const [filteredPost, setFilteredPost] = useState<string | null>(null)
     const [technologiesString, setTechnologiesString] = useState("");
-
-    const postsTypes = [
-        'Все',
-        'Проекты',
-        'Достижения',
-        'Курсы',
-        'Стажировки',
-        'Спорт',
-        'Волонтерство'
-    ]
 
     useEffect(() => {
         const fetchData = async () => {
-            const [postsResponse, studentResponse] = await Promise.all([
+            const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=1&populate=*`),
-                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`)
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
             ]);
         
             setStudent(studentResponse.data);
             setPosts(postsResponse);
-        
+
+            const namesWorktypes = worktypesResponse.data.map((worktype: any) => worktype.attributes.name);   
+            setWorktypes(namesWorktypes);
+
             if (studentResponse.data) {
                 const technologies = studentResponse.data.attributes.technologies.data.map((tec: any) => tec.attributes ? tec.attributes.name : "");
                 setTechnologiesString(technologies.join(", "));
@@ -113,18 +109,19 @@ export default function Portfolio({ params: { id } }: Props) {
         };
     fetchData();
     }, []);
-    
-    
+
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
-        let filteredData = posts.data;
-        // Фильтрация по типам
-        if (filteredPostType) {
-            filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPostType);
-        }
-        return filteredData;
-    }, [posts, filteredPostType]);
 
+        let filteredData = posts.data;
+        
+        // Фильтрация по типам
+        if (filteredPost) {
+            filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost);
+        }
+
+        return filteredData;
+    }, [posts, filteredPost, checkboxChecked]);
 
     return (
         <div className="flex flex-col">
@@ -147,14 +144,14 @@ export default function Portfolio({ params: { id } }: Props) {
                 }
             </div>
 
-            <div className="flex justify-end pt-10 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-6">
+            <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-8">
                 <div className='w-4/6 max-[480px]:w-10/12'>
                     {student?.attributes?.about_info}
                 </div>
             </div>
 
-            <div className="px-11 pb-5 max-sm:pb-0 max-sm:px-4">
-                <SliderMenu values={postsTypes} updateFilteredValues={setFilteredPostTypes}/>
+            <div className="px-11 pb-6 max-sm:pb-1 max-sm:px-4">
+                <SliderMenu values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
             </div>
 
             {filteredPosts && filteredPosts.length > 0 

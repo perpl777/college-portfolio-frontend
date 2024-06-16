@@ -82,13 +82,13 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                                         className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
                                     >
                                         <td className='w-2/12 max-sm:w-8 max-sm:flex max-sm:items-start'>{index + 1}</td>
-                                        <td className='w-4/12 max-sm:w-auto max-sm:pr-0 '> 
+                                        <td className='w-4/12 max-sm:w-auto max-sm:pr-0'> 
                                             <Link href={`/${studentLinks?.href}/${student.id}`}>
                                                 {`${student.attributes.surname} 
                                                 ${student.attributes.name} 
                                                 ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
                                             </Link>
-                                            <p className='pt-4 sm:hidden  max-sm:text-gray-600'>{student.attributes.specialty}</p>
+                                            <p className='pt-4 sm:hidden max-sm:text-gray-500'>{student.attributes.specialization.data.attributes.name}</p>
                                         </td>
                                         <td className='w-5/12 max-sm:hidden'>{student.attributes.specialization.data.attributes.name}</td>
                                         <td className='max-sm:flex max-sm:items-start'>
