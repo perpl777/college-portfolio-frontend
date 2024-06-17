@@ -150,7 +150,7 @@ export default function Portfolio({ params: { id } }: Props) {
                 </div>
             </div>
 
-            <div className="px-11 pb-6 max-sm:pb-1 max-sm:px-4">
+            <div className="px-11 pb-4 max-sm:pb-1 max-sm:px-4">
                 <SliderMenu values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
             </div>
 

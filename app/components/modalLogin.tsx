@@ -1,6 +1,11 @@
 'use client'
 import React, {useState} from "react";
 
+import { fetcher } from '@/lib/api';
+import { setAuthData } from '@/lib/auth';
+// import {useUser} from "@/lib/authContext";
+import ErrorMess from "./errorMess";
+
 
 interface ModalProps {
     openModal: boolean;
@@ -13,14 +18,61 @@ const ModalLogin = ({ openModal, handleCloseModal }: ModalProps) => {
     const [registrationMode, setRegistrationMode] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
 
+    const [data, setData] = useState(
+        {
+            "email": "",
+            "password": ""
+        }
+    )
+
+    const [error, setError] = useState<string | undefined>(undefined);
+    // const {user, loading} = useUser();
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setError(undefined)
+        
+        try {
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    identifier: data.email,
+                    password: data.password
+                }),
+            });
+    
+            if (response.error) {
+                console.error('Error:', response.error);
+                setError('Error');
+                return;
+            }
+            setAuthData(response);
+
+            window.location.href = '/';
+        } 
+        catch (error) {
+            console.error('Error:', error);
+            setError('Error');
+        }
+    };
+
+    const handleChange = (e: any) => {
+        setData({ ...data, [e.target.name]: e.target.value });
+    }
+
     const handleRegistrationClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault(); 
         setRegistrationMode(true);
+        setError(undefined)
     };
 
     const handleForgotPasswordClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setForgotPassword(true);
+        setError(undefined)
     };
 
     const handleLoginClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,7 +80,6 @@ const ModalLogin = ({ openModal, handleCloseModal }: ModalProps) => {
         setRegistrationMode(false);
         setForgotPassword(false);
     };
-
 
 
     return (
@@ -39,7 +90,7 @@ const ModalLogin = ({ openModal, handleCloseModal }: ModalProps) => {
                         <button className='text-5xl font-light' onClick={handleCloseModal}>&times;</button>
                     </form>
                 </div>
-                <form className="flex flex-col items-center w-8/12 max-sm:w-10/12">
+                <form onSubmit={handleSubmit}  className="flex flex-col items-center w-8/12 max-sm:w-10/12">
                     <h1 className="montserrat text-3xl mt-8">
                         {forgotPassword ? "Восстановление пароля" : (registrationMode ? "Регистрация" : "Вход")}
                     </h1>
@@ -47,23 +98,36 @@ const ModalLogin = ({ openModal, handleCloseModal }: ModalProps) => {
                     {forgotPassword ?
                         <input 
                             type="text" 
+                            name="email"
                             placeholder="Почта.."
+                            onChange={handleChange}
+                            required
                             className="w-full p-1 mt-10 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
                     :
-                    <div className="mt-11 space-y-6">
+                    <div className="mt-12 space-y-6">
                         <input 
                             type="text" 
+                            name="email"
                             placeholder="Почта.."
+                            onChange={handleChange}
+                            required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
                         <input 
-                            type="text" 
+                            name="password"
+                            type="password" 
                             placeholder="Пароль.."
+                            onChange={handleChange}
+                            required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
                     </div>
                     }
+
+                    <div className="mt-56 absolute">
+                        {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>}
+                    </div>
 
                     <button
                         type="submit"

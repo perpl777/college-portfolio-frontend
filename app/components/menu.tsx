@@ -2,24 +2,51 @@
 
 import React, { useEffect, useState } from 'react';
 import { gsap } from 'gsap'
+import {fetcher} from "@/lib/api"
 import Link from 'next/link'
 
-import { setAuthData, unsetAuthData } from '@/lib/auth';
+import { getAuthData, unsetAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
 import ModalLogin from './modalLogin';
-import { title } from 'process';
 
 
-interface MenuProps {
-    adminPage: boolean;
+interface UserData {
+    character: {
+        id: number
+    }
+}
+
+interface CharacterData {
+    id: number;
+    attributes: {
+        student: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                }
+            }
+        }
+    }
 }
 
 
-const Menu = ({adminPage}: MenuProps) => {
+const Menu = () => {
     
+    const { id } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
+    let [characterData, setCharacterData] = useState<CharacterData>();
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
+
+    useEffect(() => {     
+        const fetchData = async () => {     
+            const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+            const characterDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/characters/${userDataResponse.character.id}/?populate=*`);
+            setCharacterData(characterDataResponse.data)
+        };
+        fetchData();   
+    }, []);
 
     const handleOpenModal = () => {
         setOpenModal(!openModal);
@@ -30,7 +57,7 @@ const Menu = ({adminPage}: MenuProps) => {
     };
 
     useEffect(() => {
-        const userData = Cookies.get('username');
+        const userData = Cookies.get('email');
         if (userData) {
             setUser(userData);
         }
@@ -41,7 +68,6 @@ const Menu = ({adminPage}: MenuProps) => {
         unsetAuthData()
         window.location.href = '/';
     }
-
 
     //--------- anim click appirance menu----------
     const [menuHide, setMenuHide] = useState(true);
@@ -139,7 +165,7 @@ const Menu = ({adminPage}: MenuProps) => {
                         </Link>
                         {user ? (
                             <>
-                                <Link href={`/admin`}>
+                                <Link href={`/myprofile`}>
                                     <span className={"menu-nav-elenemt ml-12 hover:text-gray-400"}>
                                         Профиль
                                     </span>
@@ -156,7 +182,7 @@ const Menu = ({adminPage}: MenuProps) => {
                             </>
                         )}
                     </div>
-                    <div className='menu-nav-elenemt mr-12 max-sm:mr-5'>{user}</div>
+                    <span className='menu-nav-elenemt mr-16 max-sm:mr-5'>{characterData?.attributes.student.data.attributes.name}</span>
                 </div>
             </div>
 
