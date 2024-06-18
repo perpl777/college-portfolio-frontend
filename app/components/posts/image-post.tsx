@@ -14,6 +14,8 @@ interface DataPost {
 
 
 const ImagePost = ({ studentId, postId, url_view, title }: DataPost) => {
+
+    //анимации
     const divRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -27,11 +29,8 @@ const ImagePost = ({ studentId, postId, url_view, title }: DataPost) => {
             }
             }
         };
-    
         handleResize();
-    
         window.addEventListener('resize', handleResize);
-    
         return () => {
             window.removeEventListener('resize', handleResize);
         };

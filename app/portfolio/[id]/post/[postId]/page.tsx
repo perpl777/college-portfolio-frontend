@@ -53,6 +53,7 @@ export default function Post({ params: { id, postId}}: Props) {
 
     const [post, setPost] = useState<DataPosts>();
 
+    //фетч
     useEffect(() => {
         const fetchData = async () => {
             let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);    

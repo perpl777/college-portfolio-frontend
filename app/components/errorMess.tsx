@@ -1,5 +1,4 @@
 
-
 interface Props {
     text: string;
 }

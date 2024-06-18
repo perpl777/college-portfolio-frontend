@@ -1,9 +1,6 @@
-'use client'
 import React from 'react'
 
-
 const Checkbox = ({ onChange, checked }: any) => {
-
     return (
         <div className="form-control">
             <label className="cursor-pointer label gap-2 p-0">

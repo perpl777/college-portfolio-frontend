@@ -59,9 +59,7 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                         </Suspense>
                     </tbody>
                 </table>
-
                 :
-
                 <table className='table table-lg m-auto'>
                     <thead>
                     {

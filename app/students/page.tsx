@@ -1,7 +1,9 @@
 'use client'
 import React, { Suspense, useEffect, useState, useMemo } from 'react'
 import { fetcher } from "../../lib/api"
+
 import Loading from '../loading'
+
 import Search from '../components/search'
 import Filter from '../components/filter'
 import Table from '../components/students-table';
@@ -24,11 +26,10 @@ interface DataStudents {
     };
 }
 
-
-
 interface StudentProps {
     data: DataStudents[]
 }
+
 
 export default function StudentsPage() {
     
@@ -50,6 +51,7 @@ export default function StudentsPage() {
         "Изделия из бумаги и картона", 
     ]
 
+    //фетч
     useEffect(() => {     
         const fetchData = async () => {       
         const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=specialization&fields=name&fields=surname&fields=patronymic`);
@@ -58,7 +60,7 @@ export default function StudentsPage() {
         fetchData();   
     }, []);
 
-
+    //фильтр для студентов
     const filteredStudents = useMemo(() => {
         if (!students) return [];
         let filteredData = students.data;
@@ -76,7 +78,7 @@ export default function StudentsPage() {
         );
         filteredData = searchResults;
         }
-
+        
         return filteredData;
     }, [students, filteredSpecialty, searchQuery]);
 

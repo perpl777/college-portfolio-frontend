@@ -1,4 +1,3 @@
-'use client'
 import React from 'react';
 import Image from 'next/image';
 
@@ -10,7 +9,6 @@ interface DataPost {
     worktype: string
     url_view?: string
 }
-
 
 const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) => {
 

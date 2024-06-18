@@ -8,7 +8,6 @@ import Menu from './menu'
 
 
 const Header = () => {
-
     useEffect(() => {
         gsap.from(".title", { 
             x: 100, 
@@ -21,7 +20,6 @@ const Header = () => {
             duration: 0.6, 
         }); 
     }, []);
-
     return (
         <div className='flex flex-col px-11 pt-5 max-sm:px-6 max-sm:pt-2'>
             <div className='flex items-start justify-between py-7 gap-5 border-b border-black'>

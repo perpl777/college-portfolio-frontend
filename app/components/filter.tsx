@@ -14,7 +14,6 @@ interface Props {
 
 
 const Filter = ({values, updateFilteredValues, type}: Props) => {
-
     const [selectedValues, setSelectedValues] = useState(null);
 
     const handleVaSelection = (Values: any) => {

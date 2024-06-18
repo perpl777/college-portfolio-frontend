@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetcher } from '@/lib/api';
+
 import Header from '@/app/components/header';
 import SliderMenu from '@/app/components/slider-menu';
 import StudentCard from '@/app/components/student-card';
@@ -79,15 +80,15 @@ interface PostsProps {
 }
 
 
-
 export default function Portfolio({ params: { id } }: Props) {
     let [student, setStudent] = useState<DataStudent>();
     const [posts, setPosts] = useState<PostsProps>();
+    const [filteredPost, setFilteredPost] = useState<string | null>(null)
     const [worktypes, setWorktypes] = useState<string[]>([]);
     const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
-    const [filteredPost, setFilteredPost] = useState<string | null>(null)
     const [technologiesString, setTechnologiesString] = useState("");
 
+    //фетчи
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
@@ -110,6 +111,8 @@ export default function Portfolio({ params: { id } }: Props) {
     fetchData();
     }, []);
 
+    
+    //фильтры для постов
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
 

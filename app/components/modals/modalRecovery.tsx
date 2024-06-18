@@ -1,0 +1,69 @@
+'use client'
+import React, {useState} from "react";
+import ErrorMess from "../errorMess";
+
+
+interface ModalProps {
+    openModalRecovery: boolean;
+    handleCloseModalRecovery: () => void;
+    handleOpenModalLogin: any;
+}
+
+
+const ModalRecovery = ({ openModalRecovery, handleCloseModalRecovery, handleOpenModalLogin }: ModalProps) => {
+    const [error, setError] = useState<string | undefined>(undefined);
+    const [data, setData] = useState(
+        {
+            "email": "",
+            "password": ""
+        }
+    )
+
+    const handleChange = (e: any) => {
+        setData({ ...data, [e.target.name]: e.target.value });
+    }
+
+    return (
+        <dialog className="modal bg-black/70" open={openModalRecovery}>
+            <div className="modal-box py-14 max-sm:w-full rounded-none flex items-center justify-center">
+                <div className="modal-action absolute -top-2 right-6">
+                    <form method="dialog">
+                        <button className='text-5xl font-light' onClick={handleCloseModalRecovery}>&times;</button>
+                    </form>
+                </div>
+                <form className="flex flex-col items-center w-8/12 max-sm:w-10/12">
+                    <h1 className="montserrat text-3xl mt-8">
+                        Восстановление пароля
+                    </h1>
+
+                    <input 
+                        type="text" 
+                        name="email"
+                        placeholder="Почта.."
+                        onChange={handleChange}
+                        required
+                        className="w-full p-1 mt-10 font-light text-lg text-gray border-b border-gray-800 outline-none"
+                    />
+
+                    <div className="mt-56 absolute">
+                        {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-black mt-16 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
+                    >Восстановить пароль</button>
+
+                    <div className="mt-4 flex justify-end w-full">
+                        <button
+                            className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
+                            onClick={handleOpenModalLogin}
+                        >Зайти в аккаунт</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+    );
+};
+
+export default ModalRecovery;

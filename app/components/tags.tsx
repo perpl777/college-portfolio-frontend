@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 interface TagsProps {
     tags: string[];
     filteredPost: string[];
@@ -8,9 +7,7 @@ interface TagsProps {
     selectedTags: any;
 }
 
-
 const Tags: React.FC<TagsProps> = ({ tags, filteredPost, handleTagFilter, selectedTags}) => {
-    
     return (
         <div className="flex gap-4 max-lg:flex-wrap">
             {tags && tags?.map((tag: any) => {
