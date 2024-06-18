@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-import PostWindow from './post';
+import PostPage from './post-page';
 
 
 interface Props {
@@ -23,7 +23,10 @@ interface DataPosts {
         publishedAt: string,
         student: {
             data: {
-                id: number
+                id: number;
+                attributes: {
+                    name: string
+                }
             }
         },
         worktype: {
@@ -49,7 +52,6 @@ interface DataPosts {
 export default function Post({ params: { id, postId}}: Props) {
 
     const [post, setPost] = useState<DataPosts>();
-    const [fileLoaded, setFileLoaded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,7 +65,7 @@ export default function Post({ params: { id, postId}}: Props) {
         <>
             {post && 
                 <>
-                    <PostWindow
+                    <PostPage
                         postId={postId}
                         title={post?.attributes.title}
                         description={post?.attributes.description}
@@ -71,6 +73,8 @@ export default function Post({ params: { id, postId}}: Props) {
                         worktype={post?.attributes.worktype.data.attributes.name}
                         url_view={post.attributes.url_view}
                         url_file={post.attributes.url_file}
+                        studentName={post.attributes.student.data.attributes.name}
+                        studentId={post.attributes.student.data.id}
                     />
                 </>
             }

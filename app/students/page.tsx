@@ -24,6 +24,8 @@ interface DataStudents {
     };
 }
 
+
+
 interface StudentProps {
     data: DataStudents[]
 }
@@ -90,7 +92,7 @@ export default function StudentsPage() {
 
             <div className='px-11 max-sm:p-6'>
                 <Suspense fallback={<Loading />}>
-                <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
+                    <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
                 </Suspense>
             </div> 
         </div>

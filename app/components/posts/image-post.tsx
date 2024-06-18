@@ -1,16 +1,19 @@
 'use client'
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Image from 'next/image';
+import Link from 'next/link';
 
 
 interface DataPost {
+    studentId: number;
+    postId: number;
     url_view?: string
     title: string
 }
 
 
-const ImagePost = ({ url_view, title }: DataPost) => {
+const ImagePost = ({ studentId, postId, url_view, title }: DataPost) => {
     const divRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -38,7 +41,7 @@ const ImagePost = ({ url_view, title }: DataPost) => {
         if (divRef.current) {
             gsap.to(divRef.current, { height: 'auto', duration: 0.6 });
         }
-        };
+    };
     
     const handleMouseLeave = () => {
         if (divRef.current) {
@@ -47,22 +50,24 @@ const ImagePost = ({ url_view, title }: DataPost) => {
     };
     
     return (
-        <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {url_view ? (
-            <div className='cursor-pointer'>
-                <Image src={url_view} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
-                <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
-                <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
+        <Link href={`/portfolio/${studentId}/post/${postId}`}>
+            <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                {url_view ? (
+                <div className='cursor-pointer'>
+                    <Image src={url_view} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                    <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
+                    <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
+                    </div>
                 </div>
-            </div>
-            ) : (
-            <div className='cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50'>
-                <div className='w-full absolute bottom-0 items-center'>
-                <p className='text-3xl titlePost uppercase py-6 px-6 max-lg:text-2xl'>{title}</p>
+                ) : (
+                <div className='cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50'>
+                    <div className='w-full absolute bottom-0 items-center'>
+                    <p className='text-3xl titlePost uppercase py-6 px-6 max-lg:text-2xl'>{title}</p>
+                    </div>
                 </div>
+                )}
             </div>
-            )}
-        </div>
+        </Link>
     );
 };
 

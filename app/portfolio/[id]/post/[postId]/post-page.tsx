@@ -14,10 +14,12 @@ interface Props {
     worktype: string;
     url_view?: any;
     url_file?: any;
+    studentName: string;
+    studentId: number;
 }
 
 
-export default function PostWindow({postId, title, description, publishedAt, worktype, url_view, url_file}: Props) {
+export default function PostPage({postId, title, description, publishedAt, worktype, url_view, url_file, studentName, studentId}: Props) {
 
     return (
         <div className='p-11 flex flex-col justify-between gap-8 max-sm:p-7'>
@@ -35,6 +37,10 @@ export default function PostWindow({postId, title, description, publishedAt, wor
             <div className='flex justify-between items-end max-sm:flex-col max-sm:items-start max-sm:gap-7'>
                 <div className='w-7/12 max-sm:w-10/12'>
                     {description && <p className='text-sm opacity-70 pb-14'>{description}</p>}
+
+                    <Link href={`/portfolio/${studentId}`}>
+                        <span className='text-sm opacity-70 pb-14 hover:text-cyan-900 transition-colors'>Автор: {studentName}</span>
+                    </Link>
                 </div>
     
                 {url_file 

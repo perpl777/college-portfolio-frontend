@@ -16,6 +16,12 @@ interface DataPosts {
   attributes: {
     title: string,
     url_view: string;
+    published: boolean;
+    student: {
+      data: {
+        id: number
+      }
+    }
     worktype: {
       data: {
         id: number,
@@ -80,7 +86,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags&fields=title&fields=url_view`);    
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student&fields=title&fields=url_view&fields=published`);    
         setPosts(postsResponse);
         
         let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=categories&fields=name`);        
@@ -102,7 +108,7 @@ export default function Home() {
   
     let filteredData = posts.data?.filter((post: any) => {
       return (
-        post.attributes.worktype.data.attributes.name === 'Проекты' &&
+        post.attributes.worktype.data.attributes.name === 'Проекты' && post.attributes.published &&
         (filteredPost.length === 0 ||
           post.attributes.tags.data.some((tag: any) =>
             filteredPost.includes(tag.attributes.name)
@@ -157,6 +163,8 @@ export default function Home() {
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <ImagePost 
+              studentId={post.attributes.student.data.id}
+              postId={post.id}
               url_view={post.attributes.url_view} 
               title={post.attributes.title}
             />

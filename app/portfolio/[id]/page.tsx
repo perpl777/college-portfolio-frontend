@@ -91,7 +91,7 @@ export default function Portfolio({ params: { id } }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
-                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=1&populate=*`),
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=${id}&populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
             ]);
