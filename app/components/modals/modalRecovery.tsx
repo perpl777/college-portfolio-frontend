@@ -10,8 +10,12 @@ interface ModalProps {
 }
 
 
-const ModalRecovery = ({ openModalRecovery, handleCloseModalRecovery, handleOpenModalLogin }: ModalProps) => {
-    const [error, setError] = useState<string | undefined>(undefined);
+const ModalRecovery = ({ 
+    openModalRecovery, 
+    handleCloseModalRecovery, 
+    handleOpenModalLogin
+}: ModalProps) => {
+
     const [data, setData] = useState(
         {
             "email": "",
@@ -22,6 +26,7 @@ const ModalRecovery = ({ openModalRecovery, handleCloseModalRecovery, handleOpen
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
+
 
     return (
         <dialog className="modal bg-black/70" open={openModalRecovery}>
@@ -36,25 +41,27 @@ const ModalRecovery = ({ openModalRecovery, handleCloseModalRecovery, handleOpen
                         Восстановление пароля
                     </h1>
 
-                    <input 
-                        type="text" 
-                        name="email"
-                        placeholder="Почта.."
-                        onChange={handleChange}
-                        required
-                        className="w-full p-1 mt-10 font-light text-lg text-gray border-b border-gray-800 outline-none"
-                    />
+                    <div className="space-y-6 w-full">
+                        <input 
+                            type="text" 
+                            name="email"
+                            placeholder="Почта.."
+                            onChange={handleChange}
+                            required
+                            className="w-full p-1 mt-10 font-light text-lg text-gray border-b border-gray-800 outline-none"
+                        />
 
-                    <div className="mt-56 absolute">
-                        {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>}
+                        <div>
+                            {/* {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>} */}
+                        </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="bg-black mt-16 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
+                        className="bg-black mt-10 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
                     >Восстановить пароль</button>
 
-                    <div className="mt-4 flex justify-end w-full">
+                    <div className="mt-3 flex justify-center w-full">
                         <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalLogin}

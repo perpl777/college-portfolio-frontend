@@ -14,9 +14,13 @@ interface ModalProps {
 }
 
 
-const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegister, handleOpenModalRecovery }: ModalProps) => {
+const ModalLogin = ({ 
+    openModalLogin, 
+    handleCloseModalLogin, 
+    handleOpenModalRegister, 
+    handleOpenModalRecovery
+}: ModalProps) => {
 
-    const [error, setError] = useState<string | undefined>(undefined);
     const [data, setData] = useState(
         {
             "email": "",
@@ -26,7 +30,6 @@ const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegi
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setError(undefined)
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`, {
                 method: 'POST',
@@ -40,7 +43,6 @@ const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegi
             });
             if (response.error) {
                 console.error('Error:', response.error);
-                setError('Error');
                 return;
             }
             setAuthData(response);
@@ -48,13 +50,13 @@ const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegi
         } 
         catch (error) {
             console.error('Error:', error);
-            setError('Error');
         }
     };
 
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
+
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>
@@ -68,7 +70,7 @@ const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegi
                     <h1 className="montserrat text-3xl mt-8">
                         Вход
                     </h1>
-                    <div className="mt-12 space-y-6">
+                    <div className="mt-10 space-y-6">
                         <input 
                             type="text" 
                             name="email"
@@ -85,23 +87,23 @@ const ModalLogin = ({ openModalLogin, handleCloseModalLogin, handleOpenModalRegi
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
-                    </div>
-                    <div className="mt-56 absolute">
-                        {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>}
+                        <div>
+                            {/* {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>} */}
+                        </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="bg-black mt-16 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
+                        className="bg-black mt-10 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
                     >
                         Войти
                     </button>
 
-                    <div className="mt-4 flex justify-between w-full">
-                        <button
+                    <div className="mt-3 flex justify-center w-full">
+                        {/* <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalRecovery}
-                        >Забыли пароль</button>
+                        >Забыли пароль</button> */}
                         <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalRegister}

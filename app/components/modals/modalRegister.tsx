@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
 
 import ErrorMess from "../errorMess";
@@ -12,9 +12,12 @@ interface ModalProps {
 }
 
 
-const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpenModalLogin }: ModalProps) => {
+const ModalRegister = ({ 
+    openModalRegister, 
+    handleCloseModalRegister, 
+    handleOpenModalLogin
+}: ModalProps) => {
     
-    const [error, setError] = useState<string | undefined>(undefined);
     const [data, setData] = useState(
         {
             "username": "",
@@ -23,9 +26,9 @@ const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpen
         }
     )
 
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setError(undefined)
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`, {
                 method: 'POST',
@@ -40,7 +43,6 @@ const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpen
             });
             if (response.error) {
                 console.error('Error:', response.error);
-                setError('Error');
                 return;
             }
             window.location.href = '/';
@@ -48,7 +50,6 @@ const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpen
         } 
         catch (error) {
             console.error('Error:', error);
-            setError('Error');
         }
     };
 
@@ -65,11 +66,11 @@ const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpen
                         <button className='text-5xl font-light' onClick={handleCloseModalRegister}>&times;</button>
                     </form>
                 </div>
-                <form onSubmit={handleSubmit}  className="flex flex-col items-center w-9/12 max-sm:w-10/12">
+                <form onSubmit={handleSubmit}  className="flex flex-col items-center w-8/12 max-sm:w-10/12">
                     <h1 className="montserrat text-3xl mt-8">
                         Регистрация
                     </h1>
-                    <div className="mt-12 space-y-6">
+                    <div className="mt-14 space-y-7">
                         <input 
                             type="text" 
                             name="email"
@@ -94,18 +95,17 @@ const ModalRegister = ({ openModalRegister, handleCloseModalRegister, handleOpen
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
-                    </div>
+                        <div>
+                            {/* {error && <ErrorMess text='Ошибка'></ErrorMess>} */}
+                        </div>
 
-                    <div className="mt-56 absolute">
-                        {error && <ErrorMess text='Ошибка'></ErrorMess>}
                     </div>
-
                     <button
                         type="submit"
-                        className="bg-black mt-16 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
+                        className="bg-black mt-10 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
                     >Зарегистрироваться</button>
 
-                    <div className="mt-4 flex justify-end w-full">
+                    <div className="mt-3 flex justify-center w-full">
                         <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalLogin}

@@ -29,6 +29,7 @@ const Menu = () => {
     const [openModalRegister, setOpenModalRegister] = useState(false);
     const [openModalRecovery, setOpenModalRecovery] = useState(false);
 
+
     //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
@@ -38,7 +39,7 @@ const Menu = () => {
         fetchData();   
     }, []);
 
-
+    
     // хэндлы для модалки авторизации
     const handleOpenModalLogin = () => {
         if (openModalRegister) {

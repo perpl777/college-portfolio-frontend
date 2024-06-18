@@ -1,4 +1,3 @@
-import React from "react";
 import ModalLogin from "./modalLogin";
 import ModalRegister from "./modalRegister";
 import ModalRecovery from "./modalRecovery"
