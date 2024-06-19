@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { fetcher } from '@/lib/api';
 
 import ErrorMess from "../errorMess";
@@ -25,38 +25,61 @@ const ModalRegister = ({
             "password": ""
         }
     )
+    const [error, setError] = useState<string | undefined>(undefined);
 
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        try {
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: data.username,
-                    email: data.email,
-                    password: data.password
-                }),
-            });
-            if (response.error) {
-                console.error('Error:', response.error);
-                return;
-            }
-            window.location.href = '/';
-            console.log('acces');
-        } 
-        catch (error) {
-            console.error('Error:', error);
-        }
+    const isValidEmail = (email: any) => {
+        // Простейшая проверка на корректность email
+        const re = /\S+@\S+\.\S+/;
+        return re.test(email);
     };
 
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
+        const response1 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[username][$eq]=${data.username}`);
+        const response2 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
+
+
+        if (data.password.length < 6 || data.password === data.password.toLowerCase()) {
+            setError('Пароль должен содержать не менее 6 символов и хотя бы одну заглавную букву.');
+        }
+          // Проверка настоящего email
+        else if (!isValidEmail(data.email)) {
+            setError('Пожалуйста, введите настоящий email.');
+        }
+        else if (response1.length !== 0 || response2.length !== 0) {
+            setError('Пользователь с таким именем или email уже существует.');
+        }
+
+        else {
+            try {
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: data.username,
+                        email: data.email,
+                        password: data.password
+                    }),
+                });
+                if (response.error) {
+                    console.error('Error:', response.error);
+                    return;
+                }
+                window.location.href = '/';
+                console.log('acces');
+            }
+            catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
 
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
@@ -74,6 +97,7 @@ const ModalRegister = ({
                         <input 
                             type="text" 
                             name="email"
+                            maxLength={70}
                             placeholder="Почта.."
                             onChange={handleChange}
                             required
@@ -82,6 +106,7 @@ const ModalRegister = ({
                         <input 
                             type="text" 
                             name="username"
+                            maxLength={20}
                             placeholder="Логин.."
                             onChange={handleChange}
                             required
@@ -90,13 +115,14 @@ const ModalRegister = ({
                         <input 
                             name="password"
                             type="password" 
+                            maxLength={30}
                             placeholder="Пароль.."
                             onChange={handleChange}
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
                         <div>
-                            {/* {error && <ErrorMess text='Ошибка'></ErrorMess>} */}
+                            {error && <ErrorMess text={error}></ErrorMess>}
                         </div>
 
                     </div>

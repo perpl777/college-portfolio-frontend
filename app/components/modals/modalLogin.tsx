@@ -21,6 +21,8 @@ const ModalLogin = ({
     handleOpenModalRecovery
 }: ModalProps) => {
 
+
+    const [error, setError] = useState<string | undefined>(undefined);
     const [data, setData] = useState(
         {
             "email": "",
@@ -43,12 +45,14 @@ const ModalLogin = ({
             });
             if (response.error) {
                 console.error('Error:', response.error);
+                setError('Неверная почта или пароль');
                 return;
             }
             setAuthData(response);
             window.location.href = '/';
         } 
         catch (error) {
+            setError('Неверная почта или пароль');
             console.error('Error:', error);
         }
     };
@@ -56,7 +60,6 @@ const ModalLogin = ({
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
-
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>
@@ -66,7 +69,7 @@ const ModalLogin = ({
                         <button className='text-5xl font-light' onClick={handleCloseModalLogin}>&times;</button>
                     </form>
                 </div>
-                <form onSubmit={handleSubmit}  className="flex flex-col items-center w-8/12 max-sm:w-10/12">
+                <form onSubmit={handleSubmit}  className="flex flex-col items-center w-7/12 max-sm:w-10/12">
                     <h1 className="montserrat text-3xl mt-8">
                         Вход
                     </h1>
@@ -88,7 +91,7 @@ const ModalLogin = ({
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
                         <div>
-                            {/* {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>} */}
+                            {error && <ErrorMess text={error}></ErrorMess>}
                         </div>
                     </div>
 
