@@ -42,7 +42,7 @@ const StudentCard = ({surname, name, course, about_info, technologies, url_behan
                         {`${name} ${surname}`}
                     </h1>
 
-                    <table className="table table-sm mt-12 max-sm:table-xs max-sm:mt-6">
+                    <table className="table table-sm mt-10 max-sm:table-xs max-sm:mt-6">
                         <tbody> 
                             <tr className='border-b border-black'> 
                                 <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Специальность</th> {/*выводим Специальность студента */}

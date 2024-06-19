@@ -30,14 +30,14 @@ const ModalRecovery = ({
 
     return (
         <dialog className="modal bg-black/70" open={openModalRecovery}>
-            <div className="modal-box py-14 max-sm:w-full rounded-none flex items-center justify-center">
+            <div className="modal-box py-12 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">
                 <div className="modal-action absolute -top-2 right-6">
                     <form method="dialog">
                         <button className='text-5xl font-light' onClick={handleCloseModalRecovery}>&times;</button>
                     </form>
                 </div>
-                <form className="flex flex-col items-center w-8/12 max-sm:w-10/12">
-                    <h1 className="montserrat text-3xl mt-8">
+                <form className="flex flex-col items-center w-4/6 max-sm:w-11/12">
+                    <h1 className="text-3xl mt-6 font-bold">
                         Восстановление пароля
                     </h1>
 

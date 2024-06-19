@@ -148,7 +148,7 @@ export default function Portfolio({ params: { id } }: Props) {
             </div>
 
             <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-8">
-                <div className='w-4/6 max-[480px]:w-10/12'>
+                <div className='w-4/6 max-[480px]:w-10/12 text-overflow-ellipsis'>
                     {student?.attributes?.about_info}
                 </div>
             </div>
