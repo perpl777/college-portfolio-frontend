@@ -5,24 +5,34 @@ import Checkbox from '../components/checkbox';
 
 interface Props {
     values: any;
-    updateFilteredValues: (query: string) => void;
+    setSelectedCategory: any;
+    checkboxChecked: any;
+    setCheckboxChecked: any;
 }
 
 
-const SliderMenu = ({values, updateFilteredValues}: Props) => {
+const SliderMenu = ({values, setSelectedCategory, checkboxChecked, setCheckboxChecked }: Props) => {
+    
+    const [activeButton, setActiveButton] = useState<number>(-1);
 
-    const [selectedValues, setSelectedValues] = useState(null);
-    const [activeButton, setActiveButton] = useState(0);
-
-    const handleVaSelection = (Values: any, index: any) => {
-        if (Values === values[0]) {
-            setSelectedValues(null); 
-            updateFilteredValues("");
-        } else {
-            setSelectedValues(Values);
-            updateFilteredValues(Values);
+    const handleCategoryClick = (index: number, value: string) => {
+        if (checkboxChecked) {
+            setCheckboxChecked(false);
         }
         setActiveButton(index);
+        setSelectedCategory(value);
+    };
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCheckboxChecked(e.target.checked);
+        if (e.target.checked) {
+            setActiveButton(-1);
+            setSelectedCategory();
+        }
+        else {
+            setActiveButton(0);
+            setSelectedCategory(values[0]);
+        }
     };
 
     const stylesAdaptive = {
@@ -31,17 +41,17 @@ const SliderMenu = ({values, updateFilteredValues}: Props) => {
     }
 
     return  (
-        <div className={`flex items-center space-x-9  ${stylesAdaptive.menu}`}>
+        <div className={`flex items-center space-x-9 max-sm:space-x-7 ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
+                    onClick={() => handleCategoryClick(index, value)}
                     key={index}
-                    onClick={() => handleVaSelection(value, index)}
-                    className={`text-left text-lg text-black p-1 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
+                    className={`text-left text-lg text-black p-2 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
                 >
                     {value}
                 </button>
             ))}
-            <Checkbox/>
+            <Checkbox onChange={handleCheckboxChange} checked={checkboxChecked}/>
         </div>
     )
 }

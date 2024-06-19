@@ -5,93 +5,65 @@ import Image from 'next/image';
 
 
 interface DataPost {
-    photo?: string
+    url_view?: string
     title: string
-    work_type: string
 }
 
 
-const ImagePost = ({photo, title, work_type}: DataPost) => {
-
-    const [blob, setBlob] = useState<Blob | null>(null);
+const ImagePost = ({ url_view, title }: DataPost) => {
     const divRef = useRef<HTMLDivElement | null>(null);
 
-    
-    //запрос к фото поста
     useEffect(() => {
-        const fetchPhoto = () => {
-            if (photo) {
-                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${photo}`);
-                response.then(resp => resp.blob())
-                    .then(fetchedBlob => setBlob(fetchedBlob));
+        const handleResize = () => {
+            const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+            if (divRef.current) {
+            if (isDesktop) {
+                gsap.set(divRef.current, { height: 0, overflow: 'hidden' });
+            } else {
+                gsap.set(divRef.current, { height: 'auto' });
+            }
             }
         };
     
-        fetchPhoto();
-    }, [photo]);
-
-
-    //анимация появления заголовка
-    useEffect(() => {
-        if (divRef.current) {
-            gsap.set(divRef.current, { height: 0, overflow: 'hidden' });
-        }
-    }, []);
-
+        handleResize();
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+        }, []);
+    
     const handleMouseEnter = () => {
         if (divRef.current) {
-            gsap.to(divRef.current, { height: 'auto', duration: 0.6});
+            gsap.to(divRef.current, { height: 'auto', duration: 0.6 });
         }
-    };
-
+        };
+    
     const handleMouseLeave = () => {
         if (divRef.current) {
-            gsap.to(divRef.current, {
-                height: 0, 
-                duration: 0.6, 
-                onComplete: () => {
-                    if (divRef.current) {
-                        divRef.current.style.overflow = 'hidden';
-                    }
-                }
-            });
+            gsap.to(divRef.current, { height: 0, duration: 0.6, onComplete: () => { if (divRef.current) { divRef.current.style.overflow = 'hidden'; } } });
         }
     };
-
     
     return (
         <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            { photo 
-            ? 
+            {url_view ? (
             <div className='cursor-pointer'>
-                <Image
-                    src={blob ? URL.createObjectURL(blob) : ''}
-                    alt="image" 
-                    quality={80}
-                    width={440}
-                    height={350}
-                    className='relative bg-slate-200 object-cover aspect-square w-full'
-                />
-                <div ref={divRef} className=' bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
-                    <p className='text-3xl titlePost uppercase py-6 px-8 max-lg:text-2xl'>{title}</p>
+                <Image src={url_view} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
+                <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
                 </div>
             </div>
-            :
-            <div className='cursor-pointer'>
-                <div className='p-5 border border-gray-400 rounded-sm aspect-square w-full'>
-                    <div
-                        className={`border rounded-sm border-gray-400 py-1 px-3 w-32 text-xs text-gray-600`}
-                    >
-                        # веб-разработка
-                    </div>
-                </div>
+            ) : (
+            <div className='cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50'>
                 <div className='w-full absolute bottom-0 items-center'>
-                    <p className='text-3xl titlePost uppercase py-6 px-6  max-lg:text-2xl '>{title}</p>
+                <p className='text-3xl titlePost uppercase py-6 px-6 max-lg:text-2xl'>{title}</p>
                 </div>
             </div>
-            }
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default ImagePost

@@ -10,15 +10,14 @@ interface Props {
     postId: number;
     title: string;
     description?: string;
-    link?: string;
     publishedAt: string;
-    work_type: string;
-    photo?: any;
-    file?: any;
+    worktype: string;
+    url_view?: any;
+    url_file?: any;
 }
 
 
-export default function PostWindow({postId, title, description, link, publishedAt, work_type, photo, file}: Props) {
+export default function PostWindow({postId, title, description, publishedAt, worktype, url_view, url_file}: Props) {
 
     return (
         <div className='p-11 flex flex-col justify-between gap-8 max-sm:p-7'>
@@ -27,7 +26,7 @@ export default function PostWindow({postId, title, description, link, publishedA
             </Link>
 
             <div className='flex justify-between'>
-                <p className='text-sm uppercase'>{work_type}</p>
+                <p className='text-sm uppercase'>{worktype}</p>
                 <p className='text-sm opacity-50'>@{publishedAt.slice(0, 4)}</p>
             </div>
     
@@ -35,20 +34,13 @@ export default function PostWindow({postId, title, description, link, publishedA
     
             <div className='flex justify-between items-end max-sm:flex-col max-sm:items-start max-sm:gap-7'>
                 <div className='w-7/12 max-sm:w-10/12'>
-                {description && <p className='text-sm opacity-70 pb-14'>{description}</p>}
-    
-                {link && (
-                    <Link href={link} target='_blank' className='cursor-pointer text-sm text-slate-400 hover:text-sky-800'>
-                        Ссылка: {link}
-                    </Link>
-                )}
+                    {description && <p className='text-sm opacity-70 pb-14'>{description}</p>}
                 </div>
     
-                {file 
+                {url_file 
                 ? 
                 (
-
-                    <Link href={file} target='_blank'>
+                    <Link href={url_file} target='_blank'>
                         <Suspense fallback={""}>
                             <Image src={PdfIcon} alt="Ссылка на PDF" width={30} />
                         </Suspense>
@@ -59,10 +51,10 @@ export default function PostWindow({postId, title, description, link, publishedA
                 }
             </div>
     
-            {photo && (
+            {url_view && (
                 <Suspense fallback={""}>
                     <Image 
-                        src={photo} 
+                        src={url_view} 
                         alt="image" 
                         width={500}
                         height={500}

@@ -14,14 +14,17 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        markupWithBackground: boolean,
+        urls_photos: string,
+        url_view: string,
+        url_file: string
+        background: boolean,
         publishedAt: string,
-        author: {
+        student: {
             data: {
                 id: number
             }
         },
-        work_type: {
+        worktype: {
             data: {
                 id: number,
                 attributes: {
@@ -29,26 +32,17 @@ interface DataPosts {
                 }
             }
         },
-        photo?: {
-            data: {
-                id: number,
-                attributes: {
-                    name: string,
-                    url: string
-                }
-            }
-        },
-        file?: {
+        tags: {
             data: {
                 id: number;
                 attributes: {
                     name: string;
-                    url: string;
                 };
             };
         }
     }
 }
+
 
 const Posts = ({posts}: Props) => {
 
@@ -80,13 +74,13 @@ const Posts = ({posts}: Props) => {
         <div>
             {posts.map((post: any, index: number) => {
                 return  (
-                    <Link key={index} href={`/portfolio/${post?.attributes.author.data.id}/post/${post?.id}`}>
+                    <Link key={index} href={`/portfolio/${post?.attributes.student.data.id}/post/${post?.id}`}>
                         <Post
                             title={post.attributes.title}
-                            markupWithBackground={post.attributes.markupWithBackground}
+                            background={post.attributes.background}
                             publishedAt={post.attributes.publishedAt}
-                            work_type={post.attributes.work_type.data?.attributes?.name}
-                            photo={post?.attributes?.photo?.data?.attributes?.url}
+                            worktype={post.attributes.worktype.data?.attributes?.name}
+                            url_view={post?.attributes?.url_view}
                         />
                     </Link>
                 )

@@ -6,6 +6,8 @@ import Link from 'next/link'
 
 import { setAuthData, unsetAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
+import ModalLogin from './modalLogin';
+import { title } from 'process';
 
 
 interface MenuProps {
@@ -17,6 +19,15 @@ const Menu = ({adminPage}: MenuProps) => {
     
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleOpenModal = () => {
+        setOpenModal(!openModal);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
     useEffect(() => {
         const userData = Cookies.get('username');
@@ -31,11 +42,10 @@ const Menu = ({adminPage}: MenuProps) => {
         window.location.href = '/';
     }
 
-    
-    const [menuHide, setMenuHide] = useState(true);
-
 
     //--------- anim click appirance menu----------
+    const [menuHide, setMenuHide] = useState(true);
+
     const handleMouseEnter = () => {
         setMenuHide(false);
         HandleMenuAppirance();
@@ -44,7 +54,6 @@ const Menu = ({adminPage}: MenuProps) => {
     const handleMouseLeave = () => {
         setMenuHide(true);
         HandleMenuAppirance();
-
     };
 
     // отображение меню при наведении и исчезновение
@@ -139,18 +148,22 @@ const Menu = ({adminPage}: MenuProps) => {
                             </>
                         ) : (
                             <>
-                                <Link href={`/auth`}>
+                                <button onClick={handleOpenModal}>
                                     <span className={"menu-nav-elenemt ml-12 hover:text-gray-400 max-sm:ml-8"}>
-                                        Кураторам
+                                        Вход
                                     </span>
-                                </Link>
+                                </button>
                             </>
                         )}
                     </div>
-
                     <div className='menu-nav-elenemt mr-12 max-sm:mr-5'>{user}</div>
                 </div>
             </div>
+
+            <ModalLogin
+                openModal={openModal}
+                handleCloseModal={handleCloseModal}
+            />
         </div>
     );
 };

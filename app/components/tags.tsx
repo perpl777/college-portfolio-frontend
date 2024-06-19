@@ -1,54 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Tags = () => {
-    const [activeButtons, setActiveButtons] = useState<Set<number>>(new Set());
 
-    const handleClick = (index: number) => {
-        const newActiveButtons = new Set(activeButtons);
+interface TagsProps {
+    tags: string[];
+    filteredPost: string[];
+    handleTagFilter: (tag: string) => void;
+    selectedTags: any;
+}
 
-        if (newActiveButtons.has(index)) {
-            newActiveButtons.delete(index);
-        } 
-        else {
-            newActiveButtons.add(index);
-        }
-        setActiveButtons(newActiveButtons);
-    };
 
+const Tags: React.FC<TagsProps> = ({ tags, filteredPost, handleTagFilter, selectedTags}) => {
+    
     return (
-        <div className="flex gap-3 max-lg:flex-wrap">
-            <button
-                className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(0) ? 'bg-sky-100 border border-sky-100 ' : ''
-                }`}
-                onClick={() => handleClick(0)}
-            >
-                # веб-разработка
-            </button>
-            <button
-                className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(1) ? 'bg-lime-100 border border-lime-100 ' : ''
-                }`}
-                onClick={() => handleClick(1)}
-            >
-                # стилизация фотографий
-            </button>
-            <button
-                className={`border rounded-sm border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(2) ? 'bg-orange-100 border border-orange-100 ' : ''
-                }`}
-                onClick={() => handleClick(2)}
-            >
-                # интерфейсы
-            </button>
-            <button
-                className={`border rounded-sm  border-gray-200 py-1 px-4 text-sm text-gray-800 transition-colors ${
-                activeButtons.has(3) ? 'bg-purple-100 border border-purple-100 ' : ''
-                }`}
-                onClick={() => handleClick(3)}
-            >
-                # брендинг
-            </button>
+        <div className="flex gap-4 max-lg:flex-wrap">
+            {tags && tags?.map((tag: any) => {
+                return (
+                    <label 
+                        key={tag} 
+                        className={`cursor-pointer px-3 border rounded-sm border-gray-300 py-1 text-sm text-gray-800 transition-colors ${selectedTags.includes(tag) ? 'bg-gray-200 border-gray-300/0' : ''}`} 
+                        style={{ userSelect: 'none' }}>
+                        <input
+                            type="checkbox"
+                            checked={filteredPost.includes(tag)}
+                            onChange={() => handleTagFilter(tag)}
+                            className="hidden"
+                        />
+                        # {tag}
+                    </label>
+                )
+            })}
         </div>
     );
 };
