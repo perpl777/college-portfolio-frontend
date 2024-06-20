@@ -1,24 +1,25 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import StatisticsChart from '@/app/components/statisticsChart/ui';
+import StatisticsChart from '@/app/components/statisticsChart/chart';
 import { Student, Period, StatisticsData, ChartData } from '@/app/components/statisticsChart/interface';
 import { fetcher } from "@/lib/api"
   
 
 const StatisticsPage = () => {
-    let [students, setStudents] = useState<Student[] | null>(null);
-    const [period, setPeriod] = useState<Period>('month');
+    let [students, setStudents] = useState<Student[]>([]);
+    let [posts, setPosts] = useState<Student[] | null>(null);
+    
+    const oneYearAgoISO = new Date();
+    oneYearAgoISO.setFullYear(oneYearAgoISO.getFullYear() - 1);
 
     //Получение данных из бд
     useEffect(() => {     
         const fetchData = async () => {       
             try {
-                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/students?populate=*`);
-                const data = response.data.map((item: { attributes: any; id: any; }) => ({
-                    ...item.attributes,
-                    id: item.id  // Сохранение идентификатора отдельно
-                }));
-                setStudents(data);
+                // const responsePosts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=*&filters[createdAt][$gte]=${oneYearAgoISO.toISOString()}`);
+                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
+                const studentsData = responseStudents.data;
+                setStudents(studentsData);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
@@ -28,13 +29,8 @@ const StatisticsPage = () => {
 
 return (
     <div className=''>
-        <h1>StatisticsPage</h1>
-        <button onClick={() => setPeriod('month')}>Month</button>
-        <button onClick={() => setPeriod('year')}>Year</button>
-        <button onClick={() => students && console.log(students, students.length)}>students</button>
-        {/* <StatisticsChart students={students} period={period}/> */}
         {students ? (
-                <StatisticsChart students={students} period={period} />
+                <StatisticsChart students={students} />
             ) : (
                 <p>Loading...</p>
             )}
