@@ -20,6 +20,7 @@ interface DataPosts {
         url_view: string,
         url_file: string
         background: boolean,
+        published: boolean,
         publishedAt: string,
         student: {
             data: {
@@ -64,21 +65,26 @@ export default function Post({ params: { id, postId}}: Props) {
 
     return (
         <>
-            {post && 
-                <>
-                    <PostPage
-                        postId={postId}
-                        title={post?.attributes.title}
-                        description={post?.attributes.description}
-                        publishedAt={post?.attributes.publishedAt}
-                        worktype={post?.attributes.worktype.data.attributes.name}
-                        url_view={post.attributes.url_view}
-                        url_file={post.attributes.url_file}
-                        studentName={post.attributes.student.data.attributes.name}
-                        studentId={post.attributes.student.data.id}
-                    />
-                </>
-            }
+        {post?.attributes.published &&
+            <>
+                {post && 
+                    <>
+                        <PostPage
+                            postId={postId}
+                            title={post?.attributes.title}
+                            description={post?.attributes.description}
+                            publishedAt={post?.attributes.publishedAt}
+                            worktype={post?.attributes.worktype.data.attributes.name}
+                            url_view={post.attributes.url_view}
+                            url_file={post.attributes.url_file}
+                            studentName={post.attributes.student.data.attributes.name}
+                            studentId={post.attributes.student.data.id}
+                        />
+                    </>
+                }
+            </>
+            
+        }
         </>
     );
 }

@@ -169,11 +169,11 @@ const Menu = () => {
                     <div className='mr-12 space-x-12 max-sm:mr-6 max-sm:space-x-6 max-sm:text-sm'>
                         {user ? (
                                 <>
-                                <Link href={`/`}>
-                                    <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
-                                    {/* <span className={"menu-nav-elenemt hover:text-gray-400"}>{userName?.student.name}</span> */}
-                                </Link>
-                                <a onClick={logout} className='menu-nav-elenemt hover:text-gray-400 cursor-pointer'>Выход</a>
+                                    <Link href={`/profile`}>
+                                        <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
+                                        {/* <span className={"menu-nav-elenemt hover:text-gray-400"}>{userName?.student.name}</span> */}
+                                    </Link>
+                                    <a onClick={logout} className='menu-nav-elenemt hover:text-gray-400 cursor-pointer'>Выход</a>
                                 </>
                             ) : (
                                 <>

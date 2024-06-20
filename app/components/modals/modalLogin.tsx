@@ -1,9 +1,11 @@
 'use client'
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import { fetcher } from '@/lib/api';
 import { setAuthData } from '@/lib/auth';
 import ErrorMess from "../errorMess";
+
+
 
 
 interface ModalProps {
@@ -30,6 +32,7 @@ const ModalLogin = ({
         }
     )
 
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
@@ -49,7 +52,7 @@ const ModalLogin = ({
                 return;
             }
             setAuthData(response);
-            window.location.href = '/';
+            window.location.href = '/profile';
         } 
         catch (error) {
             setError('Неверная почта или пароль');

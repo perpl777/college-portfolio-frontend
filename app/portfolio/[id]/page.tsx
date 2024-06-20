@@ -19,6 +19,7 @@ interface DataStudent {
         name: string,
         course: number,
         about_info: string,
+        published: boolean,
         technologies: {
             data: {
                 attributes: {
@@ -96,7 +97,7 @@ export default function Portfolio({ params: { id } }: Props) {
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
             ]);
-        
+
             setStudent(studentResponse.data);
             setPosts(postsResponse);
 
@@ -107,6 +108,7 @@ export default function Portfolio({ params: { id } }: Props) {
                 const technologies = studentResponse.data.attributes.technologies.data.map((tec: any) => tec.attributes ? tec.attributes.name : "");
                 setTechnologiesString(technologies.join(", "));
             }
+        
         };
     fetchData();
     }, []);
@@ -127,40 +129,44 @@ export default function Portfolio({ params: { id } }: Props) {
     }, [posts, filteredPost, checkboxChecked]);
 
     return (
-        <div className="flex flex-col">
-            <Header />
-            
-            <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
-                {student &&
-                    <StudentCard 
-                        surname={student.attributes?.surname}
-                        name={student.attributes?.name}
-                        course={student.attributes?.course}
-                        about_info={student.attributes?.about_info}
-                        technologies={technologiesString}
-                        url_behance={student.attributes?.url_behance}
-                        url_github={student.attributes?.url_github}
-                        url_vk={student.attributes?.url_vk}
-                        specialization={student.attributes.specialization.data.attributes.name}
-                        url_photo={student.attributes.url_photo}
-                    /> 
+    <>
+        {student?.attributes.published &&
+            <div className="flex flex-col">
+                <Header />
+                
+                <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
+                    {student &&
+                        <StudentCard 
+                            surname={student.attributes?.surname}
+                            name={student.attributes?.name}
+                            course={student.attributes?.course}
+                            about_info={student.attributes?.about_info}
+                            technologies={technologiesString}
+                            url_behance={student.attributes?.url_behance}
+                            url_github={student.attributes?.url_github}
+                            url_vk={student.attributes?.url_vk}
+                            specialization={student.attributes.specialization.data.attributes.name}
+                            url_photo={student.attributes.url_photo}
+                        /> 
+                    }
+                </div>
+
+                <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-8">
+                    <div className='w-4/6 max-[480px]:w-10/12 text-overflow-ellipsis'>
+                        {student?.attributes?.about_info}
+                    </div>
+                </div>
+
+                <div className="px-11 pb-4 max-sm:pb-1 max-sm:px-4">
+                    <SliderMenu values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
+                </div>
+
+                {filteredPosts && filteredPosts.length > 0 
+                    ? (<Posts posts={filteredPosts} />) 
+                    : (<div className="text-center text-zinc-400 text-lg my-40">Здесь пока ничего нет</div>)
                 }
             </div>
-
-            <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-8">
-                <div className='w-4/6 max-[480px]:w-10/12 text-overflow-ellipsis'>
-                    {student?.attributes?.about_info}
-                </div>
-            </div>
-
-            <div className="px-11 pb-4 max-sm:pb-1 max-sm:px-4">
-                <SliderMenu values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
-            </div>
-
-            {filteredPosts && filteredPosts.length > 0 
-                ? (<Posts posts={filteredPosts} />) 
-                : (<div className="text-center text-zinc-400 text-lg my-40">Здесь пока ничего нет</div>)
-            }
-        </div>
-        );
+        }
+        </>
+    );
 }

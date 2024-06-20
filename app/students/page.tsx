@@ -16,6 +16,7 @@ interface DataStudents {
         surname: string;
         name: string;
         patronymic: string;
+        pubslished: boolean;
         specialization: {
             data: {
                 attributes: {
@@ -54,7 +55,7 @@ export default function StudentsPage() {
     //фетч
     useEffect(() => {     
         const fetchData = async () => {       
-        const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=specialization&fields=name&fields=surname&fields=patronymic`);
+        const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*`);
         setStudents(studentsResponse);
         };
         fetchData();   
