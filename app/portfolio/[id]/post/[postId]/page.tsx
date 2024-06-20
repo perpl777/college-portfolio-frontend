@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-import PostPage from './post-page';
+import PostPage from '../../../../components/posts/post-page';
 
 
 interface Props {

@@ -6,14 +6,15 @@ import Link from 'next/link';
 
 
 interface DataPost {
+    href: string;
     studentId: number;
     postId: number;
-    url_view?: string
-    title: string
+    url_view?: string;
+    title: string;
 }
 
 
-const ImagePost = ({ studentId, postId, url_view, title }: DataPost) => {
+const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
 
     //анимации
     const divRef = useRef<HTMLDivElement | null>(null);
@@ -49,7 +50,7 @@ const ImagePost = ({ studentId, postId, url_view, title }: DataPost) => {
     };
     
     return (
-        <Link href={`/portfolio/${studentId}/post/${postId}`}>
+        <Link href={href}>
             <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 {url_view ? (
                 <div className='cursor-pointer'>

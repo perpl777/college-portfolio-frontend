@@ -15,6 +15,9 @@ interface UserNameProps {
     student: {
         name: string
     }
+    role: {
+        name: string
+    }
 }
 
 
@@ -64,6 +67,7 @@ const Menu = () => {
         }
         setLoading(false);
     }, []);
+    
 
     // обработка выхода
     const logout = () => {
@@ -168,21 +172,27 @@ const Menu = () => {
 
                     <div className='mr-12 space-x-12 max-sm:mr-6 max-sm:space-x-6 max-sm:text-sm'>
                         {user ? (
-                                <>
-                                    <Link href={`/profile`}>
+                            <>
+                                { userName?.role.name === "Student" &&
+                                    <Link href={`/myprofile`}>
                                         <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
-                                        {/* <span className={"menu-nav-elenemt hover:text-gray-400"}>{userName?.student.name}</span> */}
                                     </Link>
+                                }
+                                { userName?.role.name === "Moderator" &&
+                                    <Link href={`/moderation`}>
+                                        <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
+                                    </Link>
+                                }
                                     <a onClick={logout} className='menu-nav-elenemt hover:text-gray-400 cursor-pointer'>Выход</a>
-                                </>
+                            </>
                             ) : (
-                                <>
-                                    <button onClick={handleOpenModalLogin}>
-                                        <span className={"menu-nav-elenemt hover:text-gray-400"}>
-                                            Вход
-                                        </span>
-                                    </button>
-                                </>
+                            <>
+                                <button onClick={handleOpenModalLogin}>
+                                    <span className={"menu-nav-elenemt hover:text-gray-400"}>
+                                        Вход
+                                    </span>
+                                </button>
+                            </>
                             )}
                             
                         </div>

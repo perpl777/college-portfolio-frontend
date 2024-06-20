@@ -4,10 +4,10 @@ import { fetcher } from '@/lib/api';
 
 import Loading from './loading'
 
+import ImagePost from './components/posts/image-post';
 import SliderMenu from "./components/slider-menu";
 import Header from './components/header'
 import Tags from "./components/tags"
-import ImagePost from './components/posts/image-post';
 
 
 interface PostsProps {
@@ -174,6 +174,7 @@ export default function Home() {
           return (
             <Suspense fallback={<Loading />}>
               <ImagePost 
+                href={`/portfolio/${post.attributes.student.data.id}/post/${post.id}`}
                 studentId={post.attributes.student.data.id}
                 postId={post.id}
                 url_view={post.attributes.url_view} 
