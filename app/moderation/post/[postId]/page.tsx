@@ -6,6 +6,7 @@ import {fetcher} from "@/lib/api"
 import { getAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
 
+import ErrorMess from '@/app/components/errorMess';
 import PostPage from '../../../components/posts/post-page';
 import Header from '@/app/components/header';
 import Buttons from '@/app/components/accept-reject-btns';
@@ -16,6 +17,7 @@ interface Props {
         postId: number
     }
 }
+
 
 interface DataPosts {
     id: number,
@@ -32,7 +34,8 @@ interface DataPosts {
             data: {
                 id: number;
                 attributes: {
-                    name: string
+                    name: string,
+                    published: boolean
                 }
             }
         },
@@ -55,6 +58,7 @@ interface DataPosts {
     }
 }
 
+
 interface UserRoleProps {
     student: {
         name: string
@@ -67,10 +71,14 @@ interface UserRoleProps {
 
 export default function Post({ params: {postId}}: Props) {
     const { id } = getAuthData();
+    const { jwt } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState<UserRoleProps>();
+    
     const [post, setPost] = useState<DataPosts>();
+    const [error, setError] = useState<string | undefined>(undefined);
+
 
     //получение email user
     useEffect(() => {
@@ -91,6 +99,7 @@ export default function Post({ params: {postId}}: Props) {
         fetchData();   
     }, []);
 
+
     //фетч к постy
     useEffect(() => {
         const fetchData = async () => {
@@ -99,6 +108,65 @@ export default function Post({ params: {postId}}: Props) {
         };     
         fetchData();   
     }, []);
+    
+
+    const handleDeletePost = async () => {
+        if (post?.attributes.student.data.attributes.published === false) {
+            setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
+        }
+        else {
+            try {
+                // отклонить пост
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.error) {
+                    console.error('Error:', response.error);
+                    return;
+                }
+                window.location.href = '/moderation';
+            } 
+            catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
+
+    const handlePublishPost = async () => {
+        if (post?.attributes.student.data.attributes.published === false) {
+            setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
+        }
+        else {
+            try {
+                // опубликовать пост
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        data: {
+                            published: true
+                        }
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.error) {
+                    console.error('Error:', response.error);
+                    return;
+                }
+                window.location.href = '/moderation';
+            } 
+            catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
 
 
     return (
@@ -106,7 +174,7 @@ export default function Post({ params: {postId}}: Props) {
         { user && userRole?.role.name === "Moderator" &&
             <div className='pb-20'>
                 <Header /> 
-                <div className='mt-8 mb-12 border-y border-black max-sm:mb-10 max-sm:mt-8'>
+                <div className='mt-12 mb-14 border-y border-black max-sm:mt-8'>
                     {post &&
                         <PostPage
                             postId={postId}
@@ -121,8 +189,11 @@ export default function Post({ params: {postId}}: Props) {
                         />
                     }
                 </div>
+                <div className='m-auto mb-6 w-1/3 max-sm:w-full'>
+                    {error && <ErrorMess text={error}/>}
+                </div>
                 <div className='flex justify-center'>
-                    <Buttons />
+                    <Buttons handleDelete={handleDeletePost} handlePublish={handlePublishPost}/>
                 </div>
             </div>
         }

@@ -70,6 +70,7 @@ const Posts = ({posts}: Props) => {
         };
     }, []);
 
+    
     return (
         <div>
             {posts.map((post: any, index: number) => {

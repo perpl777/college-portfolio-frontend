@@ -12,6 +12,7 @@ interface Props {
     params: {id: number};
 }
 
+
 interface DataStudent {
     id: number,
     attributes: {
@@ -40,6 +41,7 @@ interface DataStudent {
         url_photo?: string,
     }
 }
+
 
 interface DataPosts {
     id: number,
@@ -76,6 +78,7 @@ interface DataPosts {
     }
 }
 
+
 interface PostsProps {
     some: any;
     data: DataPosts[]
@@ -94,7 +97,7 @@ export default function Portfolio({ params: { id } }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
-                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=1&filters[published][$eq]=true&populate=*`),
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=${id}&filters[published][$eq]=true&populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
             ]);

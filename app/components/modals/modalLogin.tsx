@@ -60,9 +60,11 @@ const ModalLogin = ({
         }
     };
 
+    
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
+
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>

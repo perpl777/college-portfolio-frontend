@@ -14,12 +14,12 @@ import Header from '@/app/components/header';
 import StudentCard from '@/app/components/students/student-card';
 import Buttons from '@/app/components/accept-reject-btns';
 
-
 interface Props {
     params: {
         profileId: number
     }
 }
+
 
 interface DataStudent {
     id: number,
@@ -50,6 +50,7 @@ interface DataStudent {
     }
 }
 
+
 interface UserRoleProps {
     student: {
         name: string
@@ -62,6 +63,7 @@ interface UserRoleProps {
 
 export default function Profile({ params: {profileId}}: Props) {
     const { id } = getAuthData();
+    const { jwt } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState<UserRoleProps>();
@@ -105,6 +107,55 @@ export default function Profile({ params: {profileId}}: Props) {
     }, []);
 
 
+    const handleDeleteStudent = async () => {
+        try {
+            // отклонить данные студента
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwt}`,
+                },
+            });
+            if (response.error) {
+                console.error('Error:', response.error);
+                return;
+            }
+            window.location.href = '/moderation';
+        } 
+        catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+    const handlePublishStudent = async () => {
+        try {
+            // опубликовать профиль студента
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    data: {
+                        published: true
+                    }
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwt}`,
+                },
+            });
+            if (response.error) {
+                console.error('Error:', response.error);
+                return;
+            }
+            window.location.href = '/moderation';
+        } 
+        catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
     return (
     <>
         { user && userRole?.role.name === "Moderator" &&
@@ -115,7 +166,7 @@ export default function Profile({ params: {profileId}}: Props) {
                         <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
                     </Link>
                 </div>
-                <div className='border-y border-black mb-12 max-sm:mb-10'>
+                <div className='border-y border-black mb-12'>
                     <div className="max-lg:m-auto px-11 max-lg:px-6">
                         {student &&
                             <StudentCard 
@@ -138,7 +189,7 @@ export default function Profile({ params: {profileId}}: Props) {
                     </div>
                 </div>
                 <div className='flex justify-center'>
-                    <Buttons />
+                    <Buttons handleDelete={handleDeleteStudent} handlePublish={handlePublishStudent}/>
                 </div>
             </div>
         }

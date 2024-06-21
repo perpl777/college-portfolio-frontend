@@ -20,9 +20,11 @@ interface DataStudents {
     }
 };
 
+
 interface StudentLinkProps {
     href: string;
 }
+
 
 /*отображаем ФИО, курс и группу либо только ФИО */
 type type = 'all' | 'only_name'

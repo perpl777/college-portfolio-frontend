@@ -11,6 +11,7 @@ interface Props {
     }
 }
 
+
 interface DataPosts {
     id: number,
     attributes: {
@@ -62,6 +63,7 @@ export default function Post({ params: { id, postId}}: Props) {
         };     
         fetchData();   
     }, []);
+
 
     return (
         <>

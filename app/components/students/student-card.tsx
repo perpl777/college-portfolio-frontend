@@ -42,7 +42,7 @@ const StudentCard = ({surname, name, course, technologies, url_behance, url_gith
                         {`${name} ${surname}`}
                     </h1>
 
-                    <table className="table table-sm mt-10 max-sm:table-xs max-sm:mt-6">
+                    <table className="table table-sm mt-6 max-sm:table-xs">
                         <tbody> 
                             <tr className='border-b border-black'> 
                                 <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Специальность</th> {/*выводим Специальность студента */}
@@ -61,13 +61,13 @@ const StudentCard = ({surname, name, course, technologies, url_behance, url_gith
 
                     <div className='flex mt-8 gap-4'>
                         {url_vk && 
-                            <Link href={url_vk} target='_blank'><Image src={Vk} alt='vk' width={45} height={45} className='max-sm:w-9 max-sm:h-9'></Image> </Link>
+                            <Link href={url_vk} target='_blank'><Image src={Vk} alt='vk' width={45} height={45} className='max-sm:w-10 max-sm:h-10'></Image> </Link>
                         }
                         {url_github && 
-                            <Link href={url_github} target='_blank'><Image src={Github} alt='github' width={45} height={45} className='max-sm:w-9 max-sm:h-9'></Image></Link>
+                            <Link href={url_github} target='_blank'><Image src={Github} alt='github' width={45} height={45} className='max-sm:w-10 max-sm:h-10'></Image></Link>
                         }
                         {url_behance && 
-                            <Link href={url_behance} target='_blank'><Image src={Behance} alt='behance' width={45} height={45} className='max-sm:w-9 max-sm:h-9'></Image></Link>
+                            <Link href={url_behance} target='_blank'><Image src={Behance} alt='behance' width={45} height={45} className='max-sm:w-10 max-sm:h-10'></Image></Link>
                         }
                     </div>
                 </div>

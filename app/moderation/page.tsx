@@ -30,8 +30,8 @@ export default function ModerationPage() {
     const [userRole, setUserRole] = useState<UserRoleProps>();
 
     const [activeButton, setActiveButton] = useState<number>(0);
-    const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
-    const values = ['Работы', 'Профили']
+    const [selectedBtn, setSelectedBtn] = useState<string>('Профили');
+    const values = ['Профили', 'Работы']
 
 
     //получение email user
@@ -73,7 +73,7 @@ export default function ModerationPage() {
             { userRole?.role.name === "Moderator" &&
                 <div>
                     <Header />
-                    <div className={`px-11 pt-12 pb-12 flex items-center space-x-9 max-sm:pt-8 max-sm:pb-4 max-sm:px-6 ${stylesAdaptive.menu}`}>
+                    <div className={`px-11 pt-12 pb-10 flex items-center space-x-9 max-sm:pt-10 max-sm:pb-4 max-sm:px-6 ${stylesAdaptive.menu}`}>
                         {values && values.map((value: any, index: any) => (
                             <button
                                 onClick={() => handleCategoryClick(index, value)}
@@ -84,11 +84,11 @@ export default function ModerationPage() {
                             </button>
                         ))}
                     </div>
-                    { selectedBtn === "Работы" 
+                    { selectedBtn === "Профили" 
                     ?
-                        <UnpublishedPosts />
-                    :
                         <UnpublishedProfiles />
+                    :
+                        <UnpublishedPosts />
                     }
                 </div>
             }

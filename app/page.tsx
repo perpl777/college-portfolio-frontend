@@ -14,6 +14,7 @@ interface PostsProps {
   data: DataPosts[]
 }
 
+
 interface DataPosts {
   id: number,
   attributes: {
@@ -45,6 +46,7 @@ interface DataPosts {
   }
 }
 
+
 interface CategoryProps {
   id: number,
   attributes: {
@@ -60,6 +62,7 @@ interface CategoryProps {
   }
 }
 
+
 interface TagsProps {
   id: number,
   attributes: {
@@ -74,6 +77,7 @@ interface TagsProps {
     };
   }
 }
+
 
 export default function Home() {
 
@@ -151,6 +155,7 @@ export default function Home() {
       setFilteredPost([...filteredPost, tag]);
     }
   };
+
 
   return (
     <div>

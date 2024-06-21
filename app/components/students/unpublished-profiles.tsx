@@ -9,6 +9,7 @@ interface StudentsProps {
     data: DataStudents[] | undefined
 }
 
+
 interface DataStudents {
     id: number;
     attributes: {
@@ -40,6 +41,7 @@ export default function UnpublishedProfiles() {
         fetchData();   
     }, []);
 
+    
     //сортируем на только неопубликованных
     const filteredStudents = useMemo(() => {
         if (!students) return [];

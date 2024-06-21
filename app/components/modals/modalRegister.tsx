@@ -81,6 +81,7 @@ const ModalRegister = ({
         }
     };
 
+    
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
             <div className="modal-box py-12 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">

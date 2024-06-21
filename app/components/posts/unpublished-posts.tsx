@@ -71,17 +71,17 @@ export default function UnpublishedPosts() {
             ? 
                 <div className='px-11 pb-10 w-full grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
                     {filteredPosts.map((post: any) => {
-                        return (
-                            <Suspense fallback={<Loading />}>
-                                <ImagePost 
-                                    href={`/moderation/post/${post?.id}`}
-                                    studentId={post.attributes.student.data.id}
-                                    postId={post.id}
-                                    url_view={post.attributes.url_view} 
-                                    title={post.attributes.title}
-                                />
-                            </Suspense>
-                        )
+                        return (<>
+                                <Suspense fallback={<Loading />}>
+                                    <ImagePost 
+                                        href={`/moderation/post/${post?.id}`}
+                                        studentId={post.attributes.student.data.id}
+                                        postId={post.id}
+                                        url_view={post.attributes.url_view} 
+                                        title={post.attributes.title}
+                                    />
+                                </Suspense>
+                        </>)
                     })}
                 </div>
             : 
