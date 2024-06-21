@@ -19,6 +19,7 @@ interface DataStudent {
     url_photo?: string,
 }
 
+
 const StudentCard = ({surname, name, course, about_info, technologies, url_behance, url_github, url_vk, specialization, url_photo}: DataStudent) => {
     return (
         <div className='flex max-h-[566px] max-lg:inline-block max-lg:max-h-max'>

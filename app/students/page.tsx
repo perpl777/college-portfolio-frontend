@@ -55,11 +55,12 @@ export default function StudentsPage() {
     //фетч
     useEffect(() => {     
         const fetchData = async () => {       
-        const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*`);
-        setStudents(studentsResponse);
+            const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*`);
+            setStudents(studentsResponse);
         };
         fetchData();   
     }, []);
+
 
     //фильтр для студентов
     const filteredStudents = useMemo(() => {

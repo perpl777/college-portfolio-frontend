@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 
 import Header from "../components/header";
 import UnpublishedPosts from '../components/moderator/unpublished-posts';
+import UnpublishedProfiles from '../components/moderator/unpublished-profiles';
 
 
 
@@ -28,13 +29,9 @@ export default function ModerationPage() {
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState<UserRoleProps>();
 
-
     const [activeButton, setActiveButton] = useState<number>(0);
+    const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
     const values = ['Работы', 'Профили']
-
-    const handleCategoryClick = (index: number, value: string) => {
-        setActiveButton(index);
-    };
 
 
     //получение email user
@@ -55,6 +52,12 @@ export default function ModerationPage() {
         };
         fetchData();   
     }, []);
+
+
+    const handleCategoryClick = (index: number, value: string) => {
+        setActiveButton(index);
+        setSelectedBtn(value);
+    };
 
     
     const stylesAdaptive = {
@@ -81,7 +84,12 @@ export default function ModerationPage() {
                             </button>
                         ))}
                     </div>
-                    <UnpublishedPosts />
+                    { selectedBtn === "Работы" 
+                    ?
+                        <UnpublishedPosts />
+                    :
+                        <UnpublishedProfiles />
+                    }
                 </div>
             }
             </>

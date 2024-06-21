@@ -117,7 +117,7 @@ export default function Post({ params: {postId}}: Props) {
                     studentId={post.attributes.student.data.id}
                 />
             }
-        </>
+            </>
         }
         </>
     );
