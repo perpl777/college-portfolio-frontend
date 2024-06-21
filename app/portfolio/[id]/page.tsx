@@ -50,6 +50,7 @@ interface DataPosts {
         url_view: string,
         url_file: string
         background: boolean,
+        published: boolean,
         publishedAt: string,
         student: {
             data: {
@@ -93,7 +94,7 @@ export default function Portfolio({ params: { id } }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
-                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=${id}&populate=*`),
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=1&filters[published][$eq]=true&populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
             ]);
@@ -113,7 +114,7 @@ export default function Portfolio({ params: { id } }: Props) {
     fetchData();
     }, []);
 
-    
+
     //фильтры для постов
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
@@ -122,11 +123,13 @@ export default function Portfolio({ params: { id } }: Props) {
         
         // Фильтрация по типам
         if (filteredPost) {
-            filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost);
+            filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost
+            );
         }
 
         return filteredData;
     }, [posts, filteredPost, checkboxChecked]);
+
 
     return (
     <>
@@ -134,13 +137,12 @@ export default function Portfolio({ params: { id } }: Props) {
             <div className="flex flex-col">
                 <Header />
                 
-                <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
+                <div className="pt-16 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
                     {student &&
                         <StudentCard 
                             surname={student.attributes?.surname}
                             name={student.attributes?.name}
                             course={student.attributes?.course}
-                            about_info={student.attributes?.about_info}
                             technologies={technologiesString}
                             url_behance={student.attributes?.url_behance}
                             url_github={student.attributes?.url_github}

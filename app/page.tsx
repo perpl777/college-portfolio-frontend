@@ -169,7 +169,7 @@ export default function Home() {
           selectedTags={selectedTags}
         />
       </div>
-      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
+      <div className='px-11 pb-12 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <Suspense fallback={<Loading />}>

@@ -56,7 +56,7 @@ export default function UnpublishedProfiles() {
         <div className='px-11 max-sm:p-6'>
             {filteredStudents &&
                 <Suspense fallback={<Loading />}>
-                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profiles` }} type={'all'}/>
+                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }} type={'all'}/>
                 </Suspense>
             }
         </div> 

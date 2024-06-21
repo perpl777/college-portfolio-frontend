@@ -41,7 +41,7 @@ const SliderMenu = ({values, setSelectedCategory, checkboxChecked, setCheckboxCh
     }
 
     return  (
-        <div className={`flex items-center space-x-8 max-sm:space-x-7 ${stylesAdaptive.menu}`}>
+        <div className={`flex items-center space-x-6 ${stylesAdaptive.menu}`}>
             {values && values.map((value: any, index: any) => (
                 <button
                     onClick={() => handleCategoryClick(index, value)}

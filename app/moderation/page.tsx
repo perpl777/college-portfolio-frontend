@@ -71,9 +71,9 @@ export default function ModerationPage() {
         { user && 
             <>
             { userRole?.role.name === "Moderator" &&
-                <div className='space-y-12 max-sm:space-y-8'>
+                <div>
                     <Header />
-                    <div className={`px-11 flex items-center space-x-8 max-sm:space-x-7 max-sm:px-6 ${stylesAdaptive.menu}`}>
+                    <div className={`px-11 py-12 flex items-center space-x-9  max-sm:pb-5 max-sm:px-6 ${stylesAdaptive.menu}`}>
                         {values && values.map((value: any, index: any) => (
                             <button
                                 onClick={() => handleCategoryClick(index, value)}

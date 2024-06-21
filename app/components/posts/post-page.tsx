@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import ArrowIcon from '@/public/Arrow.svg'
 import PdfIcon from '@/public/pdf.svg'
+import ArrowIcon from '@/public/Arrow.svg'
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -20,7 +20,7 @@ interface Props {
 
 export default function PostPage({postId, title, description, publishedAt, worktype, url_view, url_file, studentName, studentId}: Props) {
     return (
-        <div className='p-11 flex flex-col justify-between gap-8 max-sm:p-7'>
+        <div className='px-11 my-12 flex flex-col justify-between gap-8 max-sm:p-7 max-sm:my-2'>
             <Link href={`#${postId}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
@@ -37,7 +37,7 @@ export default function PostPage({postId, title, description, publishedAt, workt
                     {description && <p className='text-sm opacity-70 pb-14'>{description}</p>}
 
                     <Link href={`/portfolio/${studentId}`}>
-                        <span className='text-sm opacity-70 pb-14 hover:text-cyan-800 transition-colors'>Автор: {studentName}</span>
+                        <span className='text-sm opacity-70 pb-16 hover:text-cyan-800 transition-colors'>Автор: {studentName}</span>
                     </Link>
                 </div>
     

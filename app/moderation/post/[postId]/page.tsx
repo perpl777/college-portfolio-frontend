@@ -7,7 +7,7 @@ import { getAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
 
 import PostPage from '../../../components/posts/post-page';
-
+import Header from '@/app/components/header';
 
 
 interface Props {
@@ -90,7 +90,7 @@ export default function Post({ params: {postId}}: Props) {
         fetchData();   
     }, []);
 
-    //фетч к постам
+    //фетч к постy
     useEffect(() => {
         const fetchData = async () => {
             let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);    
@@ -103,21 +103,24 @@ export default function Post({ params: {postId}}: Props) {
     return (
         <>
         { user && userRole?.role.name === "Moderator" &&
-            <>
-            {post &&
-                <PostPage
-                    postId={postId}
-                    title={post?.attributes.title}
-                    description={post?.attributes.description}
-                    publishedAt={post?.attributes.publishedAt}
-                    worktype={post?.attributes.worktype.data.attributes.name}
-                    url_view={post.attributes.url_view}
-                    url_file={post.attributes.url_file}
-                    studentName={post.attributes.student.data.attributes.name}
-                    studentId={post.attributes.student.data.id}
-                />
-            }
-            </>
+            <div>
+                <Header /> 
+                <div className='mt-16 mb-16 border-y border-black max-sm:my-10'>
+                    {post &&
+                        <PostPage
+                            postId={postId}
+                            title={post?.attributes.title}
+                            description={post?.attributes.description}
+                            publishedAt={post?.attributes.publishedAt}
+                            worktype={post?.attributes.worktype.data.attributes.name}
+                            url_view={post.attributes.url_view}
+                            url_file={post.attributes.url_file}
+                            studentName={post.attributes.student.data.attributes.name}
+                            studentId={post.attributes.student.data.id}
+                        />
+                    }
+                </div>
+            </div>
         }
         </>
     );
