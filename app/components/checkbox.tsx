@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Checkbox = ({ onChange, checked }: any) => {
     return (
         <div className="form-control">

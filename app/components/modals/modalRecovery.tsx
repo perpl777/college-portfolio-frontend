@@ -27,7 +27,6 @@ const ModalRecovery = ({
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
-
     return (
         <dialog className="modal bg-black/70" open={openModalRecovery}>
             <div className="modal-box py-12 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">

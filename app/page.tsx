@@ -14,7 +14,6 @@ interface PostsProps {
   data: DataPosts[]
 }
 
-
 interface DataPosts {
   id: number,
   attributes: {
@@ -46,7 +45,6 @@ interface DataPosts {
   }
 }
 
-
 interface CategoryProps {
   id: number,
   attributes: {
@@ -62,12 +60,11 @@ interface CategoryProps {
   }
 }
 
-
 interface TagsProps {
   id: number,
   attributes: {
     name: string,
-    categories: {
+    category: {
       data: {
         id: number,
         attributes: {
@@ -77,7 +74,6 @@ interface TagsProps {
     };
   }
 }
-
 
 export default function Home() {
 
@@ -99,7 +95,7 @@ export default function Home() {
         let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student&fields=title&fields=url_view&fields=published`);    
         setPosts(postsResponse);
         
-        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=categories&fields=name`);        
+        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=category&fields=name`);        
         setTags(tagsResponse.data)  
 
         const namesTags = tagsResponse.data.map((tag: any) => tag.attributes.name);      
@@ -113,31 +109,45 @@ export default function Home() {
     fetchData();   
   }, []);
 
+
+  const filteredTags = useMemo(() => {
+    if (!tags) return [];
+
+    if (!checkboxChecked && selectedCategory != '') {
+      let filteredData = tags.filter((tag: any) => {
+        return (
+          tag.attributes.category.data.attributes.name === selectedCategory
+        )
+      })
+      let filteredDataNames = filteredData.map((tag: any) => tag.attributes.name)
+      return filteredDataNames
+    }
+    else {
+      return tagsNames
+    }
+  }, [filteredPost, tags, selectedCategory, checkboxChecked]);
   
+
   const filteredPosts = useMemo(() => {
     if (!posts) return [];
+    
     let filteredData = posts.data?.filter((post: any) => {
       return (
-        //если посты проекты и статус published
         post.attributes.worktype.data.attributes.name === 'Проекты' && post.attributes.published &&
-        //фильтр по тэгам
         (filteredPost.length === 0 ||
           post.attributes.tags.data.some((tag: any) =>
             filteredPost.includes(tag.attributes.name)
           )) 
         &&
-        //фильтр по категориям + чекбокс
-        (checkboxChecked ||
+        (checkboxChecked || selectedCategory != '' &&
           tags.some((tag: any) =>
-            tag.attributes.categories.data.some((category: any) =>
-              category.attributes.name === selectedCategory &&
-              post.attributes.tags.data.some((postTag: any) =>
-                postTag.attributes.name === tag.attributes.name
-              )
+            tag.attributes.category.data.attributes.name === selectedCategory &&
+            post.attributes.tags.data.some((postTag: any) =>
+              postTag.attributes.name === tag.attributes.name
             )
-          ))
-        );
+        )))
     });
+  
     return filteredData;
   }, [posts, filteredPost, categories, tags, selectedCategory, checkboxChecked]);
 
@@ -156,7 +166,6 @@ export default function Home() {
     }
   };
 
-
   return (
     <div>
       <Header /> 
@@ -167,14 +176,14 @@ export default function Home() {
           checkboxChecked={checkboxChecked}
           setCheckboxChecked={setCheckboxChecked}
         />
-        <Tags 
-          tags={tagsNames} 
-          filteredPost={filteredPost} 
-          handleTagFilter={handleTagFilter} 
+        <Tags
+          tags={filteredTags}
+          filteredPost={filteredPost}
+          handleTagFilter={handleTagFilter}
           selectedTags={selectedTags}
         />
       </div>
-      <div className='px-11 pb-12 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
+      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <Suspense fallback={<Loading />}>

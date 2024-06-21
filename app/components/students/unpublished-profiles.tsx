@@ -41,7 +41,7 @@ export default function UnpublishedProfiles() {
         fetchData();   
     }, []);
 
-    
+
     //сортируем на только неопубликованных
     const filteredStudents = useMemo(() => {
         if (!students) return [];
@@ -56,10 +56,13 @@ export default function UnpublishedProfiles() {
 
     return (
         <div className='px-11 max-sm:p-6'>
-            {filteredStudents &&
+            {filteredStudents !== null
+            ?
                 <Suspense fallback={<Loading />}>
                     <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }} type={'all'}/>
                 </Suspense>
+            :
+                (<div className="text-center text-zinc-400 text-lg mt-16">Данных нет</div>)
             }
         </div> 
     );

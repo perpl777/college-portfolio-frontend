@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
 
 import ErrorMess from "../errorMess";
@@ -43,7 +43,6 @@ const ModalRegister = ({
         const response1 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[username][$eq]=${data.username}`);
         const response2 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
 
-
         if (data.password.length < 6 || data.password === data.password.toLowerCase()) {
             setError('Пароль должен содержать не менее 6 символов и хотя бы одну заглавную букву.');
         }
@@ -80,7 +79,6 @@ const ModalRegister = ({
             }
         }
     };
-
     
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>

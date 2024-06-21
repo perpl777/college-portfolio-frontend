@@ -22,7 +22,6 @@ interface DataStudent {
 const StudentCard = ({surname, name, course, technologies, url_behance, url_github, url_vk, specialization, url_photo}: DataStudent) => {
     return (
         <div className='flex max-h-[566px] max-lg:inline-block max-lg:max-h-max'>
-
             {url_photo && 
                 <Image src={url_photo}
                     alt="student" 

@@ -46,7 +46,7 @@ interface DataPosts {
 
 const Posts = ({posts}: Props) => {
 
-    //кнопка при скролле
+//для кнопки при скролле
     const [showButton, setShowButton] = useState(false);
 
     const handleScroll = () => {

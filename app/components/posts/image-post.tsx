@@ -16,7 +16,7 @@ interface DataPost {
 
 const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
 
-    //анимации
+// все для анимаций
     const divRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {

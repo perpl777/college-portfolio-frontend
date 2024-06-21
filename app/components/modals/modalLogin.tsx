@@ -32,7 +32,6 @@ const ModalLogin = ({
         }
     )
 
-
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
@@ -59,12 +58,11 @@ const ModalLogin = ({
             console.error('Error:', error);
         }
     };
-
     
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
-
+    
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>

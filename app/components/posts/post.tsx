@@ -10,6 +10,7 @@ interface DataPost {
     url_view?: string
 }
 
+
 const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) => {
 
     const colors = ['bg-stone-800', 'bg-blue-800/40'];
