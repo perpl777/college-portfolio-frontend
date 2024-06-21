@@ -4,7 +4,7 @@ import { fetcher } from '@/lib/api';
 
 import Header from '@/app/components/header';
 import SliderMenu from '@/app/components/slider-menu';
-import StudentCard from '@/app/components/student-card';
+import StudentCard from '@/app/components/students/student-card';
 import Posts from '@/app/components/posts/posts';
 
 
@@ -137,7 +137,7 @@ export default function Portfolio({ params: { id } }: Props) {
             <div className="flex flex-col">
                 <Header />
                 
-                <div className="pt-16 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
+                <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
                     {student &&
                         <StudentCard 
                             surname={student.attributes?.surname}

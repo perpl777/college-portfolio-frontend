@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 
 import PostPage from '../../../components/posts/post-page';
 import Header from '@/app/components/header';
+import Buttons from '@/app/components/accept-reject-btns';
 
 
 interface Props {
@@ -103,9 +104,9 @@ export default function Post({ params: {postId}}: Props) {
     return (
         <>
         { user && userRole?.role.name === "Moderator" &&
-            <div>
+            <div className='pb-20'>
                 <Header /> 
-                <div className='mt-16 mb-16 border-y border-black max-sm:my-10'>
+                <div className='mt-8 mb-12 border-y border-black max-sm:mb-10 max-sm:mt-8'>
                     {post &&
                         <PostPage
                             postId={postId}
@@ -119,6 +120,9 @@ export default function Post({ params: {postId}}: Props) {
                             studentId={post.attributes.student.data.id}
                         />
                     }
+                </div>
+                <div className='flex justify-center'>
+                    <Buttons />
                 </div>
             </div>
         }

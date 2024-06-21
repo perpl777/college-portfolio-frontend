@@ -2,7 +2,7 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import { fetcher } from '@/lib/api';
 import Loading from '../../loading'
-import Table from '../students-table';
+import Table from '../students/students-table';
 
 
 interface StudentsProps {

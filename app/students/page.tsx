@@ -6,7 +6,7 @@ import Loading from '../loading'
 
 import Search from '../components/search'
 import Filter from '../components/filter'
-import Table from '../components/students-table';
+import Table from '../components/students/students-table';
 import Header from '../components/header'
 
 

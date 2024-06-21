@@ -8,8 +8,8 @@ import { getAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
 
 import Header from "../components/header";
-import UnpublishedPosts from '../components/moderator/unpublished-posts';
-import UnpublishedProfiles from '../components/moderator/unpublished-profiles';
+import UnpublishedPosts from '../components/posts/unpublished-posts';
+import UnpublishedProfiles from '../components/students/unpublished-profiles';
 
 
 
@@ -73,7 +73,7 @@ export default function ModerationPage() {
             { userRole?.role.name === "Moderator" &&
                 <div>
                     <Header />
-                    <div className={`px-11 py-12 flex items-center space-x-9  max-sm:pb-5 max-sm:px-6 ${stylesAdaptive.menu}`}>
+                    <div className={`px-11 pt-12 pb-12 flex items-center space-x-9 max-sm:pt-8 max-sm:pb-4 max-sm:px-6 ${stylesAdaptive.menu}`}>
                         {values && values.map((value: any, index: any) => (
                             <button
                                 onClick={() => handleCategoryClick(index, value)}
