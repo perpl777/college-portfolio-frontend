@@ -1,5 +1,6 @@
 import Header from "../components/header";
 import StudentNav from "./components/menu";
+import { UserProvider } from "./components/context";
 
 export default function StudentLoyaut({
   children,
@@ -11,7 +12,9 @@ export default function StudentLoyaut({
       <Header />
       <section className='px-11 pt-5'>
         <StudentNav />
+        <UserProvider>
           {children}
+        </UserProvider>
       </section>
     </>
   );
