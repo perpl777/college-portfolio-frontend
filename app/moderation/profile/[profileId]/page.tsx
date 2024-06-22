@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 import Header from '@/app/components/header';
 import StudentCard from '@/app/components/students/student-card';
-import Buttons from '@/app/components/accept-reject-btns';
+import Buttons from '@/app/components/btns/accept-reject-btns';
 
 interface Props {
     params: {

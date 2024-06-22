@@ -14,7 +14,7 @@ export default function InputPhoto() {
     };
 
     return (
-        <button className='flex items-center justify-center w-full h-full border border-gray-400 hover:bg-zinc-50'>
+        <button className='flex items-center justify-center w-full h-full border border-gray-400 hover:bg-zinc-100'>
             {/* <input type="file" style={{ display: 'none' }} required onChange={handleFileChange} />
             <div className="absolute">
                 <Image src={Plus} alt="add photo" className='m-auto'/>

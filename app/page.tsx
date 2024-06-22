@@ -89,7 +89,6 @@ export default function Home() {
 
   const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
 
-
   //фетчи
   useEffect(() => {
     const fetchData = async () => {

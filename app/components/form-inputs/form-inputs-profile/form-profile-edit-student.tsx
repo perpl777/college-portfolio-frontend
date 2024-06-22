@@ -12,7 +12,7 @@ import InputTechnology from './input-technology';
 import InputSpecializations from './input-specilalizations';
 import InputCourse from './input-course';
 import InputPhoto from '../input-photo';
-import InputText from './input-text';
+import InputText from '../input-text';
 import Textarea from '../textarea';
 import InputContacts from './input-contacts';
 
@@ -64,6 +64,7 @@ interface DataStudent {
     url_behance?: string;
     url_vk?: string;
     url_photo: any;
+    published: boolean;
 }
 
 interface Props {
@@ -92,8 +93,10 @@ export default function FormProfileEditStudent({studentId}: Props) {
         url_github: '',
         url_behance: '',
         url_vk: '',
-        url_photo: null
+        url_photo: null,
+        published: false
     });
+
 
      //фетч
     useEffect(() => {     
@@ -104,12 +107,14 @@ export default function FormProfileEditStudent({studentId}: Props) {
         fetchData();   
     }, []);
 
+
     useEffect(() => {
         if (student?.attributes?.technologies?.data) {
             const selectedTechIds = student.attributes.technologies.data.map((tech: { id: number }) => tech.id);
             setSelectedTechnologies(selectedTechIds);
         }
     }, [student]);
+
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -130,6 +135,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                 },
                 body: JSON.stringify({
                     data: {
+                        published: false,
                         user: id,
                         surname: formData.surname || student?.attributes.surname,
                         name: formData.name || student?.attributes.name,
@@ -145,11 +151,11 @@ export default function FormProfileEditStudent({studentId}: Props) {
                     }
                 }),
             });
-            console.log('edit student');
+            console.log('add post');
             window.location.href = `/myprofile/${id}`;
         } 
         catch (error) {
-            console.error('Error adding student:', error);
+            console.error('Error:', error);
         }
     };
 
@@ -183,7 +189,10 @@ export default function FormProfileEditStudent({studentId}: Props) {
                 <InputContacts srcImage={VkIcon} placeholder={student?.attributes.url_vk ? student?.attributes.url_vk : 'Ссылка на Vk..'} name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>
             </div>
 
-            <div className='w-full flex justify-end pt-2 max-md:pt-10 max-md:justify-center'>
+            <p className='pb-12 pt-9 max-sm:py-7'>Статус:  
+                {student?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
+            </p>
+            <div className='w-full flex justify-end max-md:pt-8 max-md:justify-center'>
                 <button 
                     type='submit'
                     className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">

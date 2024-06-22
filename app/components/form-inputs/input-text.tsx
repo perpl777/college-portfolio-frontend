@@ -19,6 +19,7 @@ export default function InputText({placeholder, name, value, onChange}: Props) {
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
+                style={{ color: 'black' } }
             />
         </label>
     );

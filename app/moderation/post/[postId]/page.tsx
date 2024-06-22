@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 import ErrorMess from '@/app/components/errorMess';
 import PostPage from '../../../components/posts/post-page';
 import Header from '@/app/components/header';
-import Buttons from '@/app/components/accept-reject-btns';
+import Buttons from '@/app/components/btns/accept-reject-btns';
 
 
 interface Props {

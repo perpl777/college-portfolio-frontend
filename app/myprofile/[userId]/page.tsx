@@ -7,8 +7,8 @@ import Cookies from 'js-cookie';
 
 import Header from "../../components/header";
 import Navbar from '../../components/navbar';
-import MyProfile from '../my-profile';
-import MyPosts from '../my-posts';
+import MyProfile from '../../components/students/my-profile';
+import MyPosts from '../../components/posts/my-posts';
 
 
 interface Props {
@@ -33,8 +33,8 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     const [userRole, setUserRole] = useState<UserRoleProps>();
 
     const [activeButton, setActiveButton] = useState<number>(2);
-    const [selectedBtn, setSelectedBtn] = useState<string>('Профиль');
-    const values = ['Активность', 'Работы', 'Профиль']
+    const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
+    const values = ['Активность', 'Профиль', 'Работы']
 
 
    //получение email user
@@ -78,7 +78,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
                                 <MyProfile />
                             }
                             { selectedBtn === 'Работы' &&
-                                <div>bbbbbb</div>
+                                <div><MyPosts /></div>
                             }
                             { selectedBtn === 'Активность' &&
                                 <div>aaaaaaaa</div>

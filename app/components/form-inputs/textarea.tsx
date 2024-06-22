@@ -18,7 +18,7 @@ export default function Textarea({ placeholder, name, required, value, onChange 
                 className="grow outline-none px-5 pt-5 rounded-sm"
                 placeholder={placeholder}
                 name={name}
-                style={{ whiteSpace: "nowrap", overflow: "hidden" }}
+                style={{ whiteSpace: "nowrap", overflow: "hidden", color: 'black'  }}
                 onChange={onChange}
                 value={value}
             />

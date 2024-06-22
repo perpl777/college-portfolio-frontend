@@ -12,7 +12,7 @@ import InputTechnology from './input-technology';
 import InputSpecializations from './input-specilalizations';
 import InputCourse from './input-course';
 import InputPhoto from '../input-photo';
-import InputText from './input-text';
+import InputText from '../input-text';
 import Textarea from '../textarea';
 import InputContacts from './input-contacts';
 
@@ -74,6 +74,7 @@ export default function FormProfileNewStudent() {
                 },
                 body: JSON.stringify({
                     data: {
+                        published: false,
                         user: id,
                         surname: formData.surname,
                         name: formData.name,
