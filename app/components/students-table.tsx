@@ -1,3 +1,4 @@
+'use'
 import React, { Suspense } from 'react'
 import Loading from '@/app/loading';
 import { FC } from 'react';

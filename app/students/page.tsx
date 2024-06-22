@@ -6,26 +6,39 @@ import Search from '../components/search'
 import Filter from '../components/filter'
 import Table from '../components/students-table';
 import Header from '../components/header'
+import { getFiltredStudents } from '../components/rating/rating';
 
+interface Post {
+    attributes: {
+        id: number;
+        title: string;
+        createdAt: string;
+    }
+}
 
-interface DataStudents {
+interface Specialization {
+    data: {
+        attributes: {
+            name: string;
+        }
+    }
+}
+
+interface DataStudent {
     id: number;
     attributes: {
         surname: string;
         name: string;
         patronymic: string;
-        specialization: {
-            data: {
-                attributes: {
-                    name: string
-                }
-            }
+        specialization: Specialization;
+        posts: {
+            data: Post[];
         }
-    };
+    }
 }
 
 interface StudentProps {
-    data: DataStudents[]
+    data: DataStudent[];
 }
 
 export default function StudentsPage() {
@@ -50,12 +63,16 @@ export default function StudentsPage() {
 
     useEffect(() => {     
         const fetchData = async () => {       
-        const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=specialization&fields=name&fields=surname&fields=patronymic`);
+        const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*&fields=name&fields=surname&fields=patronymic`);
         setStudents(studentsResponse);
         };
         fetchData();   
     }, []);
 
+    const getRatingStudents = (students: DataStudent[]) => {
+        return getFiltredStudents(students);
+    }
+    
 
     const filteredStudents = useMemo(() => {
         if (!students) return [];
@@ -75,7 +92,7 @@ export default function StudentsPage() {
         filteredData = searchResults;
         }
 
-        return filteredData;
+        return getRatingStudents(filteredData);
     }, [students, filteredSpecialty, searchQuery]);
 
 
@@ -89,9 +106,7 @@ export default function StudentsPage() {
             </div>
 
             <div className='px-11 max-sm:p-6'>
-                <Suspense fallback={<Loading />}>
                 <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
-                </Suspense>
             </div> 
         </div>
     );
