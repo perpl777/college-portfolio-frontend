@@ -173,8 +173,8 @@ const Menu = () => {
                     <div className='mr-12 space-x-12 max-sm:mr-6 max-sm:space-x-6 max-sm:text-sm'>
                         {user ? (
                             <>
-                                { userName?.role.name === "Student" &&
-                                    <Link href={`/myprofile`}>
+                                { userName?.role.name === "Authenticated" &&
+                                    <Link href={`/myprofile/${id}`}>
                                         <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
                                     </Link>
                                 }

@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import Checkbox from '../components/checkbox';
+import Checkbox from './checkbox';
 
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 
-const SliderMenu = ({values, setSelectedCategory, checkboxChecked, setCheckboxChecked }: Props) => {
+const SliderWithCheckbox = ({values, setSelectedCategory, checkboxChecked, setCheckboxChecked }: Props) => {
     
     const [activeButton, setActiveButton] = useState<number>(-1);
 
@@ -56,4 +56,4 @@ const SliderMenu = ({values, setSelectedCategory, checkboxChecked, setCheckboxCh
     )
 }
 
-export default SliderMenu;
+export default SliderWithCheckbox;

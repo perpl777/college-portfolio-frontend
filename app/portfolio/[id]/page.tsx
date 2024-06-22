@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { fetcher } from '@/lib/api';
 
 import Header from '@/app/components/header';
-import SliderMenu from '@/app/components/slider-menu';
+import SliderWithCheckbox from '@/app/components/slider-with-checkbox/slider-with-checkbox';
 import StudentCard from '@/app/components/students/student-card';
 import Posts from '@/app/components/posts/posts';
 
@@ -121,15 +121,12 @@ export default function Portfolio({ params: { id } }: Props) {
     //фильтры для постов
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
-
         let filteredData = posts.data;
-        
         // Фильтрация по типам
         if (filteredPost) {
             filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost
             );
         }
-
         return filteredData;
     }, [posts, filteredPost, checkboxChecked]);
 
@@ -163,7 +160,7 @@ export default function Portfolio({ params: { id } }: Props) {
                 </div>
 
                 <div className="px-11 pb-4 max-sm:pb-1 max-sm:px-4">
-                    <SliderMenu values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
+                    <SliderWithCheckbox values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
                 </div>
 
                 {filteredPosts && filteredPosts.length > 0 

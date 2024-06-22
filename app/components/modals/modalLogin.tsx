@@ -59,6 +59,7 @@ const ModalLogin = ({
         }
     };
     
+    
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }

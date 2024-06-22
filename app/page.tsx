@@ -5,7 +5,7 @@ import { fetcher } from '@/lib/api';
 import Loading from './loading'
 
 import ImagePost from './components/posts/image-post';
-import SliderMenu from "./components/slider-menu";
+import SliderWithCheckbox from './components/slider-with-checkbox/slider-with-checkbox';
 import Header from './components/header'
 import Tags from "./components/tags"
 
@@ -89,6 +89,7 @@ export default function Home() {
 
   const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
 
+
   //фетчи
   useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +127,7 @@ export default function Home() {
       return tagsNames
     }
   }, [filteredPost, tags, selectedCategory, checkboxChecked]);
-  
+
 
   const filteredPosts = useMemo(() => {
     if (!posts) return [];
@@ -170,7 +171,7 @@ export default function Home() {
     <div>
       <Header /> 
       <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pb-5 max-sm:pt-10 max-sm:space-y-5 max-lg:space-y-10'>
-        <SliderMenu 
+        <SliderWithCheckbox 
           values={categories} 
           setSelectedCategory={setSelectedCategory} 
           checkboxChecked={checkboxChecked}

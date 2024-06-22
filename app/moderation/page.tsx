@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 import Header from "../components/header";
 import UnpublishedPosts from '../components/posts/unpublished-posts';
 import UnpublishedProfiles from '../components/students/unpublished-profiles';
-
+import SliderWithoutCheckbox from '../components/slider-without-checkbox/slider-without-checkbox';
 
 
 interface UserRoleProps {
@@ -59,12 +59,6 @@ export default function ModerationPage() {
         setSelectedBtn(value);
     };
 
-    
-    const stylesAdaptive = {
-        menu: 'overflow-x-auto whitespace-nowrap',
-        button: 'max-md:text-base',
-    }
-
 
     return (
         <>
@@ -73,16 +67,8 @@ export default function ModerationPage() {
             { userRole?.role.name === "Moderator" &&
                 <div>
                     <Header />
-                    <div className={`px-11 pt-12 pb-10 flex items-center space-x-9 max-sm:pt-10 max-sm:pb-4 max-sm:px-6 ${stylesAdaptive.menu}`}>
-                        {values && values.map((value: any, index: any) => (
-                            <button
-                                onClick={() => handleCategoryClick(index, value)}
-                                key={index}
-                                className={`text-left text-lg text-black p-2 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
-                            >
-                                {value}
-                            </button>
-                        ))}
+                    <div className='px-11 pt-12 pb-10 max-sm:pt-10 max-sm:pb-4 max-sm:px-6'>
+                        <SliderWithoutCheckbox values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
                     </div>
                     { selectedBtn === "Профили" 
                     ?

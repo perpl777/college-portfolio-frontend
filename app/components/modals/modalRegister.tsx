@@ -27,15 +27,18 @@ const ModalRegister = ({
     )
     const [error, setError] = useState<string | undefined>(undefined);
 
+
     const isValidEmail = (email: any) => {
         // Простейшая проверка на корректность email
         const re = /\S+@\S+\.\S+/;
         return re.test(email);
     };
 
+
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
+
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -106,6 +109,7 @@ const ModalRegister = ({
                             type="text" 
                             name="username"
                             maxLength={20}
+                            minLength={5}
                             placeholder="Логин.."
                             onChange={handleChange}
                             required
@@ -114,6 +118,7 @@ const ModalRegister = ({
                         <input 
                             name="password"
                             type="password" 
+                            minLength={6}
                             maxLength={30}
                             placeholder="Пароль.."
                             onChange={handleChange}
