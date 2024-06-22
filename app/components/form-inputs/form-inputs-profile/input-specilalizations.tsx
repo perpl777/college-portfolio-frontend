@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-import DropDownInput from '../dropdown-input';
 
 
 
@@ -12,22 +11,43 @@ interface SpecializationsProps {
     }
 }
 
+interface Props {
+    selectedSpecialization: any
+    setSelectedSpecialization: any
+}
 
-export default function InputSpecializations() {
-    const [specializations, setSpecializations] = useState<SpecializationsProps[]>([]);
+
+export default function InputSpecializations({selectedSpecialization, setSelectedSpecialization}: Props) {
     
+
+    const [specializations, setSpecializations] = useState<SpecializationsProps[]>([]);
+
+
     useEffect(() => {
         const fetchData = async () => {
             const specResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/specializations`);
-            const specNames = specResponse.data.map((spec: any) => spec.attributes.name);
-            setSpecializations(specNames);
+            setSpecializations(specResponse.data);
         };
         fetchData();
     }, []); 
+    
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        setSelectedSpecialization(selectedValue);
+    };
+
 
     return (
         <div>
-            <DropDownInput values={specializations} placeholder="Специальность.."/>
+            <select className="select select-bordered max-w-xs rounded-none w-full" value={selectedSpecialization} onChange={handleSelectChange}>
+                <option disabled selected>Специальность..</option>
+                {specializations && specializations.map((value: SpecializationsProps) => (
+                    <option key={value.id} value={value.id}>
+                        {value.attributes.name}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 }
