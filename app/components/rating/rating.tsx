@@ -27,9 +27,6 @@ interface DataStudent {
     }
 }
 
-interface StudentProps {
-    data: DataStudent[];
-}
 
 export const getFiltredStudents = (students: DataStudent[]) => {
     const now = new Date();
@@ -42,10 +39,11 @@ export const getFiltredStudents = (students: DataStudent[]) => {
         return posts.some(post => {
             const postDate = new Date(post.attributes.createdAt); 
             return postDate >= oneMonthAgo && postDate <= now;
+    // Проверяем, что дата поста попадает в промежуток одного месяца
         });
     });
 
-
+    // Фильтруем студентов, у которых нет постов за последний месяц
     const studentsWithoutRecentPosts = students.filter(student => {
         const posts = student.attributes.posts.data;
         return !posts.some(post => {
@@ -53,8 +51,9 @@ export const getFiltredStudents = (students: DataStudent[]) => {
             return postDate >= oneMonthAgo && postDate <= now;
         });
     });
+    // Объединяем два массива: сначала те, у кого есть посты, потом те, у кого нет
     const sortedStudents = [...studentsWithPostsLastMonth, ...studentsWithoutRecentPosts];
 
-    
+    // Возвращаем отсортированный список студентов
     return sortedStudents;
 }
