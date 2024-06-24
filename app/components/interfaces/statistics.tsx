@@ -1,17 +1,20 @@
 export type Period = 'неделя' | 'месяц' | 'год';
 
 export interface Student {
-  attributes: {
     id: number;
-    login: string;
-    group: string;
-    surname: string;
-    name: string;
-    course: number;
-    posts: {
-      data: Post[];
+    attributes: {
+      id: number;
+      login: string;
+      group: string;
+      name: string;
+      surname: string;
+      patronymic: string;
+      course: number;
+      specialization: Specialization;
+      posts: {
+        data: Post[];
+      }
     }
-  }
 }
 
 export interface StatisticsData {
@@ -31,7 +34,17 @@ export interface ChartData {
 
 interface Post {
   attributes: {
+    id: number;
     publishedAt: string;
+    createdAt: string;
     title: string;
+  }
+}
+
+interface Specialization {
+  data: {
+      attributes: {
+          name: string;
+      }
   }
 }

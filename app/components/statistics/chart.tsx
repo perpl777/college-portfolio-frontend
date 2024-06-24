@@ -80,16 +80,19 @@ const StatisticsChart: React.FC<StatisticsData> = ({ students }) => {
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" 
             className="
-            font-light 
+            text-left
             btn 
-            text-white 
-            bg-slate-900
-            border-slate-900
-            hover-border-slate-300
-            shadow-none
-            rounded-sm 
-            hover:bg-white 
-            hover:text-black ">{
+            flex-nowrap	
+            flex 
+            pl-3 
+            py-2 
+            w-64 
+            border 
+            border-slate-900 
+            bg-white 
+            rounded-sm
+            hover:bg-slate-100
+            hover:border-slate-900 ">{
             ChangeText(currentPeriod)
           }</div>
           <ul tabIndex={0} className="dropdown-content z-[1] menu w-[16em] px-5 shadow bg-base-100 rounded-sm w-52">

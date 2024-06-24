@@ -1,4 +1,4 @@
-import { ChartData, Period, Student } from './interface';
+import { ChartData, Period, Student } from '../interfaces/statistics';
 import { format, subDays, subMonths } from 'date-fns';
 
 
@@ -52,9 +52,9 @@ export const generateChartData = (students: Student[], period: Period): ChartDat
       {
         label: 'Количество постов всех студентов',
         data,
-        backgroundColor: 'rgba(107, 157, 250, 0.8)',
-        borderColor: 'rgba(107, 157, 250, 0.8)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(100, 150, 200, 0.8)',
+        borderColor: 'rgba(100, 150, 200, 0.8)',
+        borderWidth: 2,
       },
     ],
   };
