@@ -1,34 +1,6 @@
-interface Post {
-    attributes: {
-        id: number;
-        title: string;
-        createdAt: string;
-    }
-}
+import { Student } from '../interfaces/statistics';
 
-interface Specialization {
-    data: {
-        attributes: {
-            name: string;
-        }
-    }
-}
-
-interface DataStudent {
-    id: number;
-    attributes: {
-        surname: string;
-        name: string;
-        patronymic: string;
-        specialization: Specialization;
-        posts: {
-            data: Post[];
-        }
-    }
-}
-
-
-export const getFiltredStudents = (students: DataStudent[]) => {
+export const getFiltredStudents = (students: Student[]) => {
     const now = new Date();
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(now.getMonth() - 1);
