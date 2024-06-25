@@ -46,6 +46,7 @@ interface DataPosts {
 
 const Posts = ({posts}: Props) => {
 
+//для кнопки при скролле
     const [showButton, setShowButton] = useState(false);
 
     const handleScroll = () => {
@@ -55,7 +56,6 @@ const Posts = ({posts}: Props) => {
             setShowButton(false);
         }
     };
-
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -70,6 +70,7 @@ const Posts = ({posts}: Props) => {
         };
     }, []);
 
+    
     return (
         <div>
             {posts.map((post: any, index: number) => {
