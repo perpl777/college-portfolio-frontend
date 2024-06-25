@@ -88,3 +88,7 @@ export default function StudentsPage() {
         </div>
     );
 }
+
+function getRatingStudents(filteredData: Student[]): any {
+    throw new Error('Function not implemented.')
+}

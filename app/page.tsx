@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { fetcher } from '@/lib/api';
 
 import Loading from './loading'
