@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import StatisticsChart from '@/app/components/statistics/chart';
 import { Student } from '@/app/components/interfaces/statistics';
 import { fetcher } from "@/lib/api"
-  
 
-const StatisticsPage = () => {
+
+const StatisticsStudent = () => {
     let [students, setStudents] = useState<Student[]>([]);
     
     // const oneYearAgoISO = new Date();
@@ -37,4 +37,4 @@ return (
 );
 };
 
-export default StatisticsPage;
+export default StatisticsStudent;

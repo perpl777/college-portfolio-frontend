@@ -183,6 +183,11 @@ const Menu = () => {
                                         <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
                                     </Link>
                                 }
+                                { userName?.role.name === "Statistic" &&
+                                    <Link href={`/statistic`}>
+                                        <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
+                                    </Link>
+                                }
                                     <a onClick={logout} className='menu-nav-elenemt hover:text-gray-400 cursor-pointer'>Выход</a>
                             </>
                             ) : (

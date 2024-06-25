@@ -15,7 +15,7 @@ const Navbar = ({values, handleCategoryClick, activeButton }: Props) => {
                 <button
                     onClick={() => handleCategoryClick(index, value)}
                     key={index}
-                    className={`uppercase ${index === activeButton ? 'text-black font-medium text-4xl max-sm:text-2xl' : 'text-lg text-gray-500 max-sm:text-sm'}  `}
+                    className={`uppercase ${index === activeButton ? 'text-black font-medium text-4xl max-sm:text-xl' : 'text-lg text-gray-500 max-sm:text-sm'}  `}
                 >
                     {value}
                 </button>

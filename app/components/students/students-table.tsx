@@ -27,42 +27,17 @@ interface StudentLinkProps {
 }
 
 
-/*отображаем ФИО, курс и группу либо только ФИО */
-type type = 'all' | 'only_name'
+
 interface TableProps {
     students?: DataStudents[];
     studentLinks?: StudentLinkProps;
-    type?: type;
 }
 
 
-const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TableProps) => {
+const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
     return (
         <>
             <div className='overflow-x-auto'>
-                {type == 'only_name' 
-                ? 
-                <table className='table table-lg m-auto'>
-                    <tbody>
-                        <Suspense fallback={<Loading />}>
-                            {students && students.map((student: any) => {
-                                return (
-                                    <tr 
-                                        key={student.id} 
-                                        className={`border-b border-black hover:bg-stone-100 transition-all  active:bg-gray-800 active:text-gray-300 active:duration-75`}
-                                    >
-                                        <td> 
-                                            <Link href={`/${studentLinks?.href}/${student.id}`}>
-                                                {`${student.attributes.surname} 
-                                                ${student.attributes.name}`}
-                                            </Link>
-                                        </td>
-                                    </tr>
-                            )})}
-                        </Suspense>
-                    </tbody>
-                </table>
-                :
                 <table className='table table-lg m-auto'>
                     <thead>
                     {
@@ -103,7 +78,6 @@ const Table:FC<TableProps> = ({ students, studentLinks, type = 'all' }: TablePro
                         </Suspense>
                     </tbody>
                 </table>
-                }
             </div>
         </>
     );

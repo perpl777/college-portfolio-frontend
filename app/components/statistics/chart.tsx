@@ -76,7 +76,7 @@ const StatisticsChart: React.FC<StatisticsData> = ({ students }) => {
   };
   return (
     <div>
-      <div className='py-5 flex justify-end'>
+      <div className='py-5 flex justify-end max-sm:justify-center max-sm:pb-10'>
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" 
             className="
@@ -103,7 +103,7 @@ const StatisticsChart: React.FC<StatisticsData> = ({ students }) => {
         </div>
       </div>
       <div className='flex justify-center'>
-        <div className='flex justify-center relative w-[80%]  h-[50vh]'>
+        <div className='flex justify-center relative w-[80%]  h-[50vh] max-sm:w-full'>
           <Line className='relative' key={JSON.stringify(chartData)} data={chartData} options={options} />
         </div>
       </div>

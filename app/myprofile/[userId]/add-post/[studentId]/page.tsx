@@ -116,7 +116,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     </div>
                 </div>
             </div>
-            <div className='w-full flex justify-end pt-16 max-md:pt-24 max-md:justify-center'>
+            <div className='w-full flex justify-end pt-20 max-md:pt-32 max-md:justify-center'>
                 <button 
                     type='submit'
                     className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">

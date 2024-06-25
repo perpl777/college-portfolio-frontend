@@ -18,12 +18,13 @@ export default function InputFile() {
         setBlobFile(file);
     };
 
-    const handleClickFile = () => {
+    const handleClickFile = (event: React.FormEvent<any>) => {
+        event.preventDefault()
         fileInputRef.current?.click();
     };
 
     return (
-        <div className='flex rounded-xl border border-gray-800 h-12 w-[320px]'>
+        <div className='flex rounded-xl border border-gray-800 h-12 w-[300px]'>
             <button
                 className='bg-black rounded-l-xl flex items-center justify-center w-1/2 cursor-pointer text-gray-500 text-md'
                 onClick={handleClickFile}

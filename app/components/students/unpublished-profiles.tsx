@@ -59,7 +59,7 @@ export default function UnpublishedProfiles() {
             {filteredStudents !== null
             ?
                 <Suspense fallback={<Loading />}>
-                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }} type={'all'}/>
+                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }}/>
                 </Suspense>
             :
                 (<div className="text-center text-zinc-400 text-lg mt-16">Данных нет</div>)

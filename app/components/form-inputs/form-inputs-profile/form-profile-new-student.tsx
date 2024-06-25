@@ -113,7 +113,7 @@ export default function FormProfileNewStudent() {
                         <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
                     </div>
                 </div>
-                <div className='h-96 max-sm:h-64'>
+                <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
                     <InputPhoto />
                 </div>
             </div>

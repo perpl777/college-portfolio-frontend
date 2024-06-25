@@ -2,13 +2,33 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import StatisticsChart from '@/app/components/statistics/chart';
 import { fetcher } from "@/lib/api"
+
+import { getAuthData } from '@/lib/auth';
+import Cookies from 'js-cookie';
+
 import Header from '../components/header';
 import Filter from '../components/filter';
 import { getFiltredStudents } from '../components/rating/rating';
 import { Student } from '../components/interfaces/statistics'
-import Table from '../components/students-table';
+import Table from '../components/students/students-table';
+
+
+interface UserRoleProps {
+    student: {
+        name: string
+    }
+    role: {
+        name: string
+    }
+}
+
 
 const StatisticsPage = () => {
+    const { id } = getAuthData();
+    const [user, setUser] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [userRole, setUserRole] = useState<UserRoleProps>();
+
     let [students, setStudents] = useState<Student[]>([]);
     const [filteredSpecialty, setFilteredSpecialty] = useState<string | null>(null);
     
@@ -25,6 +45,26 @@ const StatisticsPage = () => {
         "Издательское дело и реклама",
         "Изделия из бумаги и картона", 
     ]
+
+    //получение email user
+    useEffect(() => {
+        const userData = Cookies.get('email');
+        if (userData) {
+            setUser(userData);
+        }
+        setLoading(false);
+    }, []);
+
+
+    //фетч к юзеру
+    useEffect(() => {     
+        const fetchData = async () => {     
+            const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+            setUserRole(userDataResponse)
+        };
+        fetchData();   
+    }, []);
+
 
     //Получение данных из бд
     useEffect(() => {     
@@ -56,27 +96,34 @@ const StatisticsPage = () => {
     }, [students, filteredSpecialty]);
 
 
-return (
+    return (
     <>
-        <Header />
-        
-        <div className='p-10 relative'>
-            <div className="sm:absolute py-5 py-5 w-full flex sm:justify-start justify-end">
-                <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
-            </div>
-            {students ? (
-                <div className="">
-                    <StatisticsChart students={filteredStudents} />
-                    <div className='py-10'>
-                        <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
+        { user && 
+            <>
+            { userRole?.role.name === "Statistic" &&
+                <div>
+                    <Header />
+                    <div className='p-10 relative max-sm:px-6'>
+                        <div className="sm:absolute py-5  w-full flex sm:justify-start justify-end max-sm:pt-0 max-sm:justify-center">
+                            <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
+                        </div>
+                        {students ? (
+                            <div className="">
+                                <StatisticsChart students={filteredStudents} />
+                                <div className='py-10'>
+                                    <Table students={filteredStudents} studentLinks={{ href: "statistic/" }}/>
+                                </div>
+                            </div>
+
+                        ) : (
+                            <p>Loading...</p>
+                        )}
                     </div>
                 </div>
-
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
-    </>
+            }
+            </>
+            }
+        </>
 );
 };
 

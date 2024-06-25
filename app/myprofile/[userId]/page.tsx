@@ -9,6 +9,7 @@ import Header from "../../components/header";
 import Navbar from '../../components/navbar';
 import MyProfile from '../../components/students/my-profile';
 import MyPosts from '../../components/posts/my-posts';
+import StatisticsStudent from '@/app/components/students/student-page-statistic';
 
 
 interface Props {
@@ -73,7 +74,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
                         <div className='px-11 flex justify-end max-sm:px-6'>
                             <Navbar values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
                         </div>
-                        <div className='px-11 max-sm:px-6 pb-20'>
+                        <div className='px-11 max-sm:px-6 pb-24'>
                             { selectedBtn === 'Профиль' &&
                                 <MyProfile />
                             }
@@ -81,7 +82,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
                                 <div><MyPosts /></div>
                             }
                             { selectedBtn === 'Активность' &&
-                                <div>aaaaaaaa</div>
+                                <div><StatisticsStudent /></div>
                             }
                         </div>
                     </div>
