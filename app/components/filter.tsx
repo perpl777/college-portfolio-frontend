@@ -27,20 +27,34 @@ const Filter = ({values, updateFilteredValues, type}: Props) => {
     };
 
     return (
-        <div className="dropdown grid-cols-1 sm:grid-cols-3">
+        <div className="dropdown grid-cols-1 sm:grid-cols-3 rounded-sm ">
             {type == "none" 
             ?
             <>
                 <summary 
                     tabIndex={0} 
                     role="button" 
-                    className={`flex pl-3 py-2 gap-1 w-64 border border-gray-500 bg-white`}
+                    className={`
+                        text-left
+                        btn 
+                        flex-nowrap	
+                        flex 
+                        pl-3 
+                        py-2 
+                        w-64 
+                        border 
+                        border-slate-900 
+                        bg-white 
+                        rounded-sm
+                        hover:bg-slate-100
+                        hover:border-slate-900
+                        `}
                 >
                     <Image src={Arrow} alt='arrow' />
                     <span className='truncate w-full inline-block'> {selectedValues || values[0]} </span>
                 </summary>
 
-                <ul tabIndex={0} className={`dropdown-content z-[1] menu bg-white border border-gray-100 text-base mt-1`}>
+                <ul tabIndex={0} className={`dropdown-content z-[1] menu bg-white border border-gray-100 text-base rounded-sm  mt-1`}>
                     {values.map((value: any, index: any) => (
                         <li key={index} onClick={() => handleVaSelection(value)}>
                             <a> {value} </a>
@@ -53,13 +67,27 @@ const Filter = ({values, updateFilteredValues, type}: Props) => {
                 <summary 
                     tabIndex={0} 
                     role="button" 
-                    className={`flex pl-3 py-2 gap-1 w-64 border border-gray-800 bg-white rounded-lg`}
+                    className={`
+                        text-left
+                        btn 
+                        flex-nowrap	
+                        flex 
+                        pl-3 
+                        py-2 
+                        w-64 
+                        border 
+                        border-slate-900 
+                        bg-white 
+                        rounded-sm
+                        hover:bg-slate-100
+                        hover:border-slate-900
+                        `}
                 >
                     <Image src={Arrow} alt='arrow' />
                     <span className='truncate w-full inline-block'> {selectedValues || values[0]} </span>
                 </summary>
 
-                <ul tabIndex={0} className={`dropdown-content z-[1] menu bg-white border rounded-lg border-gray-100 text-base mt-1`}>
+                <ul tabIndex={0} className={`dropdown-content z-[1] menu bg-white border rounded-sm  border-gray-100 text-base mt-1`}>
                     {values.map((value: any, index: any) => (
                         <li key={index} onClick={() => handleVaSelection(value)}>
                             <a> {value} </a>

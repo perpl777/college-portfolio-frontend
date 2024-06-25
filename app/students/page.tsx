@@ -8,27 +8,12 @@ import Search from '../components/search'
 import Filter from '../components/filter'
 import Table from '../components/students/students-table';
 import Header from '../components/header'
+import { getFiltredStudents } from '../components/rating/rating';
+import { Student } from '../components/interfaces/statistics'
 
-
-interface DataStudents {
-    id: number;
-    attributes: {
-        surname: string;
-        name: string;
-        patronymic: string;
-        pubslished: boolean;
-        specialization: {
-            data: {
-                attributes: {
-                    name: string
-                }
-            }
-        }
-    };
-}
 
 interface StudentProps {
-    data: DataStudents[]
+    data: Student[];
 }
 
 
@@ -81,8 +66,8 @@ export default function StudentsPage() {
         );
         filteredData = searchResults;
         }
-        
-        return filteredData;
+
+        return getRatingStudents(filteredData);
     }, [students, filteredSpecialty, searchQuery]);
 
 
@@ -102,4 +87,8 @@ export default function StudentsPage() {
             </div> 
         </div>
     );
+}
+
+function getRatingStudents(filteredData: Student[]): any {
+    throw new Error('Function not implemented.')
 }

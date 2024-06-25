@@ -46,7 +46,7 @@ const SliderWithCheckbox = ({values, setSelectedCategory, checkboxChecked, setCh
                 <button
                     onClick={() => handleCategoryClick(index, value)}
                     key={index}
-                    className={`text-left text-lg text-black p-2 ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
+                    className={`text-left text-lg text-black p-2 capitalize ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
                 >
                     {value}
                 </button>
