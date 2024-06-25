@@ -7,38 +7,11 @@ import Filter from '../components/filter'
 import Table from '../components/students-table';
 import Header from '../components/header'
 import { getFiltredStudents } from '../components/rating/rating';
+import { Student } from '../components/interfaces/statistics'
 
-interface Post {
-    attributes: {
-        id: number;
-        title: string;
-        createdAt: string;
-    }
-}
-
-interface Specialization {
-    data: {
-        attributes: {
-            name: string;
-        }
-    }
-}
-
-interface DataStudent {
-    id: number;
-    attributes: {
-        surname: string;
-        name: string;
-        patronymic: string;
-        specialization: Specialization;
-        posts: {
-            data: Post[];
-        }
-    }
-}
 
 interface StudentProps {
-    data: DataStudent[];
+    data: Student[];
 }
 
 export default function StudentsPage() {
@@ -69,7 +42,7 @@ export default function StudentsPage() {
         fetchData();   
     }, []);
 
-    const getRatingStudents = (students: DataStudent[]) => {
+    const getRatingStudents = (students: Student[]) => {
         return getFiltredStudents(students);
     }
     

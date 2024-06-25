@@ -13,12 +13,15 @@ const ModalLogin = ({ openModal, handleCloseModal}: ModalProps) => {
 
     const [openRegisterModal, setOpenRegisterModal] = useState(false);
 
+    // Функция для открытия модального окна регистрации
     const handleOpenRegisterModal = (event: React.SyntheticEvent) => {
+        // Предотвращает перезагрузку страницы при клике на ссылку
         event.preventDefault();
         handleCloseModal();
         setOpenRegisterModal(!openModal);
     };
 
+    // Функция для закрытия модального окна регистрации
     const handleCloseRegisterModal = () => {
         setOpenRegisterModal(false);
     };
@@ -58,6 +61,7 @@ const ModalLogin = ({ openModal, handleCloseModal}: ModalProps) => {
                 </form>
             </div>
 
+            {/* Вложенное модальное окно для регистрации */}
             <ModalRegister openModal={openRegisterModal} handleCloseModal={handleCloseRegisterModal}/>
         </dialog>
     );

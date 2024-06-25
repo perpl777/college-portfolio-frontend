@@ -157,6 +157,7 @@ export default function Home() {
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <ImagePost 
+              key={post.attributes.url_view}
               url_view={post.attributes.url_view} 
               title={post.attributes.title}
             />
