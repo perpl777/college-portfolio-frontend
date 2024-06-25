@@ -67,7 +67,7 @@ export default function StudentsPage() {
         filteredData = searchResults;
         }
 
-        return getRatingStudents(filteredData);
+        return getFiltredStudents(filteredData);
     }, [students, filteredSpecialty, searchQuery]);
 
 
