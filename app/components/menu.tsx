@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { gsap } from 'gsap'
-import {fetcher} from "@/lib/api"
+import { fetcher } from "@/lib/api"
 import Link from 'next/link'
 
 import { getAuthData, unsetAuthData } from '@/lib/auth';
@@ -20,8 +20,13 @@ interface UserNameProps {
     }
 }
 
+interface MenuProps {
+    setMenuShow: React.Dispatch<React.SetStateAction<boolean>>;
+    HandleMenuAppirance: () => void; 
+}
 
-const Menu = () => {
+
+const Menu: React.FC<MenuProps> = ({ setMenuShow, HandleMenuAppirance }) => {
     const { id } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
     const [userName, setUserName] = useState<UserNameProps>();
@@ -77,35 +82,16 @@ const Menu = () => {
 
 
     //--------- anim click appirance menu----------
-    const [menuHide, setMenuHide] = useState(true);
 
     const handleMouseEnter = () => {
-        setMenuHide(false);
+        setMenuShow(true);
         HandleMenuAppirance();
     };
 
-    const handleMouseLeave = () => {
-        setMenuHide(true);
-        HandleMenuAppirance();
-    };
-
-
-    // отображение меню при наведении и исчезновение
-    const HandleMenuAppirance = () => {
-        gsap.to(".menu-nav-elenemt", {
-            duration: 1,
-            stagger: 0.25,
-            opacity: menuHide ? 1 : 0,
-            y: menuHide ? 0 : -10,
-            ease: "slow"
-        });
-        gsap.to("#menu", { 
-            duration: 0.6, 
-            opacity: menuHide ? 1 : 0,
-            y: menuHide ? 0 : -10,
-            ease: "slow" 
-        });
-    }
+    // const handleMouseLeave = () => {
+    //     setMenuHide(true);
+    //     HandleMenuAppirance();
+    // };
 
 
     // появление меню при скролле верх 
@@ -115,8 +101,6 @@ const Menu = () => {
         const handleScroll = () => {
             const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
             if (currentScrollTop > lastScrollTop || currentScrollTop <= 0) {
-                // setMenuOpen(true);
-                // HandleMenuAppirance();
                 gsap.to("#menu", { opacity: 0, y: -10,  duration: 0.6, ease: "slow" });
                 gsap.to(".menu-nav-elenemt", { 
                     opacity: 0,
@@ -124,10 +108,8 @@ const Menu = () => {
                     duration: 1, 
                     ease: "slow" 
                 });
-                setMenuHide(false);
+                setMenuShow(false);
             } else {
-                // setMenuOpen(false);
-                // HandleMenuAppirance();
                 gsap.to("#menu", { opacity: 1, y: 0, duration: 0.6, ease: "slow" });
                 gsap.to(".menu-nav-elenemt", { 
                     opacity: 1,
@@ -135,7 +117,7 @@ const Menu = () => {
                     duration: 1, 
                     ease: "slow" 
                 });
-                setMenuHide(true);
+                setMenuShow(true);
             }
             lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
         };
@@ -151,7 +133,7 @@ const Menu = () => {
             <div 
                 id="menu" 
                 onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                // onMouseLeave={handleMouseLeave}
                 className='fixed z-20 opacity-0 top-0 left-0 right-0 box-border 
                 text-black backdrop-blur-sm bg-white/70 '>
                     
