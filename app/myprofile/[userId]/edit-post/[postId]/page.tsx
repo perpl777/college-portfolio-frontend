@@ -133,7 +133,6 @@ export default function EditPostPage({ params: {postId}}: Props) {
                     }
                 }),
             });
-            console.log('edit post');
             window.location.href = `/myprofile/${id}`;
         } 
         catch (error) {

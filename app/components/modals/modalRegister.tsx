@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
+import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
 
@@ -20,19 +21,11 @@ const ModalRegister = ({
     
     const [data, setData] = useState(
         {
-            "username": "",
             "email": "",
             "password": ""
         }
     )
     const [error, setError] = useState<string | undefined>(undefined);
-
-
-    const isValidEmail = (email: any) => {
-        // Простейшая проверка на корректность email
-        const re = /\S+@\S+\.\S+/;
-        return re.test(email);
-    };
 
 
     const handleChange = (e: any) => {
@@ -43,18 +36,17 @@ const ModalRegister = ({
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        const response1 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[username][$eq]=${data.username}`);
-        const response2 = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
+        const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
 
-        if (data.password.length < 6 || data.password === data.password.toLowerCase()) {
+        if (data.password.length < 6) {
             setError('Пароль должен содержать не менее 6 символов и хотя бы одну заглавную букву.');
         }
           // Проверка настоящего email
         else if (!isValidEmail(data.email)) {
             setError('Пожалуйста, введите настоящий email.');
         }
-        else if (response1.length !== 0 || response2.length !== 0) {
-            setError('Пользователь с таким именем или email уже существует.');
+        else if (response.length !== 0) {
+            setError('Пользователь с таким email уже существует.');
         }
 
         else {
@@ -65,7 +57,7 @@ const ModalRegister = ({
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: data.username,
+                        username: data.email,
                         email: data.email,
                         password: data.password
                     }),
@@ -75,7 +67,6 @@ const ModalRegister = ({
                     return;
                 }
                 window.location.href = '/';
-                console.log('acces');
             }
             catch (error) {
                 console.error('Error:', error);
@@ -85,7 +76,7 @@ const ModalRegister = ({
     
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
-            <div className="modal-box py-12 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">
+            <div className="modal-box py-12 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-2 right-6">
                     <form method="dialog">
                         <button className='text-5xl font-light' onClick={handleCloseModalRegister}>&times;</button>
@@ -105,16 +96,16 @@ const ModalRegister = ({
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
-                        <input 
+                        {/* <input 
                             type="text" 
                             name="username"
                             maxLength={20}
                             minLength={5}
-                            placeholder="Логин.."
+                            placeholder="Имя.."
                             onChange={handleChange}
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
-                        />
+                        /> */}
                         <input 
                             name="password"
                             type="password" 

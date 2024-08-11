@@ -18,10 +18,7 @@ interface Props {
 
 
 export default function InputSpecializations({selectedSpecialization, setSelectedSpecialization}: Props) {
-    
-
     const [specializations, setSpecializations] = useState<SpecializationsProps[]>([]);
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,7 +37,7 @@ export default function InputSpecializations({selectedSpecialization, setSelecte
 
     return (
         <div>
-            <select className="select select-bordered max-w-xs rounded-none w-full" value={selectedSpecialization} onChange={handleSelectChange}>
+            <select className="select select-bordered max-w-xs rounded-none w-full outline-none" value={selectedSpecialization} onChange={handleSelectChange}>
                 <option disabled selected>Специальность..</option>
                 {specializations && specializations.map((value: SpecializationsProps) => (
                     <option key={value.id} value={value.id}>

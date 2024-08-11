@@ -15,7 +15,6 @@ const Header = () => {
     };
     // отображение меню при наведении и исчезновение
     const HandleMenuAppirance = () => {
-        console.log(menuShow)
         gsap.to(".menu-nav-elenemt", {
             duration: 1,
             stagger: 0.25,

@@ -15,6 +15,9 @@ import InputPhoto from '../input-photo';
 import InputText from '../input-text';
 import Textarea from '../textarea';
 import InputContacts from './input-contacts';
+import ErrorMess from '../../errorMess';
+
+import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
 
 
 interface DataStudent {
@@ -37,6 +40,7 @@ export default function FormProfileNewStudent() {
     const { id } = getAuthData();
     const { jwt } = getAuthData();
 
+    const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
     const [selectedSpecialization, setSelectedSpecialization] = useState<number>();
     const [selectedCourse, setSelectedCourse] = useState<number>();
@@ -55,16 +59,49 @@ export default function FormProfileNewStudent() {
         url_photo: null
     });
 
+    const dataCheck = async () => {
+        if (!isNotEmpty(formData.surname)) {
+            setError('Фамилия не может быть пустой');
+        } else if (!isNotEmpty(formData.name)) {
+            setError('Имя не может быть пустым');
+        } else if (!isInRange(selectedCourse, 1, 4)) {
+            setError('Курс должен быть от 1 до 4');
+        } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
+            setError('Специализация не может быть пустой');
+        } else if (!isLengthValid(formData.about_info, 10, 500)) {
+            setError('Информация о себе должна содержать от 10 до 500 символов');
+        } else if (selectedTechnologies.length === 0) {
+            setError('Технологии не могут быть пустыми');
+        } else {
+            // Проверяем доступность URL
+            const urlsToCheck = {
+                github: formData.url_github,
+                behance: formData.url_behance,
+                vk: formData.url_vk
+            };
+            
+            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
+                setError('Некорректная ссылка');
+                return;
+            }
+            
+            // Если все проверки пройдены успешно, сбрасываем ошибку
+            setError('');
+        }
+    }
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData({
             ...formData,
             [name]: value
         });
+        setError('');
     };
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
+        dataCheck()
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students`, {
                 method: 'POST',
@@ -90,7 +127,6 @@ export default function FormProfileNewStudent() {
                     }
                 }),
             });
-            console.log('adding student');
             window.location.href = `/myprofile/${id}`;
         } 
         catch (error) {
@@ -128,7 +164,10 @@ export default function FormProfileNewStudent() {
                 <InputContacts srcImage={VkIcon} placeholder='Ссылка на Vk..' name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>
             </div>
 
-            <div className='w-full flex justify-end pt-2 max-md:pt-10 max-md:justify-center'>
+            <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
+                <div className='w-72 max-sm:w-full'>
+                    {error != '' && <ErrorMess text={error}/>}
+                </div>
                 <button 
                     type='submit'
                     className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
