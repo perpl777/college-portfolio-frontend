@@ -16,6 +16,8 @@ import InputText from '../input-text';
 import Textarea from '../textarea';
 import InputContacts from './input-contacts';
 
+import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
+import ErrorMess from '../../errorMess';
 
 
 interface OldDataStudent {
@@ -78,6 +80,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
     const { jwt } = getAuthData();
     let [student, setStudent] = useState<OldDataStudent>();
 
+    const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
     const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes?.specialization?.data?.id ?? 0);
     const [selectedCourse, setSelectedCourse] = useState<number>(student?.attributes?.course ?? 0);
@@ -96,6 +99,42 @@ export default function FormProfileEditStudent({studentId}: Props) {
         url_photo: null,
         published: false
     });
+
+    
+    const dataCheck = async () => {
+        let dataOk = false
+
+        if (!isNotEmpty(formData.surname)) {
+            setError('Фамилия не может быть пустой');
+        } else if (!isNotEmpty(formData.name)) {
+            setError('Имя не может быть пустым');
+        } else if (!isInRange(selectedCourse, 1, 4)) {
+            setError('Курс должен быть от 1 до 4');
+        } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
+            setError('Специализация не может быть пустой');
+        } else if (!isLengthValid(formData.about_info, 10, 500)) {
+            setError('Информация о себе должна содержать от 10 до 500 символов');
+        } else if (selectedTechnologies.length === 0) {
+            setError('Технологии не могут быть пустыми');
+        } else {
+            // Проверяем доступность URL
+            const urlsToCheck = {
+                github: formData.url_github,
+                behance: formData.url_behance,
+                vk: formData.url_vk
+            };
+            
+            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
+                setError('Некорректная ссылка');
+                return;
+            }
+            
+            // Если все проверки пройдены успешно, сбрасываем ошибку
+            dataOk = true
+            setError('');
+        }
+        return dataOk
+    }
 
 
      //фетч
@@ -122,40 +161,42 @@ export default function FormProfileEditStudent({studentId}: Props) {
             ...formData,
             [name]: value
         });
+        setError('');
     };
     
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault();
-        try {
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}`, {
-                method: 'PUT', 
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${jwt}`,
-                },
-                body: JSON.stringify({
-                    data: {
-                        published: false,
-                        user: id,
-                        surname: formData.surname || student?.attributes.surname,
-                        name: formData.name || student?.attributes.name,
-                        patronymic: formData.patronymic || student?.attributes.patronymic,
-                        course: selectedCourse || student?.attributes.course,
-                        specialization: selectedSpecialization || student?.attributes.specialization,
-                        about_info: formData.about_info || student?.attributes.about_info,
-                        technologies: selectedTechnologies || student?.attributes.technologies,
-                        url_github: formData.url_github || student?.attributes.url_github,
-                        url_behance: formData.url_behance || student?.attributes.url_behance,
-                        url_vk: formData.url_vk || student?.attributes.url_vk,
-                        url_photo: "https://college-portfolio.hb.ru-msk.vkcs.cloud/students/efim-borisov-oqLBhhhPxy0-unsplash.jpg"
-                    }
-                }),
-            });
-            console.log('add post');
-            window.location.href = `/myprofile/${id}`;
-        } 
-        catch (error) {
-            console.error('Error:', error);
+        if (await dataCheck()) {
+            try {
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}`, {
+                    method: 'PUT', 
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            published: false,
+                            user: id,
+                            surname: formData.surname || student?.attributes.surname,
+                            name: formData.name || student?.attributes.name,
+                            patronymic: formData.patronymic || student?.attributes.patronymic,
+                            course: selectedCourse || student?.attributes.course,
+                            specialization: selectedSpecialization || student?.attributes.specialization,
+                            about_info: formData.about_info || student?.attributes.about_info,
+                            technologies: selectedTechnologies || student?.attributes.technologies,
+                            url_github: formData.url_github || student?.attributes.url_github,
+                            url_behance: formData.url_behance || student?.attributes.url_behance,
+                            url_vk: formData.url_vk || student?.attributes.url_vk,
+                            url_photo: "https://college-portfolio.hb.ru-msk.vkcs.cloud/students/efim-borisov-oqLBhhhPxy0-unsplash.jpg"
+                        }
+                    }),
+                });
+                window.location.href = `/myprofile/${id}`;
+            } 
+            catch (error) {
+                console.error('Error:', error);
+            }
         }
     };
 
@@ -192,7 +233,10 @@ export default function FormProfileEditStudent({studentId}: Props) {
             <p className='pb-12 pt-9 max-sm:py-7'>Статус:  
                 {student?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
             </p>
-            <div className='w-full flex justify-end max-md:pt-8 max-md:justify-center'>
+            <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
+                <div className='w-72 max-sm:w-full'>
+                    {error != '' && <ErrorMess text={error}/>}
+                </div>
                 <button 
                     type='submit'
                     className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">

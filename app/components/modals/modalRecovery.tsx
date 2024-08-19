@@ -29,7 +29,7 @@ const ModalRecovery = ({
 
     return (
         <dialog className="modal bg-black/70" open={openModalRecovery}>
-            <div className="modal-box py-12 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">
+            <div className="modal-box py-12 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-2 right-6">
                     <form method="dialog">
                         <button className='text-5xl font-light' onClick={handleCloseModalRecovery}>&times;</button>
@@ -51,7 +51,6 @@ const ModalRecovery = ({
                         />
 
                         <div>
-                            {/* {error && <ErrorMess text='Неверная почта или пароль'></ErrorMess>} */}
                         </div>
                     </div>
 

@@ -3,8 +3,8 @@ import React, {useState} from "react";
 
 import { fetcher } from '@/lib/api';
 import { setAuthData } from '@/lib/auth';
+import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
-
 
 
 
@@ -34,28 +34,38 @@ const ModalLogin = ({
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        try {
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    identifier: data.email,
-                    password: data.password
-                }),
-            });
-            if (response.error) {
-                console.error('Error:', response.error);
+
+        if (data.password.length < 6) {
+            setError('Неверный пароль');
+        }
+          // Проверка настоящего email
+        else if (!isValidEmail(data.email)) {
+            setError('Пожалуйста, введите настоящий email.');
+        }
+        else {
+            try {
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        identifier: data.email,
+                        password: data.password
+                    }),
+                });
+                if (response.error) {
+                    console.error('Error:', response.error);
+                    setError('Неверная почта или пароль');
+                    return;
+                }
+                setAuthData(response);
+                window.location.href = '/';
+            } 
+            catch (error) {
                 setError('Неверная почта или пароль');
-                return;
+                console.error('Error:', error);
             }
-            setAuthData(response);
-            window.location.href = '/';
-        } 
-        catch (error) {
-            setError('Неверная почта или пароль');
-            console.error('Error:', error);
         }
     };
     
@@ -67,7 +77,7 @@ const ModalLogin = ({
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>
-            <div className="modal-box py-10 w-2/6 max-sm:w-full rounded-none flex items-center justify-center">
+            <div className="modal-box py-10 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-3 right-6">
                     <form method="dialog">
                         <button className='text-5xl font-light' onClick={handleCloseModalLogin}>&times;</button>
