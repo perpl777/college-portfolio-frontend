@@ -1,5 +1,4 @@
 'use client'
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
@@ -16,65 +15,17 @@ import InputTags from '@/app/components/form-inputs/form-inputs-post/input-tags'
 import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file';
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
+import type { DataStudent, OldDataPost } from '../components/interfaces'
+import { useUser } from '../components/context';
 
+export default function EditPostPage() {
 
-interface DataStudent {
-    title: string;
-    description: string;
-    tags: string;
-    worktype: string
-    background: boolean
-    photo: any;
-    file: any;
-}
+    const { id, jwt } = useUser();
 
-interface OldDataPost {
-    id: number;
-    attributes: {
-        title: string;
-        description?: string;
-        tags: {
-            data: Tags[];
-        }
-        worktype: {
-            data: {
-                id: number;
-                attributes: {
-                    name: string
-                }
-            }
-        }
-        background: boolean
-        photo?: any;
-        file?: any;
-        published: boolean
-    }
-}
-
-interface Tags {
-    id: number;
-    attributes: {
-        name: string;
-    };
-}
-
-interface Props {
-    params: {
-        postId: number
-    }
-}
-
-
-export default function EditPostPage({ params: {postId}}: Props) {
-
-    const { id } = getAuthData();
-    const { jwt } = getAuthData();
     let [post, setPost] = useState<OldDataPost>();
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>(post?.attributes.worktype?.data?.id ?? 0);
-    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
-    const [formDataFile, setFormDataFile] = useState<FormData | null>(null);
 
     const [formData, setFormData] = useState<DataStudent>({
         title: '',
@@ -82,15 +33,15 @@ export default function EditPostPage({ params: {postId}}: Props) {
         tags: '',
         worktype: '',
         background: false,
-        photo: null,
-        file: null
+        url_file: '',
+        url_view: null
     });
 
 
      //фетч
     useEffect(() => {     
         const fetchData = async () => {       
-            const postResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);
+            const postResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${id}?populate=*`);
             setPost(postResponse.data);
         };
         fetchData();   
@@ -117,23 +68,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
         try {
-            const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-        
-            const uploadedImage = responsePhoto.data[0];
-
-            const responseFile = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataFile, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            const uploadedFile = responseFile.data[0];
-
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${id}`, {
                 method: 'PUT', 
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,12 +82,12 @@ export default function EditPostPage({ params: {postId}}: Props) {
                         tags: selectedTags || post?.attributes.tags,
                         worktype: selectedWorktype || post?.attributes.worktype,
                         background: formData.background || post?.attributes.background,
-                        photo: uploadedImage,
-                        file: uploadedFile,
+                        url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
+                        url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
                     }
                 }),
             });
-            window.location.href = `/myprofile/${id}`;
+            window.location.href = `/myprofile`;
         } 
         catch (error) {
             console.error('Error', error);
@@ -163,7 +98,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
     <div className='pb-10'>
         <Header />
         <div className='px-11 pt-14 pb-8 max-sm:p-6 max-sm:pt-12 max-sm:pb-4'>
-            <Link href={`#${postId}`} onClick={() => window.history.back()}>
+            <Link href={`#${id}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
         </div>
@@ -174,17 +109,17 @@ export default function EditPostPage({ params: {postId}}: Props) {
                     <Textarea placeholder={post?.attributes.description ? post?.attributes.description : 'Описание..'} name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
                     <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile setFormDataFile={setFormDataFile} />
+                    <InputFile />
                 </div>
                 <div className='h-96 max-sm:h-64'>
-                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
+                    <InputPhoto />
                     <div className='flex justify-end my-5'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>
                 </div>
             </div>
             <p className='pt-16 max-sm:pt-32'>Статус:  
-                {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-blue-900 pl-2'>На рассмотрении</span>}
+                {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
             </p>
             <div className='w-full flex justify-end pt-12  max-md:justify-center'>
                 <button 

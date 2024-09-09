@@ -88,7 +88,7 @@ export default function MyPosts() {
                     return (
                         <Suspense fallback={<Loading />} key={post.id}>
                             <ImagePost 
-                                href={`/myprofile/${id}/edit-post/${post.id}`}
+                                href={`/myprofile/edit-post`}
                                 studentId={post.attributes.student.data.id}
                                 postId={post.id}
                                 photo={post?.attributes?.photo?.data?.attributes?.url}
