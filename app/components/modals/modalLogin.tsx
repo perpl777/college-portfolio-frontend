@@ -60,7 +60,7 @@ const ModalLogin = ({
                     return;
                 }
                 setAuthData(response);
-                window.location.href = '/';
+                window.location.href = '/myprofile';
             } 
             catch (error) {
                 setError('Неверная почта или пароль');

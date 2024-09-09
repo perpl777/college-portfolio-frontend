@@ -15,59 +15,13 @@ import InputTags from '@/app/components/form-inputs/form-inputs-post/input-tags'
 import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file';
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
+import type { DataStudent, OldDataPost } from '../components/interfaces'
+import { useUser } from '../components/context';
 
+export default function EditPostPage() {
 
-interface DataStudent {
-    title: string;
-    description: string;
-    tags: string;
-    worktype: string
-    background: boolean
-    url_file?: string;
-    url_view: any;
-}
+    const { id, jwt } = useUser();
 
-interface OldDataPost {
-    id: number;
-    attributes: {
-        title: string;
-        description: string;
-        tags: {
-            data: Tags[];
-        }
-        worktype: {
-            data: {
-                id: number;
-                attributes: {
-                    name: string
-                }
-            }
-        }
-        background: boolean
-        url_file?: string;
-        url_view: any;
-        published: boolean
-    }
-}
-
-interface Tags {
-    id: number;
-    attributes: {
-        name: string;
-    };
-}
-
-interface Props {
-    params: {
-        postId: number
-    }
-}
-
-
-export default function EditPostPage({ params: {postId}}: Props) {
-
-    const { id } = getAuthData();
-    const { jwt } = getAuthData();
     let [post, setPost] = useState<OldDataPost>();
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -87,7 +41,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
      //фетч
     useEffect(() => {     
         const fetchData = async () => {       
-            const postResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);
+            const postResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${id}?populate=*`);
             setPost(postResponse.data);
         };
         fetchData();   
@@ -114,7 +68,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
         try {
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${id}`, {
                 method: 'PUT', 
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,7 +87,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
                     }
                 }),
             });
-            window.location.href = `/myprofile/${id}`;
+            window.location.href = `/myprofile`;
         } 
         catch (error) {
             console.error('Error', error);
@@ -144,7 +98,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
     <div className='pb-10'>
         <Header />
         <div className='px-11 pt-14 pb-8 max-sm:p-6 max-sm:pt-12 max-sm:pb-4'>
-            <Link href={`#${postId}`} onClick={() => window.history.back()}>
+            <Link href={`#${id}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
         </div>

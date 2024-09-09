@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react';
-import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
 
 import ArrowIcon from '@/public/Arrow.svg'
@@ -15,33 +14,14 @@ import InputTags from '@/app/components/form-inputs/form-inputs-post/input-tags'
 import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file';
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
-
-import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
+import type { DataStudent } from '../components/interfaces'
+import { isLengthValid, isNotEmpty, isValidURL } from '@/lib/utils/validationUtils';
 import ErrorMess from '@/app/components/errorMess';
+import { useUser } from '../components/context';
 
 
-interface DataStudent {
-    title: string;
-    description: string;
-    tags: string;
-    worktype: string
-    background: boolean
-    url_file?: string;
-    url_view: any;
-}
-
-
-interface Props {
-    params: {
-        studentId: number
-    }
-}
-
-
-export default function AddPostPage({ params: {studentId}}: Props) {
-
-    const { id } = getAuthData();
-    const { jwt } = getAuthData();
+export default function AddPostPage() {
+    const { id, jwt } = useUser();
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>();
@@ -103,7 +83,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     body: JSON.stringify({
                         data: {
                             published: false,
-                            student: studentId,
+                            student: id,
                             title: formData.title,
                             description: formData.description,
                             tags: selectedTags,
@@ -114,7 +94,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                         }
                     }),
                 });
-                window.location.href = `/myprofile/${id}`;
+                window.location.href = `/myprofile`;
             } 
             catch (error) {
                 console.error('Error adding student:', error);
@@ -126,7 +106,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
     <div className='pb-10'>
         <Header />
         <div className='px-11 pt-12 pb-5 max-sm:px-6 max-sm:pt-12'>
-            <Link href={`#${studentId}`} onClick={() => window.history.back()}>
+            <Link href={`#${id}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
         </div>
