@@ -209,8 +209,8 @@ export default function FormProfileEditStudent({studentId}: Props) {
                     <InputText placeholder={student?.attributes.surname ? student?.attributes.surname : 'Фамилия..'} name={'surname'} value={formData.surname} onChange={(e: any) => handleInputChange(e)}/>
                     <InputText placeholder={student?.attributes.name ? student?.attributes.name :  'Имя..'} name={'name'} value={formData.name} onChange={(e: any) => handleInputChange(e)}/>
                     <InputText placeholder={student?.attributes.patronymic ? student?.attributes.patronymic :  'Отчество..'} name={'patronymic'}  value={formData.patronymic} onChange={(e: any) => handleInputChange(e)}/>
-                    <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
                     <div className='flex gap-8 max-sm:flex-col'>
+                        <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
                         <InputSpecializations selectedSpecialization={selectedSpecialization} setSelectedSpecialization={setSelectedSpecialization} />
                         <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
                     </div>
