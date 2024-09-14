@@ -4,16 +4,16 @@ import { ChangeEvent, useRef } from 'react';
 import { isValidImageSize } from '@/lib/utils/validationUtils';
 import ErrorMess from '../errorMess';
 
+interface Props {
+    setFormDataPhoto: any
+}
 
-
-export default function InputPhoto() {
-
-    const [selectedFile, setSelectedFile] = useState(null);
+export default function InputPhoto({ setFormDataPhoto }: Props ) {
     const [error, setError] = useState<string>('');
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [blob, setBlob] = useState<Blob | null>(null);
-
+    
     const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) {
@@ -26,9 +26,13 @@ export default function InputPhoto() {
         } else {
             setError('');
             setBlob(file);
+
+            const formDataFile = new FormData();
+            formDataFile.append('files', file);
+            setFormDataPhoto(formDataFile);
         }
     };
-    
+
     const handleClick = (event: React.FormEvent<any>) => {
         event.preventDefault()
         fileInputRef.current?.click();
@@ -47,7 +51,7 @@ export default function InputPhoto() {
             </div>
             <div className='overflow-hidde flex justify-center items-center' style={{ minHeight: '300px' }}>
                 { error == '' && blob ? (
-                 <img className='object-cover' src={blob ? URL.createObjectURL(blob) : ''} alt='uploaded' />
+                    <img className='object-cover' src={blob ? URL.createObjectURL(blob) : ''} alt='uploaded' />
                 ) : (
                 <div style={{ height: '100%' }}/>
                 )}

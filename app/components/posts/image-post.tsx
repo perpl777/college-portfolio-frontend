@@ -9,12 +9,12 @@ interface DataPost {
     href: string;
     studentId: number;
     postId: number;
-    url_view?: string;
+    photo?: any;
     title: string;
 }
 
 
-const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
+const ImagePost = ({ href, studentId, postId, photo, title }: DataPost) => {
 
 // все для анимаций
     const divRef = useRef<HTMLDivElement | null>(null);
@@ -52,9 +52,9 @@ const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
     return (
         <Link href={href}>
             <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                {url_view ? (
+                {photo ? (
                 <div className='cursor-pointer'>
-                    <Image src={url_view} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                    <Image src={photo} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
                     <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
                     <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
                     </div>

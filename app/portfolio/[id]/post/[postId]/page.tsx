@@ -17,9 +17,8 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        urls_photos: string,
-        url_view: string,
-        url_file: string
+        photo?: any,
+        file: any;
         background: boolean,
         published: boolean,
         publishedAt: string,
@@ -77,8 +76,8 @@ export default function Post({ params: { id, postId}}: Props) {
                             description={post?.attributes.description}
                             publishedAt={post?.attributes.publishedAt}
                             worktype={post?.attributes.worktype.data.attributes.name}
-                            url_view={post.attributes.url_view}
-                            url_file={post.attributes.url_file}
+                            photo={post.attributes.photo}
+                            file={post.attributes.file}
                             studentName={post.attributes.student.data.attributes.name}
                             studentId={post.attributes.student.data.id}
                         />

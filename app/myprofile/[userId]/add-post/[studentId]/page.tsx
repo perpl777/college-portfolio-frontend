@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios';
 import { useState } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
@@ -16,7 +17,7 @@ import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file'
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
 
-import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
+import { isNotEmpty, isLengthValid } from '@/lib/utils/validationUtils'
 import ErrorMess from '@/app/components/errorMess';
 
 
@@ -24,10 +25,10 @@ interface DataStudent {
     title: string;
     description: string;
     tags: string;
-    worktype: string
-    background: boolean
-    url_file?: string;
-    url_view: any;
+    worktype: string;
+    background: boolean;
+    photo: any;
+    file: any;
 }
 
 
@@ -46,6 +47,8 @@ export default function AddPostPage({ params: {studentId}}: Props) {
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>();
     const [error, setError] = useState<string>('');
+    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
+    const [formDataFile, setFormDataFile] = useState<FormData | null>(null);
 
     const [formData, setFormData] = useState<DataStudent>({
         title: '',
@@ -53,8 +56,8 @@ export default function AddPostPage({ params: {studentId}}: Props) {
         tags: '',
         worktype: '',
         background: false,
-        url_file: '',
-        url_view: null
+        photo: null,
+        file: null
     });
 
     const dataCheck = async () => {
@@ -68,10 +71,6 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             setError('Теги не могут быть пустым');
         } else if (!selectedWorktype) {
             setError('Вы должны выбрать тип работы');
-        } else if (formData.url_file && !isValidURL(formData.url_file)) {
-            setError('Некорректно загружен файл, попробуйте снова');
-        } else if (!isValidURL(formData.url_view)) {
-            setError('Некорректно загружено фото, попробуйте снова');
         } else {
             // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
@@ -87,13 +86,28 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             [name]: value
         });
         setError('');
-
     };
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
         if (await dataCheck()) {
             try {
+                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            
+                const uploadedImage = responsePhoto.data[0];
+
+                const responseFile = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataFile, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                const uploadedFile = responseFile.data[0];
+
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts`, {
                     method: 'POST',
                     headers: {
@@ -109,11 +123,12 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                             tags: selectedTags,
                             worktype: selectedWorktype,
                             background: formData.background,
-                            url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
-                            url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
+                            photo: uploadedImage,
+                            file: uploadedFile,
                         }
                     }),
                 });
+
                 window.location.href = `/myprofile/${id}`;
             } 
             catch (error) {
@@ -137,10 +152,10 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     <Textarea placeholder='Описание..' name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
                     <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile />
+                    <InputFile setFormDataFile={setFormDataFile} />
                 </div>
                 <div className='h-96 max-sm:h-64'>
-                    <InputPhoto />
+                <InputPhoto setFormDataPhoto={setFormDataPhoto} />
                     <div className='flex justify-end my-5'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>

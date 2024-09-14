@@ -18,7 +18,7 @@ interface DataPosts {
     id: number,
     attributes: {
         title: string,
-        url_view: string;
+        photo?: any;
         worktype: {
             data: {
                 id: number,
@@ -83,7 +83,7 @@ export default function MyPosts() {
                                 href={`/myprofile/${id}/edit-post/${post.id}`}
                                 studentId={post.attributes.student.data.id}
                                 postId={post.id}
-                                url_view={post.attributes.url_view} 
+                                photo={post.attributes.photo} 
                                 title={post.attributes.title}
                             />
                         </Suspense>

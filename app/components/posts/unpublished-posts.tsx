@@ -14,7 +14,7 @@ interface DataPosts {
     id: number,
     attributes: {
     title: string,
-    url_view: string;
+    photo: string;
     published: boolean;
     student: {
         data: {
@@ -77,7 +77,7 @@ export default function UnpublishedPosts() {
                                     href={`/moderation/post/${post?.id}`}
                                     studentId={post.attributes.student.data.id}
                                     postId={post.id}
-                                    url_view={post.attributes.url_view} 
+                                    photo={post.attributes.photo} 
                                     title={post.attributes.title}
                                 />
                             </Suspense>

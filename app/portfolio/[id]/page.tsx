@@ -38,7 +38,7 @@ interface DataStudent {
                 }
             }
         },
-        url_photo?: string,
+        photo: any,
     }
 }
 
@@ -48,9 +48,7 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        urls_photos: string,
-        url_view: string,
-        url_file: string
+        photo?: any,
         background: boolean,
         published: boolean,
         publishedAt: string,
@@ -148,7 +146,7 @@ export default function Portfolio({ params: { id } }: Props) {
                             url_github={student.attributes?.url_github}
                             url_vk={student.attributes?.url_vk}
                             specialization={student.attributes.specialization.data.attributes.name}
-                            url_photo={student.attributes.url_photo}
+                            photo={student.attributes.photo}
                         /> 
                     }
                 </div>

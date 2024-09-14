@@ -1,6 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react';
-import { ChangeEvent, useRef } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
 
@@ -31,7 +31,7 @@ interface DataStudent {
     url_github?: string;
     url_behance?: string;
     url_vk?: string;
-    url_photo: any;
+    photo: any;
 }
 
 
@@ -45,6 +45,7 @@ export default function FormProfileNewStudent() {
     const [selectedSpecialization, setSelectedSpecialization] = useState<number>();
     const [selectedCourse, setSelectedCourse] = useState<number>();
 
+    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
     const [formData, setFormData] = useState<DataStudent>({
         surname: '',
         name: '',
@@ -56,7 +57,7 @@ export default function FormProfileNewStudent() {
         url_github: '',
         url_behance: '',
         url_vk: '',
-        url_photo: null
+        photo: null
     });
 
     const dataCheck = async () => {
@@ -80,11 +81,6 @@ export default function FormProfileNewStudent() {
                 vk: formData.url_vk
             };
             
-            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
-                setError('Некорректная ссылка');
-                return;
-            }
-            
             // Если все проверки пройдены успешно, сбрасываем ошибку
             setError('');
         }
@@ -103,6 +99,14 @@ export default function FormProfileNewStudent() {
         event.preventDefault()
         dataCheck()
         try {
+            const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        
+            const uploadedImage = responsePhoto.data[0];
+
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students`, {
                 method: 'POST',
                 headers: {
@@ -123,7 +127,7 @@ export default function FormProfileNewStudent() {
                         url_github: formData.url_github,
                         url_behance: formData.url_behance,
                         url_vk: formData.url_vk,
-                        url_photo: "https://college-portfolio.hb.ru-msk.vkcs.cloud/students/efim-borisov-oqLBhhhPxy0-unsplash.jpg"
+                        photo: uploadedImage
                     }
                 }),
             });
@@ -150,7 +154,7 @@ export default function FormProfileNewStudent() {
                     </div>
                 </div>
                 <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
-                    <InputPhoto />
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
                 </div>
             </div>
 

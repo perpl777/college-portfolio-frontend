@@ -11,14 +11,14 @@ interface Props {
     description?: string;
     publishedAt: string;
     worktype: string;
-    url_view?: any;
-    url_file?: any;
+    photo: any;
+    file: any;
     studentName: string;
     studentId: number;
 }
 
 
-export default function PostPage({postId, title, description, publishedAt, worktype, url_view, url_file, studentName, studentId}: Props) {
+export default function PostPage({postId, title, description, publishedAt, worktype, photo, file, studentName, studentId}: Props) {
     return (
         <div className='px-11 my-10 flex flex-col justify-between gap-8 max-sm:p-7 max-sm:my-2'>
             <Link href={`#${postId}`} onClick={() => window.history.back()}>
@@ -41,10 +41,10 @@ export default function PostPage({postId, title, description, publishedAt, workt
                     </Link>
                 </div>
     
-                {url_file 
+                {file 
                 ? 
                 (
-                    <Link href={url_file} target='_blank'>
+                    <Link href={file} target='_blank'>
                         <Suspense fallback={""}>
                             <Image src={PdfIcon} alt="Ссылка на PDF" width={30} />
                         </Suspense>
@@ -55,10 +55,10 @@ export default function PostPage({postId, title, description, publishedAt, workt
                 }
             </div>
     
-            {url_view && (
+            {photo && (
                 <Suspense fallback={""}>
                     <Image 
-                        src={url_view} 
+                        src={photo} 
                         alt="image" 
                         width={500}
                         height={500}

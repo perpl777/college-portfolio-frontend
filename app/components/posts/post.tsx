@@ -7,18 +7,18 @@ interface DataPost {
     background: boolean,
     publishedAt: string,
     worktype: string
-    url_view?: string
+    photo?: any
 }
 
 
-const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) => {
+const Post = ({title, background, publishedAt, worktype, photo}: DataPost) => {
 
     const colors = ['bg-stone-800', 'bg-blue-800/40'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     return (
         <div className='flex flex-row cursor-pointer'>
-            {url_view 
+            {photo
             ? (
                 <>
                     <div className='p-11 flex flex-col w-1/2 justify-between gap-14 border-t border-x border-black max-[1040px]:gap-5  max-md:py-5 max-md:p-4 hover:bg-slate-200 transition-all'>
@@ -30,7 +30,7 @@ const Post = ({title, background, publishedAt, worktype, url_view}: DataPost) =>
                     </div>
                     <div className='border-t border-r border-black w-1/2'>
                         <Image
-                            src={url_view}
+                            src={photo}
                             alt="image" 
                             quality={80}
                             width={500}

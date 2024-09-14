@@ -5,13 +5,16 @@ import Link from 'next/link'
 import { isValidFileSize } from '@/lib/utils/validationUtils'
 
 
-export default function InputFile() {
+interface Props {
+    setFormDataFile: any
+}
+
+export default function InputFile({ setFormDataFile }: Props ) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [blobFile, setBlobFile] = useState<File | null>(null);
     const [error, setError] = useState<string>('');
 
-    //для загурузки файла
     const handleFileChange = async (event: any) => {
         const file = event.target.files[0];
         if (!file) {
@@ -25,6 +28,10 @@ export default function InputFile() {
         } else {
             setError('')
             setBlobFile(file);
+
+            const formDataFile = new FormData();
+            formDataFile.append('files', file);
+            setFormDataFile(formDataFile);
         }
     };
 
