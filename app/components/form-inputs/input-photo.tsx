@@ -35,8 +35,14 @@ export default function InputPhoto() {
     };
 
     return (
-        <div className={`relative flex items-center justify-center w-full h-full border border-gray-500`} style={{ minHeight: '300px' }}>
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} />
+        <div className={`relative flex items-center justify-center m-y-4 border border-gray-500 min-h-80 max-h-96 min-w-full`}>
+            <input 
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+            />
             <div className='max-w-72 absolute top-0 m-5'>
                 {error != '' && <ErrorMess text={error}/>}
             </div>
@@ -45,9 +51,9 @@ export default function InputPhoto() {
                 Выбрать файл
                 </button>
             </div>
-            <div className='overflow-hidde flex justify-center items-center' style={{ minHeight: '300px' }}>
+            <div className='overflow-hidden flex justify-center items-center w-full min-h-80 max-h-96'>
                 { error == '' && blob ? (
-                 <img className='object-cover' src={blob ? URL.createObjectURL(blob) : ''} alt='uploaded' />
+                 <img className='w-full' src={blob ? URL.createObjectURL(blob) : ''} alt='uploaded' />
                 ) : (
                 <div style={{ height: '100%' }}/>
                 )}

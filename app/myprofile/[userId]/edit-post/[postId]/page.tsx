@@ -15,6 +15,8 @@ import InputTags from '@/app/components/form-inputs/form-inputs-post/input-tags'
 import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file';
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
+import { isLengthValid, isNotEmpty, isValidURL } from '@/lib/utils/validationUtils';
+import ErrorMess from '@/app/components/errorMess';
 
 
 interface DataStudent {
@@ -72,6 +74,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>(post?.attributes.worktype?.data?.id ?? 0);
+    const [error, setError] = useState<string>('');
 
     const [formData, setFormData] = useState<DataStudent>({
         title: '',
@@ -82,6 +85,25 @@ export default function EditPostPage({ params: {postId}}: Props) {
         url_file: '',
         url_view: null
     });
+
+    const dataCheck = async () => {
+        let dataOk = false
+
+        if (formData.title && !isLengthValid(formData.title, 1, 100)) {
+            setError('Название не может быть пустым');
+        } else if (formData.description && !isLengthValid(formData.description, 10, 10000)) {
+            setError('Описание должно содержать больше символов');
+        } else if (!selectedWorktype) {
+            setError('Вы должны выбрать тип работы');
+        } else if (selectedTags.length === 0) {
+            setError('Теги не могут быть пустым');
+        } else {
+            // Если все проверки пройдены успешно, сбрасываем ошибку
+            dataOk = true
+            setError('');
+        }
+        return dataOk
+    }
 
 
      //фетч
@@ -113,30 +135,32 @@ export default function EditPostPage({ params: {postId}}: Props) {
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
-        try {
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
-                method: 'PUT', 
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${jwt}`,
-                },
-                body: JSON.stringify({
-                    data: {
-                        published: false,
-                        title: formData.title || post?.attributes.title,
-                        description: formData.description || post?.attributes.description,
-                        tags: selectedTags || post?.attributes.tags,
-                        worktype: selectedWorktype || post?.attributes.worktype,
-                        background: formData.background || post?.attributes.background,
-                        url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
-                        url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
-                    }
-                }),
-            });
-            window.location.href = `/myprofile/${id}`;
-        } 
-        catch (error) {
-            console.error('Error', error);
+        if (await dataCheck()) {
+            try {
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
+                    method: 'PUT', 
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            published: false,
+                            title: formData.title || post?.attributes.title,
+                            description: formData.description || post?.attributes.description,
+                            tags: selectedTags || post?.attributes.tags,
+                            worktype: selectedWorktype || post?.attributes.worktype,
+                            background: formData.background || post?.attributes.background,
+                            url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
+                            url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
+                        }
+                    }),
+                });
+                window.location.href = `/myprofile/${id}`;
+            } 
+            catch (error) {
+                console.error('Error', error);
+            }
         }
     };
     
@@ -167,10 +191,13 @@ export default function EditPostPage({ params: {postId}}: Props) {
             <p className='pt-16 max-sm:pt-32'>Статус:  
                 {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
             </p>
-            <div className='w-full flex justify-end pt-12  max-md:justify-center'>
+            <div className='w-full flex flex-col items-end  max-md:items-center'>
+                <div className='w-72 max-sm:w-full'>
+                    {error != '' && <ErrorMess text={error}/>}
+                </div>
                 <button 
                     type='submit'
-                    className=" w-72  h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                    className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
                         Сохранить
                 </button>
             </div>

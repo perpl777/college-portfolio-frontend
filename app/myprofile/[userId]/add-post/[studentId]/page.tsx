@@ -64,14 +64,10 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             setError('Название не может быть пустым');
         } else if (!isLengthValid(formData.description, 10, 10000)) {
             setError('Описание должно содержать больше символов');
-        } else if (selectedTags.length === 0) {
-            setError('Теги не могут быть пустым');
         } else if (!selectedWorktype) {
             setError('Вы должны выбрать тип работы');
-        } else if (formData.url_file && !isValidURL(formData.url_file)) {
-            setError('Некорректно загружен файл, попробуйте снова');
-        } else if (!isValidURL(formData.url_view)) {
-            setError('Некорректно загружено фото, попробуйте снова');
+        } else if (selectedTags.length === 0) {
+            setError('Теги не могут быть пустым');
         } else {
             // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
@@ -139,14 +135,14 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
                     <InputFile />
                 </div>
-                <div className='h-96 max-sm:h-64'>
+                <div>
                     <InputPhoto />
                     <div className='flex justify-end my-5'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-col items-end pt-20 max-md:pt-32 max-md:items-center'>
+            <div className='w-full flex flex-col items-end  max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
                     {error != '' && <ErrorMess text={error}/>}
                 </div>

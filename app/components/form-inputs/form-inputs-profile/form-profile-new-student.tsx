@@ -60,15 +60,15 @@ export default function FormProfileNewStudent() {
     });
 
     const dataCheck = async () => {
-        if (!isNotEmpty(formData.surname)) {
+        if (!isNotEmpty(formData.surname) || !isLengthValid(formData.surname, 2, 30)) {
             setError('Фамилия не может быть пустой');
-        } else if (!isNotEmpty(formData.name)) {
+        } else if (!isNotEmpty(formData.name) && !isLengthValid(formData.name, 2, 30)) {
             setError('Имя не может быть пустым');
         } else if (!isInRange(selectedCourse, 1, 4)) {
             setError('Курс должен быть от 1 до 4');
         } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
             setError('Специализация не может быть пустой');
-        } else if (!isLengthValid(formData.about_info, 10, 500)) {
+        } else if (formData.about_info && !isLengthValid(formData.about_info, 10, 500)) {
             setError('Информация о себе должна содержать от 10 до 500 символов');
         } else if (selectedTechnologies.length === 0) {
             setError('Технологии не могут быть пустыми');
@@ -80,8 +80,16 @@ export default function FormProfileNewStudent() {
                 vk: formData.url_vk
             };
             
-            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
-                setError('Некорректная ссылка');
+            const results = checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk);
+
+            
+            if (!results.github || !results.behance || !results.vk) {
+                let errorMessages = [];
+                if (!results.github) errorMessages.push('GitHub');
+                if (!results.behance) errorMessages.push('Behance');
+                if (!results.vk) errorMessages.push('VK');
+            
+                setError(`Некорректная ссылка для: ${errorMessages.join(', ')}`);
                 return;
             }
             
