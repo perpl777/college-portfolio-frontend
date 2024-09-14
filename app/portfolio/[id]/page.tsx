@@ -6,6 +6,7 @@ import Header from '@/app/components/header';
 import SliderWithCheckbox from '@/app/components/slider-with-checkbox/slider-with-checkbox';
 import StudentCard from '@/app/components/students/student-card';
 import Posts from '@/app/components/posts/posts';
+import Search from '@/app/components/search';
 
 
 interface Props {
@@ -89,6 +90,8 @@ export default function Portfolio({ params: { id } }: Props) {
     let [student, setStudent] = useState<DataStudent>();
     const [posts, setPosts] = useState<PostsProps>();
     const [filteredPost, setFilteredPost] = useState<string | null>(null)
+    const [searchQuery, setSearchQuery] = useState('');
+    const [tagsNames, setTagsNames] = useState<string[]>([]); 
     const [worktypes, setWorktypes] = useState<string[]>([]);
     const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
     const [technologiesString, setTechnologiesString] = useState("");
@@ -127,9 +130,18 @@ export default function Portfolio({ params: { id } }: Props) {
             filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost
             );
         }
-        return filteredData;
-    }, [posts, filteredPost, checkboxChecked]);
 
+        // Поиск по тегам
+        if (searchQuery) {
+            const searchResults = filteredData.filter((post: any) =>
+                post.attributes.tags.data.some((tag: any) =>
+                    tag.attributes.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            );
+            filteredData = searchResults;
+        }
+
+        return filteredData;
+    }, [posts, filteredPost, checkboxChecked, searchQuery]);    
 
     return (
     <>
@@ -159,8 +171,9 @@ export default function Portfolio({ params: { id } }: Props) {
                     </div>
                 </div>
 
-                <div className="px-11 pb-4 max-sm:pb-1 max-sm:px-4">
+                <div className="flex max-lg:flex-col justify-between px-11 pb-4 max-sm:pb-1 max-sm:px-4">
                     <SliderWithCheckbox values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
+                    <Search setSearchQuery={setSearchQuery} placeholder='Поиск по тегам'></Search>
                 </div>
 
                 {filteredPosts && filteredPosts.length > 0 
