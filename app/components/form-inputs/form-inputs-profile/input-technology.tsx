@@ -9,6 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { max } from 'date-fns';
 
 
 interface TechnologiesProps {
@@ -65,13 +66,12 @@ export default function InputTechnology({selectedTechnologies, setSelectedTechno
       
     return ( // https://aguidehub.com/blog/2022-12-20-how-to-make-dropdown-with-mui-checkbox-in-react-js/
         <div>
-            <FormControl sx={{ m: 0, width: 300 }}>
+            <FormControl className="max-w-xs w-full rounded-none"  sx={{ m: 0}}>
                 <InputLabel className='' id="demo-multiple-checkbox-label">Технологии</InputLabel>
                 <Select
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
-                    sx={{":hover":{boxShadow:0}}}
                     value={checkedTechnologies}
                     onChange={handleChange}
                     input={<OutlinedInput label="Технологии" />}
