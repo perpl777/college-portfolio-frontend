@@ -67,6 +67,8 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             setError('Название не может быть пустым');
         } else if (formData.description && !isLengthValid(formData.description, 10, 10000)) {
             setError('Описание должно содержать больше символов');
+        } else if (!selectedWorktype) {
+            setError('Вы должны выбрать тип работы');
         } else if (selectedTags.length === 0) {
             setError('Теги не могут быть пустым');
         } else if (!selectedWorktype) {
@@ -164,7 +166,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-col items-end pt-20 max-md:pt-32 max-md:items-center'>
+            <div className='w-full flex flex-col items-end  max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
                     {error != '' && <ErrorMess text={error}/>}
                 </div>

@@ -8,7 +8,6 @@ interface Props {
     reset: () => void
 }
 const ErrorPage = ({ error, reset }: Props) => {
-    console.log("error", error);
   return (
     <div>
         <div>An unexpected error has occured.</div>

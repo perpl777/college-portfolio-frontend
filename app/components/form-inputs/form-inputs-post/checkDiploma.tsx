@@ -9,7 +9,7 @@ interface Props {
 
 export default function CheckDiploma({name, checked, onChange}: Props) {
     return (
-        <label className="label cursor-pointer w-36">
+        <label className="label cursor-pointer w-32">
             <input
                 type="checkbox"
                 name={name}
@@ -17,7 +17,7 @@ export default function CheckDiploma({name, checked, onChange}: Props) {
                 className='checkbox'
                 onChange={onChange}
             />
-            <span className="text-md opacity-75">Фото диплома</span> 
+            <span className="text-md opacity-75">Это диплом</span> 
         </label>
     );
 }
