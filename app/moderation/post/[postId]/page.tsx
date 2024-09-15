@@ -25,8 +25,8 @@ interface DataPosts {
         title: string,
         description?: string,
         urls_photos: string,
-        url_view: string,
-        url_file: string
+        photo: any,
+        file: any,
         background: boolean,
         published: boolean,
         publishedAt: string,
@@ -77,6 +77,10 @@ export default function Post({ params: {postId}}: Props) {
     const [userRole, setUserRole] = useState<UserRoleProps>();
     
     const [post, setPost] = useState<DataPosts>();
+    const [blobPhoto, setBlobPhoto] = useState<Blob | null>(null);
+    const [blobFile, setBlobFile] = useState<Blob | null>(null);
+    const [fileLoaded, setFileLoaded] = useState(false);
+
     const [error, setError] = useState<string | undefined>(undefined);
 
 
@@ -89,8 +93,6 @@ export default function Post({ params: {postId}}: Props) {
         setLoading(false);
     }, []);
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
@@ -99,8 +101,6 @@ export default function Post({ params: {postId}}: Props) {
         fetchData();   
     }, []);
 
-
-    //фетч к постy
     useEffect(() => {
         const fetchData = async () => {
             let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);    
@@ -109,6 +109,32 @@ export default function Post({ params: {postId}}: Props) {
         fetchData();   
     }, []);
     
+    useEffect(() => {
+        const fetchData = () => {
+            fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`)
+                .then(postResponse => {
+                    if (postResponse.data.attributes.photo && postResponse.data.attributes.photo.data && postResponse.data.attributes.photo.data.attributes.url) {
+                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${postResponse.data.attributes.photo.data.attributes.url}`)
+                            .then(photoResponse => photoResponse.blob())
+                            .then(fetchedBlobPhoto => {
+                                setBlobPhoto(fetchedBlobPhoto);
+                            });
+                    }
+    
+                    if (postResponse.data.attributes.file && postResponse.data.attributes.file.data && postResponse.data.attributes.file.data.attributes.url) {
+                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${postResponse.data.attributes.file.data.attributes.url}`)
+                            .then(fileResponse => fileResponse.blob())
+                            .then(fetchedBlobFile => {
+                                setBlobFile(fetchedBlobFile);
+                                setFileLoaded(true);
+                            });
+                    }
+    
+                    setPost(postResponse.data);
+                });
+        };
+        fetchData();
+    }, []);
 
     const handleDeletePost = async () => {
         if (post?.attributes.student.data.attributes.published === false) {
@@ -116,7 +142,6 @@ export default function Post({ params: {postId}}: Props) {
         }
         else {
             try {
-                // отклонить пост
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
                     method: 'DELETE',
                     headers: {
@@ -136,14 +161,12 @@ export default function Post({ params: {postId}}: Props) {
         }
     };
 
-
     const handlePublishPost = async () => {
         if (post?.attributes.student.data.attributes.published === false) {
             setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
         }
         else {
             try {
-                // опубликовать пост
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -168,7 +191,6 @@ export default function Post({ params: {postId}}: Props) {
         }
     };
 
-
     return (
         <>
         { user && userRole?.role.name === "Moderator" &&
@@ -182,8 +204,8 @@ export default function Post({ params: {postId}}: Props) {
                             description={post?.attributes.description}
                             publishedAt={post?.attributes.publishedAt}
                             worktype={post?.attributes.worktype.data.attributes.name}
-                            url_view={post.attributes.url_view}
-                            url_file={post.attributes.url_file}
+                            photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
+                            file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : null}
                             studentName={post.attributes.student.data.attributes.name}
                             studentId={post.attributes.student.data.id}
                         />

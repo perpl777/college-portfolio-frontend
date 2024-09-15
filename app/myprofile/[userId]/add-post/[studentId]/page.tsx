@@ -23,12 +23,12 @@ import ErrorMess from '@/app/components/errorMess';
 
 interface DataStudent {
     title: string;
-    description: string;
+    description?: string;
     tags: string;
     worktype: string;
     background: boolean;
-    photo: any;
-    file: any;
+    photo?: any;
+    file?: any;
 }
 
 
@@ -65,7 +65,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
 
         if (!isNotEmpty(formData.title)) {
             setError('Название не может быть пустым');
-        } else if (!isLengthValid(formData.description, 10, 10000)) {
+        } else if (formData.description && !isLengthValid(formData.description, 10, 10000)) {
             setError('Описание должно содержать больше символов');
         } else if (selectedTags.length === 0) {
             setError('Теги не могут быть пустым');
@@ -92,46 +92,49 @@ export default function AddPostPage({ params: {studentId}}: Props) {
         event.preventDefault()
         if (await dataCheck()) {
             try {
-                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-            
-                const uploadedImage = responsePhoto.data[0];
+                let uploadedImage = null;
+                let uploadedFile = null;
 
+            if (formDataPhoto) {
+                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                });
+                uploadedImage = responsePhoto.data[0];
+            }
+        
+        if (formDataFile) {
                 const responseFile = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataFile, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+                uploadedFile = responseFile.data[0];
+            }
 
-                const uploadedFile = responseFile.data[0];
-
-                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${jwt}`,
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwt}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        published: false,
+                        student: studentId,
+                        title: formData.title,
+                        description: formData.description,
+                        tags: selectedTags,
+                        worktype: selectedWorktype,
+                        background: formData.background,
+                        photo: uploadedImage,
+                        file: uploadedFile,
                     },
-                    body: JSON.stringify({
-                        data: {
-                            published: false,
-                            student: studentId,
-                            title: formData.title,
-                            description: formData.description,
-                            tags: selectedTags,
-                            worktype: selectedWorktype,
-                            background: formData.background,
-                            photo: uploadedImage,
-                            file: uploadedFile,
-                        }
-                    }),
-                });
-
+                }),
+            });
                 window.location.href = `/myprofile/${id}`;
-            } 
-            catch (error) {
+            } catch (error) {
                 console.error('Error adding student:', error);
             }
         }

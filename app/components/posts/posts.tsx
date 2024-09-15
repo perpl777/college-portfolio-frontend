@@ -14,8 +14,24 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        photo: any;
-        file: any;
+        photo?: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string,
+                    url: string
+                }
+            }
+        },
+        file?: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                    url: string;
+                };
+            };
+        },
         background: boolean,
         publishedAt: string,
         student: {
@@ -80,7 +96,7 @@ const Posts = ({posts}: Props) => {
                             background={post.attributes.background}
                             publishedAt={post.attributes.publishedAt}
                             worktype={post.attributes.worktype.data?.attributes?.name}
-                            photo={post?.attributes?.photo}
+                            photo={post?.attributes?.photo?.data?.attributes?.url}
                         />
                     </Link>
                 )

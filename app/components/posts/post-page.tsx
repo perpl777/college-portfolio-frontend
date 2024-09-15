@@ -11,8 +11,8 @@ interface Props {
     description?: string;
     publishedAt: string;
     worktype: string;
-    photo: any;
-    file: any;
+    photo?: string;
+    file?: string;
     studentName: string;
     studentId: number;
 }

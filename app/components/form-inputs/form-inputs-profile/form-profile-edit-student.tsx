@@ -125,11 +125,6 @@ export default function FormProfileEditStudent({studentId}: Props) {
                 vk: formData.url_vk
             };
             
-            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
-                setError('Некорректная ссылка');
-                return;
-            }
-            
             // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
             setError('');
