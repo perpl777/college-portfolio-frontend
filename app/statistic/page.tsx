@@ -111,7 +111,7 @@ const StatisticsPage = () => {
                             <div className="">
                                 <StatisticsChart students={filteredStudents} />
                                 <div className='py-10'>
-                                    <Table students={filteredStudents} studentLinks={{ href: "statistic/" }}/>
+                                    <Table students={filteredStudents} studentLinks={{ href: "portfolio/" }}/>
                                 </div>
                             </div>
 
