@@ -119,10 +119,8 @@ export const isValidFileSize = (file: File, maxSizeMB: number): Promise<boolean>
     return new Promise((resolve) => {
         const maxSizeB = maxSizeMB * 1024 * 1024 //Переводим в байты
         if (file && file.size < maxSizeB) {
-            console.log('file.size < maxSizeBytes')
             resolve(true);
         } else{
-            console.log('file.size > maxSizeBytes')
             resolve(false);
         }
     });

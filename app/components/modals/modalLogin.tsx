@@ -1,8 +1,8 @@
 'use client'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import { fetcher } from '@/lib/api';
-import { setAuthData } from '@/lib/auth';
+import { getAuthData, setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
 
@@ -15,6 +15,14 @@ interface ModalProps {
     handleOpenModalRecovery: any
 }
 
+interface UserProps {
+    student: {
+        name: string
+    }
+    role: {
+        name: string
+    }
+}
 
 const ModalLogin = ({ 
     openModalLogin, 
@@ -31,6 +39,8 @@ const ModalLogin = ({
             "password": ""
         }
     )
+    const [userName, setUserName] = useState<UserProps>();
+    
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -55,12 +65,21 @@ const ModalLogin = ({
                     }),
                 });
                 if (response.error) {
-                    console.error('Error:', response.error);
                     setError('Неверная почта или пароль');
                     return;
+                } else {
+                    // Установить данные авторизации
+                    setAuthData(response);
+                    
+                    // Получить ID пользователя
+                    const { id } = getAuthData();
+
+                    // Асинхронно получить данные пользователя
+                    const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+                    
+                    // Установить имя пользователя
+                    setUserName(userDataResponse);
                 }
-                setAuthData(response);
-                window.location.href = '/myprofile';
             } 
             catch (error) {
                 setError('Неверная почта или пароль');
@@ -69,6 +88,19 @@ const ModalLogin = ({
         }
     };
     
+    useEffect(() => {
+        if (userName) {
+            if (userName.role.name === "Authenticated") {
+                window.location.href = '/myprofile';
+            } else if (userName.role.name === "Moderator") {
+                window.location.href = '/moderation';
+            } else if (userName.role.name === "Statistic") {
+                window.location.href = '/statistic';
+            } else {
+                window.location.href = '/';
+            }
+        }
+    }, [userName]);
     
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
