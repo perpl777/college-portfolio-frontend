@@ -30,8 +30,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             
         setUserRole(userDataResponse.role.name);
         setLoading(false);
-        console.log(userDataResponse)
-        console.log('userDataResponse.role', userDataResponse.role.name)
     };
 
     fetchData();
