@@ -165,7 +165,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
                 </div>
             </div>
             <p className='pt-16 max-sm:pt-32'>Статус:  
-                {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
+                {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-blue-900 pl-2'>На рассмотрении</span>}
             </p>
             <div className='w-full flex justify-end pt-12  max-md:justify-center'>
                 <button 
