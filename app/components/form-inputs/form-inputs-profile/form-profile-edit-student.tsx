@@ -1,6 +1,6 @@
 'use client'
+import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { ChangeEvent, useRef } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
 
@@ -43,7 +43,7 @@ interface OldDataStudent {
                 }
             }
         },
-        url_photo?: string,
+        photo: any;
     }
 }
 
@@ -65,7 +65,7 @@ interface DataStudent {
     url_github?: string;
     url_behance?: string;
     url_vk?: string;
-    url_photo: any;
+    photo: any;
     published: boolean;
 }
 
@@ -85,6 +85,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
     const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes?.specialization?.data?.id ?? 0);
     const [selectedCourse, setSelectedCourse] = useState<number>(student?.attributes?.course ?? 0);
 
+    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
     const [formData, setFormData] = useState<DataStudent>({
         surname: '',
         name: '',
@@ -96,7 +97,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
         url_github: '',
         url_behance: '',
         url_vk: '',
-        url_photo: null,
+        photo: null,
         published: false
     });
 
@@ -123,11 +124,6 @@ export default function FormProfileEditStudent({studentId}: Props) {
                 behance: formData.url_behance,
                 vk: formData.url_vk
             };
-            
-            if (!checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk)) {
-                setError('Некорректная ссылка');
-                return;
-            }
             
             // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
@@ -168,6 +164,14 @@ export default function FormProfileEditStudent({studentId}: Props) {
         event.preventDefault();
         if (await dataCheck()) {
             try {
+                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            
+                const uploadedImage = responsePhoto.data[0];
+
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}`, {
                     method: 'PUT', 
                     headers: {
@@ -188,7 +192,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                             url_github: formData.url_github || student?.attributes.url_github,
                             url_behance: formData.url_behance || student?.attributes.url_behance,
                             url_vk: formData.url_vk || student?.attributes.url_vk,
-                            url_photo: "https://college-portfolio.hb.ru-msk.vkcs.cloud/students/efim-borisov-oqLBhhhPxy0-unsplash.jpg"
+                            photo: uploadedImage || student?.attributes.photo,
                         }
                     }),
                 });
@@ -216,7 +220,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                     </div>
                 </div>
                 <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
-                    <InputPhoto />
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
                 </div>
             </div>
 

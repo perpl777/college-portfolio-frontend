@@ -38,7 +38,15 @@ interface DataStudent {
                 }
             }
         },
-        url_photo?: string,
+        photo?: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string,
+                    url: string
+                }
+            }
+        },
     }
 }
 
@@ -48,9 +56,24 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        urls_photos: string,
-        url_view: string,
-        url_file: string
+        photo?: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string,
+                    url: string
+                }
+            }
+        },
+        file?: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                    url: string;
+                };
+            };
+        }
         background: boolean,
         published: boolean,
         publishedAt: string,
@@ -88,18 +111,18 @@ interface PostsProps {
 export default function Portfolio({ params: { id } }: Props) {
     let [student, setStudent] = useState<DataStudent>();
     const [posts, setPosts] = useState<PostsProps>();
+    const [blob, setBlob] = useState<Blob | null>(null);
     const [filteredPost, setFilteredPost] = useState<string | null>(null)
     const [worktypes, setWorktypes] = useState<string[]>([]);
     const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
     const [technologiesString, setTechnologiesString] = useState("");
 
-    //фетчи
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?filters[student][id][$eq]=${id}&filters[published][$eq]=true&populate=*`),
                 fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${id}?populate=*`),
-                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`)
+                fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/worktypes`),
             ]);
 
             setStudent(studentResponse.data);
@@ -111,25 +134,32 @@ export default function Portfolio({ params: { id } }: Props) {
             if (studentResponse.data) {
                 const technologies = studentResponse.data.attributes.technologies.data.map((tec: any) => tec.attributes ? tec.attributes.name : "");
                 setTechnologiesString(technologies.join(", "));
-            }
-        
+            } 
         };
     fetchData();
     }, []);
 
+    useEffect(() => {
+        const fetchPhoto = async () => {             
+            if (student?.attributes?.photo?.data?.attributes?.url) 
+                {
+                    const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${student?.attributes?.photo.data?.attributes?.url}`);
+                    response.then(resp => resp.blob())
+                    .then(fetchedBlob => setBlob(fetchedBlob));        
+                }         
+            };
+        fetchPhoto();     
+    }, [student?.attributes?.photo?.data?.attributes?.url])
 
-    //фильтры для постов
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
         let filteredData = posts.data;
-        // Фильтрация по типам
         if (filteredPost) {
             filteredData = filteredData.filter(post => post.attributes.worktype.data.attributes.name === filteredPost
             );
         }
         return filteredData;
     }, [posts, filteredPost, checkboxChecked]);
-
 
     return (
     <>
@@ -148,7 +178,7 @@ export default function Portfolio({ params: { id } }: Props) {
                             url_github={student.attributes?.url_github}
                             url_vk={student.attributes?.url_vk}
                             specialization={student.attributes.specialization.data.attributes.name}
-                            url_photo={student.attributes.url_photo}
+                            photo={blob ? URL.createObjectURL(blob) : ''}
                         /> 
                     }
                 </div>

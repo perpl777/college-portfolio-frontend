@@ -14,7 +14,15 @@ interface DataPosts {
     id: number,
     attributes: {
     title: string,
-    url_view: string;
+    photo?: {
+        data: {
+            id: number,
+            attributes: {
+                name: string,
+                url: string
+            }
+        }
+    },
     published: boolean;
     student: {
         data: {
@@ -45,17 +53,14 @@ export default function UnpublishedPosts() {
 
     const [posts, setPosts] = useState<PostsProps>();
 
-    //фетчи
     useEffect(() => {
         const fetchData = async () => {
-            let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student&fields=title&fields=url_view&fields=published`);    
+            let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student,photo&fields=title&fields=published`);    
             setPosts(postsResponse);
         };     
         fetchData();   
     }, []);
 
-
-    //сортируем на только неопубликованные
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
         let filteredData = posts.data?.filter((post: any) => { 
@@ -64,10 +69,9 @@ export default function UnpublishedPosts() {
         return filteredData;
     }, [posts]);
 
-
     return (
         <div>
-            {(filteredPosts && filteredPosts.length > 0) 
+            {(filteredPosts && filteredPosts.length !== 0) 
             ? 
                 <div className='px-11 pb-10 w-full grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
                     {filteredPosts.map((post: any) => {
@@ -77,7 +81,7 @@ export default function UnpublishedPosts() {
                                     href={`/moderation/post/${post?.id}`}
                                     studentId={post.attributes.student.data.id}
                                     postId={post.id}
-                                    url_view={post.attributes.url_view} 
+                                    photo={post?.attributes?.photo?.data?.attributes?.url}
                                     title={post.attributes.title}
                                 />
                             </Suspense>

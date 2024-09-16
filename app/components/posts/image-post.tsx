@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,15 +9,27 @@ interface DataPost {
     href: string;
     studentId: number;
     postId: number;
-    url_view?: string;
+    photo?: any;
     title: string;
 }
 
 
-const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
+const ImagePost = ({ href, studentId, postId, photo, title }: DataPost) => {
 
-// все для анимаций
+    const [blob, setBlob] = useState<Blob | null>(null);
     const divRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const fetchPhoto = () => {
+            if (photo) {
+                const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${photo}`);
+                response.then(resp => resp.blob())
+                    .then(fetchedBlob => setBlob(fetchedBlob));
+            }
+        };
+    
+        fetchPhoto();
+    }, [photo]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -52,9 +64,9 @@ const ImagePost = ({ href, studentId, postId, url_view, title }: DataPost) => {
     return (
         <Link href={href}>
             <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                {url_view ? (
+                {photo ? (
                 <div className='cursor-pointer'>
-                    <Image src={url_view} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                    <Image  src={blob ? URL.createObjectURL(blob) : ''} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
                     <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
                     <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
                     </div>

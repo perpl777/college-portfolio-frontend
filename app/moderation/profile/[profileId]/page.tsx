@@ -46,7 +46,15 @@ interface DataStudent {
                 }
             }
         },
-        url_photo?: string,
+        photo?: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string,
+                    url: string
+                }
+            }
+        },
     }
 }
 
@@ -65,14 +73,13 @@ export default function Profile({ params: {profileId}}: Props) {
     const { id } = getAuthData();
     const { jwt } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
+    const [blob, setBlob] = useState<Blob | null>(null);
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState<UserRoleProps>();
 
     const [student, setStudent] = useState<DataStudent>();
     const [technologiesString, setTechnologiesString] = useState("");
 
-
-    //получение email user
     useEffect(() => {
         const userData = Cookies.get('email');
         if (userData) {
@@ -81,8 +88,6 @@ export default function Profile({ params: {profileId}}: Props) {
         setLoading(false);
     }, []);
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
@@ -91,8 +96,6 @@ export default function Profile({ params: {profileId}}: Props) {
         fetchData();   
     }, []);
 
-
-    //фетч к студенту
     useEffect(() => {
         const fetchData = async () => {     
             const studentResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}?populate=*`);
@@ -106,10 +109,20 @@ export default function Profile({ params: {profileId}}: Props) {
     fetchData();
     }, []);
 
+    useEffect(() => {
+        const fetchPhoto = async () => {             
+            if (student?.attributes?.photo?.data?.attributes?.url) 
+                {
+                    const response = fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${student?.attributes?.photo.data?.attributes?.url}`);
+                    response.then(resp => resp.blob())
+                    .then(fetchedBlob => setBlob(fetchedBlob));        
+                }         
+            };
+        fetchPhoto();     
+    }, [student?.attributes?.photo?.data?.attributes?.url])
 
     const handleDeleteStudent = async () => {
         try {
-            // отклонить данные студента
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
                 method: 'DELETE',
                 headers: {
@@ -128,10 +141,8 @@ export default function Profile({ params: {profileId}}: Props) {
         }
     };
 
-
     const handlePublishStudent = async () => {
         try {
-            // опубликовать профиль студента
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
                 method: 'PUT',
                 body: JSON.stringify({
@@ -155,7 +166,6 @@ export default function Profile({ params: {profileId}}: Props) {
         }
     };
 
-
     return (
     <>
         { user && userRole?.role.name === "Moderator" &&
@@ -178,7 +188,7 @@ export default function Profile({ params: {profileId}}: Props) {
                                 url_github={student.attributes?.url_github}
                                 url_vk={student.attributes?.url_vk}
                                 specialization={student.attributes.specialization.data.attributes.name}
-                                url_photo={student.attributes.url_photo}
+                                photo={blob ? URL.createObjectURL(blob) : ''}
                             /> 
                         }
                     </div>

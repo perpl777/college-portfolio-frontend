@@ -46,7 +46,6 @@ const StatisticsPage = () => {
         "Изделия из бумаги и картона", 
     ]
 
-    //получение email user
     useEffect(() => {
         const userData = Cookies.get('email');
         if (userData) {
@@ -55,8 +54,6 @@ const StatisticsPage = () => {
         setLoading(false);
     }, []);
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
@@ -65,8 +62,6 @@ const StatisticsPage = () => {
         fetchData();   
     }, []);
 
-
-    //Получение данных из бд
     useEffect(() => {     
         const fetchData = async () => {       
             try {
@@ -87,7 +82,6 @@ const StatisticsPage = () => {
         if (!students) return [];
         let filteredData = students;
         
-        // Фильтрация по специальности
         if (filteredSpecialty) {
         filteredData = filteredData.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
         }

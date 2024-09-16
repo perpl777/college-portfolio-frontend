@@ -33,8 +33,6 @@ export default function ModerationPage() {
     const [selectedBtn, setSelectedBtn] = useState<string>('Профили');
     const values = ['Профили', 'Работы']
 
-
-    //получение email user
     useEffect(() => {
         const userData = Cookies.get('email');
         if (userData) {
@@ -43,8 +41,6 @@ export default function ModerationPage() {
         setLoading(false);
     }, []);
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
@@ -58,7 +54,6 @@ export default function ModerationPage() {
         setActiveButton(index);
         setSelectedBtn(value);
     };
-
 
     return (
         <>

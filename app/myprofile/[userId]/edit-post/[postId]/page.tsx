@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
@@ -23,15 +24,15 @@ interface DataStudent {
     tags: string;
     worktype: string
     background: boolean
-    url_file?: string;
-    url_view: any;
+    photo: any;
+    file: any;
 }
 
 interface OldDataPost {
     id: number;
     attributes: {
         title: string;
-        description: string;
+        description?: string;
         tags: {
             data: Tags[];
         }
@@ -44,8 +45,8 @@ interface OldDataPost {
             }
         }
         background: boolean
-        url_file?: string;
-        url_view: any;
+        photo?: any;
+        file?: any;
         published: boolean
     }
 }
@@ -72,6 +73,8 @@ export default function EditPostPage({ params: {postId}}: Props) {
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>(post?.attributes.worktype?.data?.id ?? 0);
+    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
+    const [formDataFile, setFormDataFile] = useState<FormData | null>(null);
 
     const [formData, setFormData] = useState<DataStudent>({
         title: '',
@@ -79,8 +82,8 @@ export default function EditPostPage({ params: {postId}}: Props) {
         tags: '',
         worktype: '',
         background: false,
-        url_file: '',
-        url_view: null
+        photo: null,
+        file: null
     });
 
 
@@ -114,6 +117,22 @@ export default function EditPostPage({ params: {postId}}: Props) {
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
         try {
+            const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        
+            const uploadedImage = responsePhoto.data[0];
+
+            const responseFile = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataFile, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            const uploadedFile = responseFile.data[0];
+
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
                 method: 'PUT', 
                 headers: {
@@ -128,8 +147,8 @@ export default function EditPostPage({ params: {postId}}: Props) {
                         tags: selectedTags || post?.attributes.tags,
                         worktype: selectedWorktype || post?.attributes.worktype,
                         background: formData.background || post?.attributes.background,
-                        url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
-                        url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
+                        photo: uploadedImage,
+                        file: uploadedFile,
                     }
                 }),
             });
@@ -155,10 +174,10 @@ export default function EditPostPage({ params: {postId}}: Props) {
                     <Textarea placeholder={post?.attributes.description ? post?.attributes.description : 'Описание..'} name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
                     <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile />
+                    <InputFile setFormDataFile={setFormDataFile} />
                 </div>
                 <div className='h-96 max-sm:h-64'>
-                    <InputPhoto />
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
                     <div className='flex justify-end my-5'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>

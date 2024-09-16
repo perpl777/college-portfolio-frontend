@@ -15,7 +15,6 @@ const StatisticsStudent = () => {
     useEffect(() => {     
         const fetchData = async () => {       
             try {
-                // const responsePosts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=*&filters[createdAt][$gte]=${oneYearAgoISO.toISOString()}`);
                 const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
                 const studentsData = responseStudents.data;
                 setStudents(studentsData);

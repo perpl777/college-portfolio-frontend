@@ -47,8 +47,6 @@ export default function MyProfilePage({ params: { userId } }: Props) {
         setLoading(false);
     }, []);
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
