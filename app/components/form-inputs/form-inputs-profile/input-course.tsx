@@ -3,18 +3,16 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { useState } from 'react'
 
 interface Props {
     selectedCourse: any
     setSelectedCourse: any
 }
 
-
 export default function InputCourse({selectedCourse, setSelectedCourse}: Props) {
-    
-
+    const [displayedCourse, setDisplayedCourse] = useState([])
     const course = [1, 2, 3, 4]
-
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
@@ -22,7 +20,8 @@ export default function InputCourse({selectedCourse, setSelectedCourse}: Props) 
     };
 
     const handleChange = (event: any) => {
-		setSelectedCourse(event.target.value)
+		setDisplayedCourse(event.target.value)
+        setSelectedCourse(event.target.value)
 	}
 
     return (
@@ -42,7 +41,7 @@ export default function InputCourse({selectedCourse, setSelectedCourse}: Props) 
 				<Select
 					labelId='demo-simple-select-label'
 					id='demo-simple-select'
-					value={selectedCourse}
+                    value={displayedCourse}
 					label='Курс'
 					onChange={handleChange}
 				>

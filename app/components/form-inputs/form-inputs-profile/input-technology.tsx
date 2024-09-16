@@ -9,7 +9,6 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { max } from 'date-fns';
 
 
 interface TechnologiesProps {
@@ -27,7 +26,7 @@ interface Props {
 
 export default function InputTechnology({selectedTechnologies, setSelectedTechnologies}: Props) {
     const [technologies, setTechnologies] = useState<TechnologiesProps[]>([]);
-    const [checkedTechnologies, setCheckedTechnologies] = useState([]);
+    const [displayedTechnologies, setDisplayedTechnologies] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
 
     useEffect(() => {
@@ -58,28 +57,28 @@ export default function InputTechnology({selectedTechnologies, setSelectedTechno
         const {
             target: { value },
         } = event;
-        setCheckedTechnologies(
+        setDisplayedTechnologies(
             // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
     };
       
-    return ( // https://aguidehub.com/blog/2022-12-20-how-to-make-dropdown-with-mui-checkbox-in-react-js/
+    return (
         <div>
-            <FormControl className="max-w-xs w-full rounded-none"  sx={{ m: 0}}>
+            <FormControl className="max-w-xs w-full">
                 <InputLabel className='' id="demo-multiple-checkbox-label">Технологии</InputLabel>
                 <Select
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
-                    value={checkedTechnologies}
+                    value={displayedTechnologies}
                     onChange={handleChange}
                     input={<OutlinedInput label="Технологии" />}
                     renderValue={(selected) => selected.join(', ')}
                 >
                     {technologies.map((tech: TechnologiesProps) => (
-                        <MenuItem key={tech.attributes.name} value={tech.attributes.name}>
-                            <Checkbox color='default' checked={checkedTechnologies.indexOf(tech.attributes.name) > -1} />
+                        <MenuItem key={tech.attributes.name} value={tech.attributes.name} onClick={() => handleCheckboxChange(tech.id)}>
+                            <Checkbox color='default' checked={displayedTechnologies.indexOf(tech.attributes.name) > -1} />
                             <ListItemText primary={tech.attributes.name} />
                         </MenuItem>
                     ))}

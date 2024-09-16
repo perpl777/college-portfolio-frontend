@@ -20,32 +20,30 @@ interface Props {
 	setSelectedSpecialization: any
 }
 
-export default function InputSpecializations({
-	selectedSpecialization,
-	setSelectedSpecialization,
-}: Props) {
-	const [specializations, setSpecializations] = useState<
-		SpecializationsProps[]
-	>([])
+export default function InputSpecializations({selectedSpecialization, setSelectedSpecialization}: Props) {
+    const [displayedSpecialization, setDisplayedSpecialization] = useState([])
+	const [specializations, setSpecializations] = useState<SpecializationsProps[]>([])
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const specResponse = await fetcher(
-				`${process.env.NEXT_PUBLIC_STRAPI_URL}/specializations`
-			)
+			const specResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/specializations`)
 			setSpecializations(specResponse.data)
 		}
 		fetchData()
 	}, [])
 
-	const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const selectedValue = e.target.value
-		setSelectedSpecialization(selectedValue)
-	}
+	// const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	// 	const selectedValue = e.target.value
+	// 	setSelectedSpecialization(selectedValue)
+	// }
+
+    const handleSelectChange = (id: number) => {
+        setSelectedSpecialization(id)
+    }
 
 	const handleChange = (event: any) => {
-		setSelectedSpecialization(event.target.value)
-	}
+        setDisplayedSpecialization(event.target.value)
+    }
 
 	return (
 		// <div>
@@ -64,12 +62,12 @@ export default function InputSpecializations({
 				<Select
 					labelId='demo-simple-select-label'
 					id='demo-simple-select'
-					value={selectedSpecialization}
+					value={displayedSpecialization}
 					label='Специальность'
 					onChange={handleChange}
 				>
                 {specializations && specializations.map((value: SpecializationsProps) => (
-                    <MenuItem key={value.id} value={value.id}>{value.attributes.name}</MenuItem>
+                    <MenuItem key={value.id} value={value.attributes.name} onClick={() => handleSelectChange(value.id)}>{value.attributes.name}</MenuItem>
 		        ))}    
 				</Select>
 			</FormControl>
