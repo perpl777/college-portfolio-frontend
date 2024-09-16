@@ -2,6 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
 
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 interface TagsProps {
     id: number;
@@ -17,6 +24,7 @@ interface Props {
 
 export default function InputTags({selectedTags, setSelectedTags}: Props) {
     const [tags, setTags] = useState<TagsProps[]>([]);
+    const [displayedTags, setDisplayedTags] = useState([]);
     const [showCheckboxes, setShowCheckboxes] = useState(false);
 
     useEffect(() => {
@@ -42,30 +50,61 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
         setShowCheckboxes(!showCheckboxes);
     };
 
+    const handleChange = (event: any) => {
+        const {
+            target: { value },
+        } = event;
+        setDisplayedTags(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
     return (
+        // <div>
+        //     <label htmlFor="technologyInput">
+        //     <button onClick={handleTagsClick} 
+        //         className='button-style text-gray-500 mb-3 border border-gray-300 px-7 py-2'>
+        //         Тэги
+        //     </button>
+        //     </label>
+        //     {showCheckboxes && (
+        //         <ul className='space-y-1'>
+        //             {tags.map((tag: TagsProps) => (
+        //                 <li key={tag.id}>
+        //                     <input
+        //                         type="checkbox"
+        //                         className='checkbox checkbox-xs rounded-sm  tab-border-2 border-black mx-3'
+        //                         checked={selectedTags.includes(tag.id)}
+        //                         onChange={() => handleCheckboxChange(tag.id)}
+        //                         disabled={selectedTags.length === 4 && !selectedTags.includes(tag.id)}
+        //                     />
+        //                     <label className='text-gray-600'>#{tag.attributes.name}</label>
+        //                 </li>
+        //             ))}
+        //         </ul>
+        //     )}
+        // </div>
         <div>
-            <label htmlFor="technologyInput">
-            <button onClick={handleTagsClick} 
-                className='button-style text-gray-500 mb-3 border border-gray-300 px-7 py-2'>
-                Тэги
-            </button>
-            </label>
-            {showCheckboxes && (
-                <ul className='space-y-1'>
-                    {tags.map((tag: TagsProps) => (
-                        <li key={tag.id}>
-                            <input
-                                type="checkbox"
-                                className='checkbox checkbox-xs rounded-sm  tab-border-2 border-black mx-3'
-                                checked={selectedTags.includes(tag.id)}
-                                onChange={() => handleCheckboxChange(tag.id)}
-                                disabled={selectedTags.length === 4 && !selectedTags.includes(tag.id)}
-                            />
-                            <label className='text-gray-600'>#{tag.attributes.name}</label>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+        <FormControl className="max-w-xs w-full">
+            <InputLabel className='' id="demo-multiple-checkbox-label">Теги</InputLabel>
+            <Select
+                labelId="demo-multiple-checkbox-label"
+                id="demo-multiple-checkbox"
+                multiple
+                value={displayedTags}
+                onChange={handleChange}
+                input={<OutlinedInput label="Технологии" />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                {tags.map((tag: TagsProps) => (
+                    <MenuItem key={tag.attributes.name} value={tag.attributes.name} onClick={() => handleCheckboxChange(tag.id)}>
+                        <Checkbox color='default' checked={displayedTags.indexOf(tag.attributes.name) > -1} />
+                        <ListItemText primary={tag.attributes.name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    </div>
     );
 }
