@@ -3,6 +3,7 @@ import React, { Suspense } from 'react'
 import Loading from '@/app/loading';
 import { FC } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 interface DataStudents {
@@ -35,6 +36,15 @@ interface TableProps {
 
 
 const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
+    const router = useRouter(); // Используйте useRouter
+
+    const handleRowClick = (studentId: number) => {
+        // Программный переход на другую страницу
+        if (studentLinks) {
+            router.push(`/${studentLinks.href}/${studentId}`);
+        }
+    };
+
     return (
         <>
             <div className='overflow-x-auto'>
@@ -55,15 +65,14 @@ const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
                                 return (
                                     <tr 
                                         key={student.id} 
-                                        className={`border-b border-black hover:bg-stone-100 transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
+                                        className={`border-b border-black hover:bg-stone-100 hover:cursor-pointer transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
+                                        onClick={() => handleRowClick(student.id)}
                                     >
                                         <td className='w-2/12 max-sm:w-8 max-sm:flex max-sm:items-start'>{index + 1}</td>
                                         <td className='w-4/12 max-sm:w-auto max-sm:pr-0'> 
-                                            <Link href={`/${studentLinks?.href}/${student.id}`}>
                                                 {`${student.attributes.surname} 
                                                 ${student.attributes.name} 
                                                 ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
-                                            </Link>
                                             <p className='pt-4 sm:hidden max-sm:text-gray-500'>{student.attributes.specialization.data.attributes.name}</p>
                                         </td>
                                         <td className='w-5/12 max-sm:hidden'>{student.attributes.specialization.data.attributes.name}</td>

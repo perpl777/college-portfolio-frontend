@@ -62,7 +62,7 @@ export default function PostPage({postId, title, description, publishedAt, workt
                         alt="image" 
                         width={500}
                         height={500}
-                        className='object-cover w-full h-full'
+                        className='object-contain w-full h-auto max-w-full max-h-screen'
                     />
                 </Suspense>
             )}

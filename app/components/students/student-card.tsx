@@ -47,13 +47,15 @@ const StudentCard = ({surname, name, course, technologies, url_behance, url_gith
                                 <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Специальность</th> {/*выводим Специальность студента */}
                                 <th className="pl-20 max-sm:pl-0 text-base font-normal max-sm:text-sm"> {specialization} </th>
                             </tr> 
+                    
                             <tr className='border-b border-black'> 
                                 <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Курс</th> {/*выводим Курс студента */}
                                 <th className="pl-20 max-sm:pl-0  text-base font-normal max-sm:text-sm"> {course} </th>
                             </tr> 
+
                             <tr className='border-b border-black'> 
                                 <th className="p-0 text-xs font-normal text-gray-500 uppercase max-sm:text-xs">Технологии</th> {/*выводим Технологии студента */}
-                                <th className="pl-20 max-sm:pl-0  text-base font-normal max-sm:text-sm"> {technologies}</th>
+                                <th className="pl-20 max-sm:pl-0  text-base font-normal max-sm:text-sm">{technologies.length > 0 ? technologies : "Не указано"}</th>
                             </tr> 
                         </tbody> 
                     </table>
