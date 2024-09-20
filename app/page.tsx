@@ -18,7 +18,15 @@ interface DataPosts {
   id: number,
   attributes: {
     title: string,
-    url_view: string;
+    photo?: {
+      data: {
+        id: number,
+        attributes: {
+          name: string,
+          url: string
+        }
+      }
+    },
     published: boolean;
     student: {
       data: {
@@ -76,7 +84,6 @@ interface TagsProps {
 }
 
 export default function Home() {
-
   const [posts, setPosts] = useState<PostsProps>();
   const [filteredPost, setFilteredPost] = useState<string[]>([]);
 
@@ -92,7 +99,7 @@ export default function Home() {
   //фетчи
   useEffect(() => {
     const fetchData = async () => {
-        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student&fields=title&fields=url_view&fields=published`);    
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,photo,student&fields=title&fields=published`);    
         setPosts(postsResponse);
         
         let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=category&fields=name`);        
@@ -104,8 +111,8 @@ export default function Home() {
         let categoriesResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/categories?populate=*`);        
         const namesCategories = categoriesResponse.data.map((category: any) => category.attributes.name);         
         setCategories(namesCategories); 
-        setSelectedCategory(namesCategories[0])
-      };     
+        setSelectedCategory(namesCategories[0])    
+      };  
     fetchData();   
   }, []);
 
@@ -188,10 +195,10 @@ export default function Home() {
           return (
             <Suspense fallback={<Loading />} key={post.id}>
               <ImagePost 
-                href={`/portfolio/${post.attributes.student.data.id}/post/${post.id}`}
+                href={`/portfolio/${post.attributes.student?.data?.id}/post/${post.id}`}
                 studentId={post.attributes.student.data.id}
                 postId={post.id}
-                url_view={post.attributes.url_view} 
+                photo={post?.attributes?.photo?.data?.attributes?.url}
                 title={post.attributes.title}
               />
             </Suspense>

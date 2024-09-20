@@ -27,12 +27,10 @@ interface DataStudents {
     };
 }
 
-
 export default function UnpublishedProfiles() {
 
     const [students, setStudents] = useState<StudentsProps>();
 
-     //фетч
     useEffect(() => {     
         const fetchData = async () => {       
             const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
@@ -41,8 +39,6 @@ export default function UnpublishedProfiles() {
         fetchData();   
     }, []);
 
-
-    //сортируем на только неопубликованных
     const filteredStudents = useMemo(() => {
         if (!students) return [];
 

@@ -18,7 +18,15 @@ interface DataPosts {
     id: number,
     attributes: {
         title: string,
-        url_view: string;
+        photo?: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string,
+                    url: string
+                }
+            }
+        },
         worktype: {
             data: {
                 id: number,
@@ -78,12 +86,12 @@ export default function MyPosts() {
                 <BtnAddPost id={id} user={user} setError={setError} checkProfile={checkProfile}/>
                 {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
                     return (
-                        <Suspense fallback={<Loading />}>
+                        <Suspense fallback={<Loading />} key={post.id}>
                             <ImagePost 
                                 href={`/myprofile/${id}/edit-post/${post.id}`}
                                 studentId={post.attributes.student.data.id}
                                 postId={post.id}
-                                url_view={post.attributes.url_view} 
+                                photo={post?.attributes?.photo?.data?.attributes?.url}
                                 title={post.attributes.title}
                             />
                         </Suspense>
