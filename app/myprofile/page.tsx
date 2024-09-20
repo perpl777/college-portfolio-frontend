@@ -11,20 +11,29 @@ import { useUser } from './components/context';
 
 export default function MyProfilePage() {
     const { user, role, loading } = useUser();
-    const [activeButton, setActiveButton] = useState<number>(2);
     const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
     const values = ['Активность', 'Профиль', 'Работы'];
-    const handleCategoryClick = (index: number, value: string) => {
-        setActiveButton(index);
+    const handleCategoryClick = (value: string) => {
         setSelectedBtn(value);
     };
+
+    useEffect(() => {
+        const savedCategory = localStorage.getItem('selectedCategory');
+       const savedIndex = localStorage.getItem('activeButtonIndex');
+
+       if (savedCategory) {
+           setSelectedBtn(savedCategory);
+       }
+    }, []);
+
     if (loading) {
-        return <div>Loading...</div>; // Простое сообщение о загрузке
+        return <div>Загрузка...</div>; // Простое сообщение о загрузке
     }
 
     if (!user) {
-        return <div>User not found</div>;
+        return <div>Ошибка сервера, попробуйте перезайти на аккаунт</div>;
     }
+
 
     return (
         <>
@@ -34,7 +43,7 @@ export default function MyProfilePage() {
                     <div className='space-y-12 max-sm:space-y-8'>
                         <Header />
                         <div className='px-11 flex justify-end max-sm:px-6'>
-                            <Navbar values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
+                            <Navbar values={values} handleCategoryClick={handleCategoryClick} selectedBtn={selectedBtn}/>
                         </div>
                         <div className='px-11 max-sm:px-6 pb-24'>
                             { selectedBtn === 'Профиль' &&
