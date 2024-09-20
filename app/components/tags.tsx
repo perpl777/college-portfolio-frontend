@@ -9,7 +9,7 @@ interface TagsProps {
 
 const Tags: React.FC<TagsProps> = ({ tags, filteredPost, handleTagFilter, selectedTags}) => {
     return (
-        <div className="flex gap-4 max-lg:flex-wrap">
+        <div className="flex gap-4 flex-wrap">
             {tags && tags?.map((tag: any) => {
                 return (
                     <label 

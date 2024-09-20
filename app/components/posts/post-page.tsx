@@ -19,6 +19,17 @@ interface Props {
 
 
 export default function PostPage({postId, title, description, publishedAt, worktype, photo, file, studentName, studentId}: Props) {
+    function makeLinksClickable(text: string) {
+        const urlPattern = /(\bhttps?:\/\/[^\s]+)/g;
+        return text.replace(urlPattern, url => `<a href="${url}" 
+            style="
+                font-size: 0.875rem;
+                opacity: 0.7;
+                padding-bottom: 4rem;
+                color: #0e7490;
+            " target="_blank" rel="noopener noreferrer">${url}</a>`);
+      }
+
     return (
         <div className='px-11 my-10 flex flex-col justify-between gap-8 max-sm:p-7 max-sm:my-2'>
             <Link href={`#${postId}`} onClick={() => window.history.back()}>
@@ -34,7 +45,7 @@ export default function PostPage({postId, title, description, publishedAt, workt
     
             <div className='flex justify-between items-end  max-sm:gap-7'>
                 <div className='w-7/12 max-sm:w-10/12'>
-                    {description && <p className='text-sm opacity-70 pb-14'>{description}</p>}
+                    {description && <p className='text-sm opacity-70 pb-14'>{<p dangerouslySetInnerHTML={{ __html: makeLinksClickable(description) }} />}</p>}
 
                     <Link href={`/portfolio/${studentId}`}>
                         <span className='text-sm opacity-70 pb-16 hover:text-cyan-800 transition-colors'>Автор: {studentName}</span>
