@@ -7,9 +7,10 @@ import search from '@/public/bx-search 1.svg'
 
 interface Props {
     setSearchQuery: (query: string) => void;
+    placeholder: string
 }
 
-const Search = ({ setSearchQuery }: Props) => {
+const Search = ({ setSearchQuery, placeholder }: Props) => {
     return (
         <div>
             <label className="border-b border-black flex gap-2 items-center w-64">
@@ -17,7 +18,7 @@ const Search = ({ setSearchQuery }: Props) => {
                 <input 
                     type="text" 
                     className="grow outline-none p-2" 
-                    placeholder="Найти студента" 
+                    placeholder={placeholder} 
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </label>

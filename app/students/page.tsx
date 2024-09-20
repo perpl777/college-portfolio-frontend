@@ -76,7 +76,7 @@ export default function StudentsPage() {
             <Header />
 
             <div className="flex justify-between px-11 pt-24 pb-10 flex-wrap gap-12 lg:flex-nowrap max-sm:p-6 max-sm:pt-16 max-sm:pb-2">
-                <Search setSearchQuery={setSearchQuery} />
+                <Search setSearchQuery={setSearchQuery} placeholder='Найти студента' />
                 <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
             </div>
 

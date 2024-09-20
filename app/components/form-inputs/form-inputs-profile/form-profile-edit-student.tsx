@@ -235,7 +235,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
             </div>
 
             <p className='pb-12 pt-9 max-sm:py-7'>Статус:  
-                {student?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
+                {student?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-blue-900 pl-2'>На рассмотрении</span>}
             </p>
             <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
