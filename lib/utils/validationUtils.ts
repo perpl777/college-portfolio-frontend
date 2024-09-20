@@ -57,16 +57,16 @@ export const isCorrectDomain = (url: string, domain: string): boolean => {
  * @param {string} urlVk - URL VK
  * @returns {boolean} - Возвращает true, если все URL корректны и ведут на указанные сервисы, иначе false
  */
-export const checkUrls = (urlGithub: string | undefined, urlBehance: string | undefined, urlVk: string | undefined): boolean => {
+export const checkUrls = (urlGithub: string | undefined, urlBehance: string | undefined, urlVk: string | undefined): { [key: string]: boolean } => {
     const GITHUB_DOMAIN = "github.com";
     const BEHANCE_DOMAIN = "www.behance.net";
     const VK_DOMAIN = "vk.com";
 
-    const isGithubValid = urlGithub ? isValidURL(urlGithub) && isCorrectDomain(urlGithub, GITHUB_DOMAIN) : true;
-    const isBehanceValid = urlBehance ? isValidURL(urlBehance) && isCorrectDomain(urlBehance, BEHANCE_DOMAIN) : true;
-    const isVkValid = urlVk ? isValidURL(urlVk) && isCorrectDomain(urlVk, VK_DOMAIN) : true;
-
-    return isGithubValid && isBehanceValid && isVkValid;
+    return {
+        github: urlGithub ? isValidURL(urlGithub) && isCorrectDomain(urlGithub, GITHUB_DOMAIN) : true,
+        behance: urlBehance ? isValidURL(urlBehance) && isCorrectDomain(urlBehance, BEHANCE_DOMAIN) : true,
+        vk: urlVk ? isValidURL(urlVk) && isCorrectDomain(urlVk, VK_DOMAIN) : true
+    };
 };
 
 /**

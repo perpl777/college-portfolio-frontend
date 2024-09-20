@@ -62,6 +62,11 @@ export default function InputFile({ setFormDataFile }: Props ) {
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
+                    accept="
+                    .png, .jpg, .jpeg, 
+                    .mpeg, .mp4, .mp3, 
+                    .pdf, .doc, .docx, 
+                    .heic, .heif"
                 />
             </div>
             <span className='text-gray-600 text-sm'>
