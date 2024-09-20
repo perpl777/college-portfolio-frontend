@@ -52,7 +52,7 @@ export default function UnpublishedProfiles() {
 
     return (
         <div className='px-11 max-sm:p-6'>
-            {filteredStudents !== null
+            {filteredStudents && filteredStudents.length !== 0
             ?
                 <Suspense fallback={<Loading />}>
                     <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }}/>
