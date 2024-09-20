@@ -131,7 +131,7 @@ export default function FormProfileNewStudent() {
                     }
                 }),
             });
-            window.location.href = `/myprofile/${id}`;
+            window.location.href = `/myprofile`;
         } 
         catch (error) {
             console.error('Error adding student:', error);
