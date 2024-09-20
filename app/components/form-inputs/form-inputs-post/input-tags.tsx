@@ -94,12 +94,12 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
                 multiple
                 value={displayedTags}
                 onChange={handleChange}
-                input={<OutlinedInput label="Технологии" />}
+                input={<OutlinedInput label="Теги" />}
                 renderValue={(selected) => selected.join(', ')}
             >
                 {tags.map((tag: TagsProps) => (
                     <MenuItem key={tag.attributes.name} value={tag.attributes.name} onClick={() => handleCheckboxChange(tag.id)}>
-                        <Checkbox color='default' checked={displayedTags.indexOf(tag.attributes.name) > -1} />
+                        <Checkbox checked={displayedTags.indexOf(tag.attributes.name) > -1} />
                         <ListItemText primary={tag.attributes.name} />
                     </MenuItem>
                 ))}

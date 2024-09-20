@@ -65,7 +65,7 @@ export default function InputWorktype({selectedWorktype, setSelectedWorktype}: P
 					labelId='demo-simple-select-label'
 					id='demo-simple-select'
 					value={displayedWorktype}
-					label='Специальность'
+					label='Тип работы'
 					onChange={handleChange}
 				>
                 {worktypes && worktypes.map((value: WorktypesProps) => (
