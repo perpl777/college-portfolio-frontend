@@ -20,7 +20,7 @@ export default function InputFile({ setFormDataFile }: Props ) {
         if (!file) {
         return;
         }
-        const isValidSize = await isValidFileSize(file, 5 )
+        const isValidSize = await isValidFileSize(file, 10 )
 
         if (!isValidSize) {
             setError('Слишком большой файл');
