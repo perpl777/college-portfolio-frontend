@@ -1,5 +1,6 @@
+
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Header from "../components/header";
 import Navbar from '../components/navbar';
@@ -14,7 +15,6 @@ export default function MyProfilePage() {
     const values = ['Активность', 'Профиль', 'Работы'];
     const handleCategoryClick = (value: string) => {
         setSelectedBtn(value);
-        localStorage.setItem('selectedCategory', value);
     };
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export default function MyProfilePage() {
            setSelectedBtn(savedCategory);
        }
     }, []);
-    
+
     if (loading) {
         return <div>Загрузка...</div>; // Простое сообщение о загрузке
     }
@@ -33,6 +33,7 @@ export default function MyProfilePage() {
     if (!user) {
         return <div>Ошибка сервера, попробуйте перезайти на аккаунт</div>;
     }
+
 
     return (
         <>
