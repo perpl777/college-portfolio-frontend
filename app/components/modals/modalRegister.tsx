@@ -66,7 +66,7 @@ const ModalRegister = ({
                     console.error('Error:', response.error);
                     return;
                 }
-                window.location.href = '/';
+                window.location.href = '/myprofile';
             }
             catch (error) {
                 console.error('Error:', error);
@@ -96,16 +96,6 @@ const ModalRegister = ({
                             required
                             className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
                         />
-                        {/* <input 
-                            type="text" 
-                            name="username"
-                            maxLength={20}
-                            minLength={5}
-                            placeholder="Имя.."
-                            onChange={handleChange}
-                            required
-                            className="w-full p-1 font-light text-lg text-gray border-b border-gray-800 outline-none"
-                        /> */}
                         <input 
                             name="password"
                             type="password" 

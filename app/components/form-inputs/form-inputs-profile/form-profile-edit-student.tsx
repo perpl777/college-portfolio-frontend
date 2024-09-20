@@ -196,7 +196,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                         }
                     }),
                 });
-                window.location.href = `/myprofile/${id}`;
+                window.location.href = `/myprofile`;
             } 
             catch (error) {
                 console.error('Error:', error);
