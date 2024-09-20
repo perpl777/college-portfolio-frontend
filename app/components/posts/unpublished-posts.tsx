@@ -89,7 +89,7 @@ export default function UnpublishedPosts() {
                     })}
                 </div>
             : 
-                (<div className="text-center text-zinc-400 text-lg mt-16">Данных нет</div>)
+                (<div className="text-center text-zinc-400 text-lg mt-16">Все посты проверены</div>)
             }
         </div>
     );
