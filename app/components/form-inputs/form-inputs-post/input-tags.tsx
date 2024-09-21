@@ -2,13 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
 
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import { FormControl, InputLabel, Select, MenuItem, Checkbox, OutlinedInput, ListItemText } from '@mui/material';
 
 interface TagsProps {
     id: number;
@@ -34,9 +28,17 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        // Обновляем displayedTags при изменении selectedTags
+        const initialDisplayedTags = tags
+            .filter(tag => selectedTags.includes(tag.id))
+            .map(tag => tag.attributes.name);
+        setDisplayedTags(initialDisplayedTags);
+    }, [selectedTags, tags]);
+
     const handleCheckboxChange = (id: number) => {
         if (selectedTags.includes(id)) {
-            setSelectedTags((prevSelected: any) => prevSelected.filter((tagsId: any) => tagsId !== id));
+            setSelectedTags((prevSelected: any[]) => prevSelected.filter((tagsId) => tagsId !== id));
         } else {
             if (selectedTags.length < 4) {
                 setSelectedTags((prevSelected: any) => [...prevSelected, id]);
@@ -69,7 +71,7 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
             >
                 {tags.map((tag: TagsProps) => (
                     <MenuItem 
-                        key={tag.attributes.name} 
+                        key={tag.id}
                         value={tag.attributes.name} 
                         onClick={() => handleCheckboxChange(tag.id)}
                     >

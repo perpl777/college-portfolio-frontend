@@ -89,7 +89,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFiltersChange }) =>
           </span>
         </summary>
         <div className="collapse-content capitalize p-0"> 
-          {/* теги */}
           <div>
             <div className='font-light'>
               {selectedFilters.map((filter) => (
