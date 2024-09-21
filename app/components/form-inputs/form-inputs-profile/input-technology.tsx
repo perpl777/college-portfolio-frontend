@@ -24,45 +24,44 @@ interface Props {
 }
 
 
-export default function InputTechnology({selectedTechnologies, setSelectedTechnologies}: Props) {
+export default function InputTechnology({ selectedTechnologies, setSelectedTechnologies }: Props) {
     const [technologies, setTechnologies] = useState<TechnologiesProps[]>([]);
-    const [displayedTechnologies, setDisplayedTechnologies] = useState([]);
-    const [showCheckboxes, setShowCheckboxes] = useState(false);
+    const [displayedTechnologies, setDisplayedTechnologies] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const techResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/technologies`);
             setTechnologies(techResponse.data);
+
+            // После получения данных, установка displayedTechnologies на основе selectedTechnologies
+            const selectedTechNames = techResponse.data
+                .filter((tech: TechnologiesProps) => selectedTechnologies.includes(tech.id))
+                .map((tech: TechnologiesProps) => tech.attributes.name);
+
+            setDisplayedTechnologies(selectedTechNames);
         };
         fetchData();
-    }, []);
+    }, [selectedTechnologies]);
 
-
-    const handleCheckboxChange = (id: number) => {
+    const handleCheckboxChange = (id: number | string) => {
         if (selectedTechnologies.includes(id)) {
-            setSelectedTechnologies((prevSelected: any) => prevSelected.filter((techId: any) => techId !== id));
+            setSelectedTechnologies((prevSelected: number[] | string[]) => prevSelected.filter((techId) => techId !== id));
         } else {
             if (selectedTechnologies.length < 4) {
-                setSelectedTechnologies((prevSelected: any) => [...prevSelected, id]);
+                setSelectedTechnologies((prevSelected: number[] | string[]) => [...prevSelected, id]);
             }
         }
     };
 
-    const handleTechnologyClick = (e: any) => {
-        e.preventDefault();
-        setShowCheckboxes(!showCheckboxes);
-    };
-      
     const handleChange = (event: any) => {
         const {
             target: { value },
         } = event;
         setDisplayedTechnologies(
-            // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-      
+
     return (
         <div>
             <FormControl className="max-w-xs w-full">
@@ -74,11 +73,11 @@ export default function InputTechnology({selectedTechnologies, setSelectedTechno
                     value={displayedTechnologies}
                     onChange={handleChange}
                     input={<OutlinedInput label="Технологии" />}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected: string[]) => selected.join(', ')}
                 >
                     {technologies.map((tech: TechnologiesProps) => (
                         <MenuItem key={tech.attributes.name} value={tech.attributes.name} onClick={() => handleCheckboxChange(tech.id)}>
-                            <Checkbox checked={displayedTechnologies.indexOf(tech.attributes.name) > -1} />
+                            <Checkbox checked={displayedTechnologies.includes(tech.attributes.name)} />
                             <ListItemText primary={tech.attributes.name} />
                         </MenuItem>
                     ))}
@@ -86,31 +85,4 @@ export default function InputTechnology({selectedTechnologies, setSelectedTechno
             </FormControl>
         </div>
     );
-        
-    // return (
-    //     <div>
-    //         <label htmlFor="technologyInput">
-    //         <button onClick={handleTechnologyClick} 
-    //             className='button-style text-gray-500 mb-3 border border-gray-300 px-7 py-2'>
-    //             Технологии
-    //         </button>
-    //         </label>
-    //         {showCheckboxes && (
-    //             <ul className='space-y-1'>
-    //                 {technologies.map((tech: TechnologiesProps) => (
-    //                     <li key={tech.id}>
-    //                         <input
-    //                             type="checkbox"
-    //                             className='checkbox checkbox-xs rounded-sm  tab-border-2 border-black mx-3'
-    //                             checked={selectedTechnologies.includes(tech.id)}
-    //                             onChange={() => handleCheckboxChange(tech.id)}
-    //                             disabled={selectedTechnologies.length === 4 && !selectedTechnologies.includes(tech.id)}
-    //                         />
-    //                         <label className='text-gray-600'>{tech.attributes.name}</label>
-    //                     </li>
-    //                 ))}
-    //             </ul>
-    //         )}
-    //     </div>
-    // );
 }

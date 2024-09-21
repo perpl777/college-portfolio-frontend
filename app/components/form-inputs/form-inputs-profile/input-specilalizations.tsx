@@ -21,56 +21,55 @@ interface Props {
 }
 
 export default function InputSpecializations({selectedSpecialization, setSelectedSpecialization}: Props) {
-    const [displayedSpecialization, setDisplayedSpecialization] = useState([])
-	const [specializations, setSpecializations] = useState<SpecializationsProps[]>([])
+    const [displayedSpecialization, setDisplayedSpecialization] = useState(selectedSpecialization || '');
+    const [specializations, setSpecializations] = useState<SpecializationsProps[]>([]);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const specResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/specializations`)
-			setSpecializations(specResponse.data)
-		}
-		fetchData()
-	}, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            const specResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/specializations`);
+            if (specResponse.data && specResponse.data.length > 0) {
+                setSpecializations(specResponse.data);
+                const defaultSpec = specResponse.data.find((spec: { id: any }) => spec.id === selectedSpecialization);
+                if (defaultSpec) {
+                    setDisplayedSpecialization(defaultSpec.attributes.name);
+                }
+            }
+        };
+        fetchData();
+    }, [selectedSpecialization]);
 
-	// const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-	// 	const selectedValue = e.target.value
-	// 	setSelectedSpecialization(selectedValue)
-	// }
+    const handleSelectChange = (id: number, name: string) => {
+        setSelectedSpecialization(id);
+        setDisplayedSpecialization(name);
+    };
 
-    const handleSelectChange = (id: number) => {
-        setSelectedSpecialization(id)
-    }
-
-	const handleChange = (event: any) => {
-        setDisplayedSpecialization(event.target.value)
-    }
+    const handleChange = (event: any) => {
+        const selectedName = event.target.value;
+        const selectedSpec = specializations.find(spec => spec.attributes.name === selectedName);
+        if (selectedSpec) {
+            handleSelectChange(selectedSpec.id, selectedName);
+        }
+    };
 
 	return (
-		// <div>
-		//     <select className="select select-bordered max-w-xs rounded-none w-full outline-none" value={selectedSpecialization} onChange={handleSelectChange}>
-		//         <option disabled selected>Специальность..</option>
-		//         {specializations && specializations.map((value: SpecializationsProps) => (
-		//             <option key={value.id} value={value.id}>
-		//                 {value.attributes.name}
-		//             </option>
-		//         ))}
-		//     </select>
-		// </div>
+
 		<Box className="max-w-xs w-full rounded-none">
 			<FormControl fullWidth>
-				<InputLabel id='demo-simple-select-label'>Специальность</InputLabel>
-				<Select
-					labelId='demo-simple-select-label'
-					id='demo-simple-select'
-					value={displayedSpecialization}
-					label='Специальность'
-					onChange={handleChange}
-				>
-                {specializations && specializations.map((value: SpecializationsProps) => (
-                    <MenuItem key={value.id} value={value.attributes.name} onClick={() => handleSelectChange(value.id)}>{value.attributes.name}</MenuItem>
-		        ))}    
-				</Select>
-			</FormControl>
+                <InputLabel id='demo-simple-select-label'>Специальность</InputLabel>
+                <Select
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={displayedSpecialization}
+                    label='Специальность'
+                    onChange={handleChange}
+                >
+                    {specializations && specializations.map((value: SpecializationsProps) => (
+                        <MenuItem key={value.id} value={value.attributes.name}>
+                            {value.attributes.name}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
 		</Box>
 	)
 }

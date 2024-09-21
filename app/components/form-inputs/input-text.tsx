@@ -15,11 +15,10 @@ export default function InputText({placeholder, name, value, onChange}: Props) {
             <input 
                 type="text" 
                 name={name}
-                className="grow outline-none p-2 w-full capitalize" 
+                className="text-black grow outline-none p-2 w-full capitalize" 
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                style={{ color: 'black' } }
             />
         </label>
     );

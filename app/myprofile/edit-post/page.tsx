@@ -49,6 +49,9 @@ export default function EditPostPage() {
 
 
     useEffect(() => {
+        if (post?.attributes.worktype) {
+            setSelectedWorktype(post?.attributes.worktype?.data?.id);
+        }
         if (post?.attributes.tags) {
             const selectedTechIds = post.attributes.tags.data.map((tags: { id: number }) => tags.id);
             setSelectedTags(selectedTechIds);

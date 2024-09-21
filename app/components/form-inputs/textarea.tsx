@@ -11,14 +11,14 @@ interface Props {
 
 
 
-export default function Textarea({ placeholder, name, required, value, onChange }: Props) {
+export default function Textarea({ placeholder, name, value, onChange }: Props) {
     return (
-        <label className="border border-gray-400 flex gap-2 items-center w-full">
+        <label className="border border-gray-400 flex gap-2 items-center w-full rounded-[4px]">
             <textarea
-                className="grow outline-none px-5 pt-5 rounded-sm"
+                className="min-h-40 grow whitespace-normal outline-none px-5 pt-5 rounded-[4px]"
                 placeholder={placeholder}
                 name={name}
-                style={{ whiteSpace: "nowrap", overflow: "hidden", color: 'black'  }}
+                style={{ color: 'black'  }}
                 onChange={onChange}
                 value={value}
             />

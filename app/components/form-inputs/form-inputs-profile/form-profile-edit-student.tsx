@@ -16,7 +16,7 @@ import InputText from '../input-text';
 import Textarea from '../textarea';
 import InputContacts from './input-contacts';
 
-import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
+import { isLengthValid, checkUrls, isInRange } from '@/lib/utils/validationUtils'
 import ErrorMess from '../../errorMess';
 
 
@@ -79,12 +79,12 @@ export default function FormProfileEditStudent({studentId}: Props) {
     const { id } = getAuthData();
     const { jwt } = getAuthData();
     let [student, setStudent] = useState<OldDataStudent>();
+    
 
     const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
-    const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes?.specialization?.data?.id ?? 0);
-    const [selectedCourse, setSelectedCourse] = useState<number>(student?.attributes?.course ?? 0);
-
+    const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes.specialization.data.id ?? 0);
+    const [selectedCourse, setSelectedCourse] = useState<number>(student?.attributes.course ?? 0);
     const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
     const [formData, setFormData] = useState<DataStudent>({
         surname: '',
@@ -154,8 +154,13 @@ export default function FormProfileEditStudent({studentId}: Props) {
         fetchData();   
     }, []);
 
-
     useEffect(() => {
+        if (student?.attributes?.specialization) {
+            setSelectedSpecialization(student?.attributes.specialization.data.id);
+        }
+        if (student?.attributes?.course) {
+            setSelectedCourse(student.attributes.course);
+        }
         if (student?.attributes?.technologies?.data) {
             const selectedTechIds = student.attributes.technologies.data.map((tech: { id: number }) => tech.id);
             setSelectedTechnologies(selectedTechIds);
