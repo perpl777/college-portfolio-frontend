@@ -119,7 +119,15 @@ export default function EditPostPage() {
                 </div>
             </div>
             <p className='pt-16 max-sm:pt-32'>Статус:  
-                {post?.attributes.published ? <span className='text-green-900 pl-2'>Опубликован</span> :  <span className='text-red-900 pl-2'>На рассмотрении</span>}
+                {post?.attributes.published === false &&
+                    <span className='text-yellow-500 pl-2'>На рассмотрении</span> 
+                }
+                {post?.attributes.published === null && 
+                    <span className='text-blue-900 pl-2'>Отклонен</span>
+                }
+                {post?.attributes.published &&
+                    <span className='text-green-900 pl-2'>Опубликован</span> 
+                }
             </p>
             <div className='w-full flex justify-end pt-12  max-md:justify-center'>
                 <button 
