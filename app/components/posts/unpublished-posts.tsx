@@ -1,74 +1,13 @@
-'use client'
-import React, { useState, useEffect, Suspense, useMemo } from 'react';
-import { fetcher } from '@/lib/api';
+import React, { Suspense } from 'react';
 import Loading from '../../loading'
 
 import ImagePost from '../../components/posts/image-post';
 
-
-interface PostsProps {
-    data: DataPosts[]
+interface Props {
+    filteredPosts: any
 }
 
-interface DataPosts {
-    id: number,
-    attributes: {
-    title: string,
-    photo?: {
-        data: {
-            id: number,
-            attributes: {
-                name: string,
-                url: string
-            }
-        }
-    },
-    published: boolean;
-    student: {
-        data: {
-        id: number
-        }
-    }
-    worktype: {
-        data: {
-        id: number,
-        attributes: {
-            name: string
-        }
-        }
-    };
-    tags: {
-        data: {
-        some(arg0: (tag: any) => boolean): unknown;
-        id: number,
-        attributes: {
-            name: string
-        }
-        }
-    }
-    }
-}
-
-export default function UnpublishedPosts() {
-
-    const [posts, setPosts] = useState<PostsProps>();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,student,photo&fields=title&fields=published`);    
-            setPosts(postsResponse);
-        };     
-        fetchData();   
-    }, []);
-
-    const filteredPosts = useMemo(() => {
-        if (!posts) return [];
-        let filteredData = posts.data?.filter((post: any) => { 
-            return (post.attributes.published === false)
-        });
-        return filteredData;
-    }, [posts]);
-
+export default function UnpublishedPosts({filteredPosts}: Props) {
     return (
         <div>
             {(filteredPosts && filteredPosts.length !== 0) 

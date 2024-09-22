@@ -121,14 +121,19 @@ export default function Profile({ params: {profileId}}: Props) {
         fetchPhoto();     
     }, [student?.attributes?.photo?.data?.attributes?.url])
 
-    const handleDeleteStudent = async () => {
+    const handleRejectStudent = async () => {
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
-                method: 'DELETE',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${jwt}`,
                 },
+                body: JSON.stringify({
+                    data: {
+                        published: null
+                    }
+                }),
             });
             if (response.error) {
                 console.error('Error:', response.error);
@@ -199,7 +204,7 @@ export default function Profile({ params: {profileId}}: Props) {
                     </div>
                 </div>
                 <div className='flex justify-center'>
-                    <Buttons handleDelete={handleDeleteStudent} handlePublish={handlePublishStudent}/>
+                    <Buttons handleDelete={handleRejectStudent} handlePublish={handlePublishStudent}/>
                 </div>
             </div>
         }

@@ -136,14 +136,19 @@ export default function Post({ params: {postId}}: Props) {
         fetchData();
     }, []);
 
-    const handleDeletePost = async () => {
+    const handleRejectPost = async () => {
         if (post?.attributes.student.data.attributes.published === false) {
             setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
         }
         else {
             try {
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}`, {
-                    method: 'DELETE',
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        data: {
+                            published: null
+                        }
+                    }),
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${jwt}`,
@@ -215,7 +220,7 @@ export default function Post({ params: {postId}}: Props) {
                     {error && <ErrorMess text={error}/>}
                 </div>
                 <div className='flex justify-center'>
-                    <Buttons handleDelete={handleDeletePost} handlePublish={handlePublishPost}/>
+                    <Buttons handleDelete={handleRejectPost} handlePublish={handlePublishPost}/>
                 </div>
             </div>
         }
