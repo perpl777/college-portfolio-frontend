@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Post from './post';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import Loading from '@/app/loading';
 import { FaArrowUp } from 'react-icons/fa';
 
 
@@ -16,21 +14,6 @@ interface DataPosts {
     attributes: {
         title: string,
         description?: string,
-        markupWithBackground: boolean,
-        publishedAt: string,
-        author: {
-            data: {
-                id: number
-            }
-        },
-        work_type: {
-            data: {
-                id: number,
-                attributes: {
-                    name: string
-                }
-            }
-        },
         photo?: {
             data: {
                 id: number,
@@ -48,12 +31,37 @@ interface DataPosts {
                     url: string;
                 };
             };
+        },
+        background: boolean,
+        publishedAt: string,
+        student: {
+            data: {
+                id: number
+            }
+        },
+        worktype: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string
+                }
+            }
+        },
+        tags: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                };
+            };
         }
     }
 }
 
+
 const Posts = ({posts}: Props) => {
 
+//для кнопки при скролле
     const [showButton, setShowButton] = useState(false);
 
     const handleScroll = () => {
@@ -63,7 +71,6 @@ const Posts = ({posts}: Props) => {
             setShowButton(false);
         }
     };
-
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -78,16 +85,17 @@ const Posts = ({posts}: Props) => {
         };
     }, []);
 
+    
     return (
         <div>
             {posts.map((post: any, index: number) => {
                 return  (
-                    <Link key={index} href={`/portfolio/${post?.attributes.author.data.id}/post/${post?.id}`}>
+                    <Link key={index} href={`/portfolio/${post?.attributes.student.data.id}/post/${post?.id}`}>
                         <Post
                             title={post.attributes.title}
-                            markupWithBackground={post.attributes.markupWithBackground}
+                            background={post.attributes.background}
                             publishedAt={post.attributes.publishedAt}
-                            work_type={post.attributes.work_type.data?.attributes?.name}
+                            worktype={post.attributes.worktype.data?.attributes?.name}
                             photo={post?.attributes?.photo?.data?.attributes?.url}
                         />
                     </Link>

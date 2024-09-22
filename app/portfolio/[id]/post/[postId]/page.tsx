@@ -1,9 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-import Loading from '@/app/loading';
-import { Suspense } from 'react';
-import PostWindow from './post';
+import PostPage from '../../../../components/posts/post-page';
 
 
 interface Props {
@@ -13,27 +11,12 @@ interface Props {
     }
 }
 
+
 interface DataPosts {
     id: number,
     attributes: {
         title: string,
-        description: string,
-        link?: string,
-        markupWithBackground: boolean,
-        publishedAt: string,
-        author: {
-            data: {
-                id: number
-            }
-        },
-        work_type: {
-            data: {
-                id: number,
-                attributes: {
-                    name: string
-                }
-            }
-        },
+        description?: string,
         photo: {
             data: {
                 id: number,
@@ -51,6 +34,33 @@ interface DataPosts {
                     url: string;
                 };
             };
+        },
+        background: boolean,
+        published: boolean,
+        publishedAt: string,
+        student: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string
+                }
+            }
+        },
+        worktype: {
+            data: {
+                id: number,
+                attributes: {
+                    name: string
+                }
+            }
+        },
+        tags: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                };
+            };
         }
     }
 }
@@ -63,13 +73,20 @@ export default function Post({ params: { id, postId}}: Props) {
     const [blobFile, setBlobFile] = useState<Blob | null>(null);
     const [fileLoaded, setFileLoaded] = useState(false);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`);    
+            setPost(postsResponse.data);
+        };     
+        fetchData();   
+    }, []);
 
     useEffect(() => {
         const fetchData = () => {
-            fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/works/${postId}?populate=*`)
+            fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts/${postId}?populate=*`)
                 .then(postResponse => {
                     if (postResponse.data.attributes.photo && postResponse.data.attributes.photo.data && postResponse.data.attributes.photo.data.attributes.url) {
-                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${postResponse.data.attributes.photo.data.attributes.url}`)
+                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${postResponse.data.attributes.photo.data.attributes.url}`)
                             .then(photoResponse => photoResponse.blob())
                             .then(fetchedBlobPhoto => {
                                 setBlobPhoto(fetchedBlobPhoto);
@@ -77,7 +94,7 @@ export default function Post({ params: { id, postId}}: Props) {
                     }
     
                     if (postResponse.data.attributes.file && postResponse.data.attributes.file.data && postResponse.data.attributes.file.data.attributes.url) {
-                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}${postResponse.data.attributes.file.data.attributes.url}`)
+                        fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOAD_FILES}${postResponse.data.attributes.file.data.attributes.url}`)
                             .then(fileResponse => fileResponse.blob())
                             .then(fetchedBlobFile => {
                                 setBlobFile(fetchedBlobFile);
@@ -91,23 +108,28 @@ export default function Post({ params: { id, postId}}: Props) {
         fetchData();
     }, []);
 
-
     return (
         <>
-            {post && 
-                <>
-                    <PostWindow
-                        postId={postId}
-                        title={post?.attributes.title}
-                        description={post?.attributes.description}
-                        link={post?.attributes.link}
-                        publishedAt={post?.attributes.publishedAt}
-                        work_type={post?.attributes.work_type.data.attributes.name}
-                        photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
-                        file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : null}
-                    />
-                </>
-            }
+        {post?.attributes.published &&
+            <>
+                {post && 
+                    <>
+                        <PostPage
+                            postId={postId}
+                            title={post?.attributes.title}
+                            description={post?.attributes.description}
+                            publishedAt={post?.attributes.publishedAt}
+                            worktype={post?.attributes.worktype.data.attributes.name}
+                            photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
+                            file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : null}
+                            studentName={post.attributes.student.data.attributes.name}
+                            studentId={post.attributes.student.data.id}
+                        />
+                    </>
+                }
+            </>
+            
+        }
         </>
     );
 }

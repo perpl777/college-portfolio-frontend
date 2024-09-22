@@ -1,107 +1,210 @@
 'use client'
-import React, { Suspense, useEffect, useState, useMemo } from 'react'
-import { fetcher } from "../lib/api"
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import { fetcher } from '@/lib/api';
+
 import Loading from './loading'
-import Header from './components/header';
-import Search from './components/search'
-import Filter from './components/filter'
-import Checkbox from './components/checkbox';
-import Table from './components/students-table';
+
+import ImagePost from './components/posts/image-post';
+import SliderWithCheckbox from './components/slider-with-checkbox/slider-with-checkbox';
+import Header from './components/header'
+import Tags from "./components/tags"
 
 
-interface DataStudents {
-  id: number;
+interface PostsProps {
+  data: DataPosts[]
+}
+
+interface DataPosts {
+  id: number,
   attributes: {
-    surname: string;
-    name: string;
-    patronymic: string;
-    course: number;
-    specialty: string
-  };
+    title: string,
+    photo?: {
+      data: {
+        id: number,
+        attributes: {
+          name: string,
+          url: string
+        }
+      }
+    },
+    published: boolean;
+    student: {
+      data: {
+        id: number
+      }
+    }
+    worktype: {
+      data: {
+        id: number,
+        attributes: {
+          name: string
+        }
+      }
+    };
+    tags: {
+      data: {
+        some(arg0: (tag: any) => boolean): unknown;
+        id: number,
+        attributes: {
+          name: string
+        }
+      }
+    }
+  }
 }
 
-interface StudentProps {
-  data: DataStudents[]
+interface CategoryProps {
+  id: number,
+  attributes: {
+    name: string,
+    tags: {
+      data: {
+        id: number,
+        attributes: {
+          name: string
+        }
+      }
+    };
+  }
 }
 
+interface TagsProps {
+  id: number,
+  attributes: {
+    name: string,
+    category: {
+      data: {
+        id: number,
+        attributes: {
+          name: string
+        }
+      }
+    };
+  }
+}
 
 export default function Home() {
-  
-  let [students, setStudents] = useState<StudentProps>();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSpecialty, setFilteredSpecialty] = useState<string | null>(null);
-  const [filteredCourse, setFilteredCourse] = useState<number[] | null>(null);
+  const [posts, setPosts] = useState<PostsProps>();
+  const [filteredPost, setFilteredPost] = useState<string[]>([]);
 
-  const specialty = [
-    "Все направления",
-    "Информационные системы и программирование", 
-    "Реклама", 
-    "Дизайн", 
-    "Графический дизайн", 
-    "Коммерческий дизайн", 
-    "Фотография",
-    "Печатное дело", 
-    "Издательское дело",
-    "Издательское дело и реклама",
-    "Изделия из бумаги и картона", 
-  ]
+  const [tags, setTags] = useState<TagsProps[]>([]);  
+  const [tagsNames, setTagsNames] = useState<string[]>([]); 
+  const [selectedTags, setSelectedTags] = useState<string[]>([]); 
 
-  useEffect(() => {     
-    const fetchData = async () => {       
-      const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
-      setStudents(studentsResponse);
-    };
+  const [categories, setCategories] = useState<CategoryProps[]>([]); 
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+
+  const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
+
+  //фетчи
+  useEffect(() => {
+    const fetchData = async () => {
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,photo,student&fields=title&fields=published`);    
+        setPosts(postsResponse);
+        
+        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=category&fields=name`);        
+        setTags(tagsResponse.data)  
+
+        const namesTags = tagsResponse.data.map((tag: any) => tag.attributes.name);      
+        setTagsNames(namesTags);  
+        
+        let categoriesResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/categories?populate=*`);        
+        const namesCategories = categoriesResponse.data.map((category: any) => category.attributes.name);         
+        setCategories(namesCategories); 
+        setSelectedCategory(namesCategories[0])    
+      };  
     fetchData();   
   }, []);
 
 
-  const filteredStudents = useMemo(() => {
-    if (!students) return [];
-    let filteredData = students.data;
+  const filteredTags = useMemo(() => {
+    if (!tags) return [];
+
+    if (!checkboxChecked && selectedCategory != '') {
+      let filteredData = tags.filter((tag: any) => {
+        return (
+          tag.attributes.category.data.attributes.name === selectedCategory
+        )
+      })
+      let filteredDataNames = filteredData.map((tag: any) => tag.attributes.name)
+      return filteredDataNames
+    }
+    else {
+      return tagsNames
+    }
+  }, [filteredPost, tags, selectedCategory, checkboxChecked]);
+
+
+  const filteredPosts = useMemo(() => {
+    if (!posts) return [];
     
-    // Фильтрация по специальности
-    if (filteredSpecialty) {
-      filteredData = filteredData.filter(student => student.attributes.specialty === filteredSpecialty);
-    }
-
-    // Фильтрация по курсу
-    if (filteredCourse) {
-      filteredData = filteredData.filter(student => filteredCourse.includes(student.attributes.course));
-    }
-    // filteredData = filteredData.filter(student => student.attributes.course === Number(filteredCourse));
-
-    // Поиск по запросу
-    // Поиск по запросу
-    if (searchQuery) {
-      const searchResults = filteredData.filter(student => 
-        student.attributes.surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        student.attributes.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      filteredData = searchResults;
-    }
-
+    let filteredData = posts.data?.filter((post: any) => {
+      return (
+        post.attributes.worktype.data.attributes.name === 'Проекты' && post.attributes.published &&
+        (filteredPost.length === 0 ||
+          post.attributes.tags.data.some((tag: any) =>
+            filteredPost.includes(tag.attributes.name)
+          )) 
+        &&
+        (checkboxChecked || selectedCategory != '' &&
+          tags.some((tag: any) =>
+            tag.attributes.category.data.attributes.name === selectedCategory &&
+            post.attributes.tags.data.some((postTag: any) =>
+              postTag.attributes.name === tag.attributes.name
+            )
+        )))
+    });
+  
     return filteredData;
-  }, [students, filteredSpecialty, filteredCourse, searchQuery]);
+  }, [posts, filteredPost, categories, tags, selectedCategory, checkboxChecked]);
 
+
+  //фильтр по тэгам
+  const handleTagFilter = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter(t => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+    if (filteredPost.includes(tag)) {
+      setFilteredPost(filteredPost.filter(t => t !== tag));
+    } else {
+      setFilteredPost([...filteredPost, tag]);
+    }
+  };
 
   return (
     <div>
-      <Header />
-
-      <div className="flex justify-between px-11 pt-16 pb-12 flex-wrap gap-5 lg:flex-nowrap max-sm:p-6 max-sm:pt-11">
-        <Search setSearchQuery={setSearchQuery} />
-        
-        <div className='flex flex-wrap flex-auto justify-between items-end gap-10 sm:flex-nowrap'>
-          <Checkbox updateFilteredCourse={setFilteredCourse} />
-          <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
-        </div>
+      <Header /> 
+      <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pb-5 max-sm:pt-10 max-sm:space-y-5 max-lg:space-y-10'>
+        <SliderWithCheckbox 
+          values={categories} 
+          setSelectedCategory={setSelectedCategory} 
+          checkboxChecked={checkboxChecked}
+          setCheckboxChecked={setCheckboxChecked}
+        />
+        <Tags
+          tags={filteredTags}
+          filteredPost={filteredPost}
+          handleTagFilter={handleTagFilter}
+          selectedTags={selectedTags}
+        />
       </div>
-
-      <div className='px-11 max-sm:p-6 max-sm:pt-11'>
-        <Suspense fallback={<Loading />}>
-          <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} type={'all'}/>
-        </Suspense>
-      </div> 
+      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
+        {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
+          return (
+            <Suspense fallback={<Loading />} key={post.id}>
+              <ImagePost 
+                href={`/portfolio/${post.attributes.student?.data?.id}/post/${post.id}`}
+                studentId={post.attributes.student.data.id}
+                postId={post.id}
+                photo={post?.attributes?.photo?.data?.attributes?.url}
+                title={post.attributes.title}
+              />
+            </Suspense>
+          )
+        })}
+      </div>
     </div>
   );
 }

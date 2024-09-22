@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@200;300;400;500;600;700;800&display=swap');
 
 
@@ -10,17 +12,9 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-/* @media () {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-} */
-
-body > * {
-  max-width: 1440px;
+body  {
   margin: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 h2{
@@ -29,13 +23,18 @@ h2{
 ::-webkit-scrollbar {
   width: 0;
 }
-/* table th {
-  font-family: ;
-} */
 
 .titlePost {
   font-family: 'Mukta Mahee', sans-serif;
-  font-weight: 400;
+}
+
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.montserrat_regular {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
 }
 
 @layer utilities {
@@ -43,3 +42,5 @@ h2{
     text-wrap: balance;
   }
 }
+
+
