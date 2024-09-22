@@ -20,7 +20,6 @@ export default function MyProfilePage() {
     
 
     useEffect(() => {
-        console.log('MyProfilePage', user)
         const savedCategory = localStorage.getItem('selectedCategory');
 
         if (savedCategory) {

@@ -47,8 +47,6 @@ const ModalRegister = ({
             setError('Пользователь с таким email уже существует.');
         }
         else if (!isValidEmail(data.email)) {
-            console.log(data)
-            console.log(!isValidEmail(data.email))
             setError('Пожалуйста, введите настоящий email.');
         }
         
@@ -66,7 +64,6 @@ const ModalRegister = ({
                         password: data.password
                     }),
                 });
-                console.log(response)
                 if (response.error) {
                     console.error('Error:', response.error);
                     return;

@@ -54,8 +54,6 @@ export default function EditPostPage() {
         }
         if (post?.attributes.tags) {
             const selectTags = post.attributes.tags.data.map((tags: { id: number }) => tags.id);
-            console.log(post.attributes.tags.data)
-            console.log(selectTags)
             setSelectedTags(selectTags);
         }
     }, [post]);
