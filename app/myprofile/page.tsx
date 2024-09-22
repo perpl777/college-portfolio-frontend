@@ -19,11 +19,11 @@ export default function MyProfilePage() {
 
     useEffect(() => {
         const savedCategory = localStorage.getItem('selectedCategory');
-       const savedIndex = localStorage.getItem('activeButtonIndex');
+        const savedIndex = localStorage.getItem('activeButtonIndex');
 
-       if (savedCategory) {
-           setSelectedBtn(savedCategory);
-       }
+        if (savedCategory) {
+            setSelectedBtn(savedCategory);
+        }
     }, []);
 
     if (loading) {

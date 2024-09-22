@@ -19,7 +19,8 @@ export default function BtnAddPost({id, user, setError, checkProfile}: Props) {
             setError('error')
         }
         else {
-            window.location.href = `/myprofile/add-post/${user?.student.id}`
+            window.location.href = `/myprofile/add-post/`
+            // window.location.href = `/myprofile/add-post/${user?.student.id}`
         }
     }
 
