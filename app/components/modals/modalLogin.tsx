@@ -28,10 +28,8 @@ const ModalLogin = ({
     openModalLogin, 
     handleCloseModalLogin, 
     handleOpenModalRegister, 
-    handleOpenModalRecovery
+    // handleOpenModalRecovery
 }: ModalProps) => {
-
-
     const [error, setError] = useState<string | undefined>(undefined);
     const [data, setData] = useState(
         {
@@ -41,7 +39,6 @@ const ModalLogin = ({
     )
     const [userName, setUserName] = useState<UserProps>();
     
-
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
