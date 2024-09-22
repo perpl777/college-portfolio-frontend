@@ -118,32 +118,35 @@ export default function ModerationPage() {
         fetchData();   
     }, []);
 
-    const filteredStudents = useMemo(() => {
+    const filteredStudentsBySpecialization = useMemo(() => {
         if (!students) return [];
-
-        let filteredData = students.data?.filter((student: any) => { 
-            return (student.attributes.published === false)
-        });
-
+        let filteredData = students.data;
         if (filteredSpecialty) {
             filteredData = filteredData?.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
         }
+        return filteredData;
+    }, [students, filteredSpecialty]);
 
+    const filteredStudents = useMemo(() => {
+        if (!students) return [];
+        let filteredData = students.data?.filter((student: any) => { 
+            return (student.attributes.published === false)
+        });
+        if (filteredSpecialty) {
+            filteredData = filteredData?.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
+        }
         return filteredData;
     }, [students, filteredSpecialty]);
 
     const filteredStudentIds = useMemo(() => (
-        filteredStudents?.map(student => student.id)
-    ), [filteredStudents]);
+        filteredStudentsBySpecialization?.map(student => student.id)
+    ), [filteredStudentsBySpecialization]);
     
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
-    
-        let filteredData = posts.data?.filter(post => {
-            return filteredStudentIds?.includes(post.attributes.student.data.id);
+        return posts.data?.filter((post: any) => {
+            return post.attributes.published === false && filteredStudentIds?.includes(post.attributes.student.data.id);
         });
-    
-        return filteredData;
     }, [posts, filteredStudentIds]);
     
     const handleCategoryClick = (index: number, value: string) => {

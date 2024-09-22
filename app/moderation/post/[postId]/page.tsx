@@ -28,7 +28,7 @@ interface DataPosts {
         photo: any,
         file: any,
         background: boolean,
-        published: boolean,
+        published?: boolean,
         publishedAt: string,
         student: {
             data: {
@@ -138,7 +138,7 @@ export default function Post({ params: {postId}}: Props) {
 
     const handleRejectPost = async () => {
         if (post?.attributes.student.data.attributes.published === false) {
-            setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
+            setError('Сначала проверьте профиль автора')
         }
         else {
             try {
@@ -168,7 +168,7 @@ export default function Post({ params: {postId}}: Props) {
 
     const handlePublishPost = async () => {
         if (post?.attributes.student.data.attributes.published === false) {
-            setError('Профиль автора неактивен. Сначала проверьте профиль автора поста')
+            setError('Сначала проверьте профиль автора')
         }
         else {
             try {

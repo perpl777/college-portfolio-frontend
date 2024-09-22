@@ -1,5 +1,7 @@
 'use client'
+import axios from 'axios';
 import { useState } from 'react';
+import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
 
 import ArrowIcon from '@/public/Arrow.svg'
@@ -14,18 +16,37 @@ import InputTags from '@/app/components/form-inputs/form-inputs-post/input-tags'
 import InputFile from '@/app/components/form-inputs/form-inputs-post/input-file';
 import CheckDiploma from '@/app/components/form-inputs/form-inputs-post/checkDiploma';
 import Header from '@/app/components/header';
-import type { DataStudent } from '../components/interfaces'
-import { isLengthValid, isNotEmpty, isValidURL } from '@/lib/utils/validationUtils';
+
+import { isNotEmpty, isLengthValid } from '@/lib/utils/validationUtils'
 import ErrorMess from '@/app/components/errorMess';
-import { useUser } from '../components/context';
 
 
-export default function AddPostPage() {
-    const { id, jwt } = useUser();
+interface DataStudent {
+    title: string;
+    description?: string;
+    tags: string;
+    worktype: string;
+    background: boolean;
+    photo?: any;
+    file?: any;
+}
+
+interface Props {
+    params: {
+        studentId: number
+    }
+}
+
+export default function AddPostPage({ params: {studentId}}: Props) {
+
+    const { id } = getAuthData();
+    const { jwt } = getAuthData();
 
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>();
     const [error, setError] = useState<string>('');
+    const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
+    const [formDataFile, setFormDataFile] = useState<FormData | null>(null);
 
     const [formData, setFormData] = useState<DataStudent>({
         title: '',
@@ -33,8 +54,8 @@ export default function AddPostPage() {
         tags: '',
         worktype: '',
         background: false,
-        url_file: '',
-        url_view: null
+        photo: null,
+        file: null
     });
 
     const dataCheck = async () => {
@@ -42,20 +63,13 @@ export default function AddPostPage() {
 
         if (!isNotEmpty(formData.title)) {
             setError('Название не может быть пустым');
-        } else if (!isLengthValid(formData.description, 10, 10000)) {
+        } else if (formData.description && !isLengthValid(formData.description, 10, 10000)) {
             setError('Описание должно содержать больше символов');
-        } else if (!selectedWorktype) {
-            setError('Вы должны выбрать тип работы');
         } else if (selectedTags.length === 0) {
             setError('Теги не могут быть пустым');
         } else if (!selectedWorktype) {
             setError('Вы должны выбрать тип работы');
-        } else if (formData.url_file && !isValidURL(formData.url_file)) {
-            setError('Некорректно загружен файл, попробуйте снова');
-        } else if (!isValidURL(formData.url_view)) {
-            setError('Некорректно загружено фото, попробуйте снова');
         } else {
-            // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
             setError('');
         }
@@ -69,13 +83,33 @@ export default function AddPostPage() {
             [name]: value
         });
         setError('');
-
     };
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
         if (await dataCheck()) {
             try {
+                let uploadedImage;
+                let uploadedFile;
+    
+                if (formDataPhoto) {
+                    const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        });
+                        uploadedImage = responsePhoto.data[0];
+                }
+    
+                if (formDataFile) {
+                    const responseFile = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataFile, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+                    uploadedFile = responseFile.data[0];
+                }
+
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts`, {
                     method: 'POST',
                     headers: {
@@ -85,20 +119,19 @@ export default function AddPostPage() {
                     body: JSON.stringify({
                         data: {
                             published: false,
-                            student: id,
+                            student: studentId,
                             title: formData.title,
-                            description: formData.description,
+                            ...(formData.description && { description: formData.description }),
                             tags: selectedTags,
                             worktype: selectedWorktype,
                             background: formData.background,
-                            url_file: 'https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg',
-                            url_view: "https://college-portfolio.hb.ru-msk.vkcs.cloud/posts/sam-moghadam-khamseh-s8wknXs_O7U-unsplash.jpg"
-                        }
+                            ...(uploadedImage && { photo: uploadedImage }),
+                            ...(uploadedFile && { file: uploadedFile }),
+                        },
                     }),
                 });
-                window.location.href = `/myprofile`;
-            } 
-            catch (error) {
+                window.location.href = `/myprofile/${id}`;
+            } catch (error) {
                 console.error('Error adding student:', error);
             }
         }
@@ -108,7 +141,7 @@ export default function AddPostPage() {
     <div className='pb-10'>
         <Header />
         <div className='px-11 pt-12 pb-5 max-sm:px-6 max-sm:pt-12'>
-            <Link href={`#${id}`} onClick={() => window.history.back()}>
+            <Link href={`#${studentId}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
         </div>
@@ -119,16 +152,16 @@ export default function AddPostPage() {
                     <Textarea placeholder='Описание..' name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
                     <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile />
+                    <InputFile setFormDataFile={setFormDataFile} />
                 </div>
                 <div className='h-96 max-sm:h-64'>
-                    <InputPhoto />
+                <InputPhoto setFormDataPhoto={setFormDataPhoto} />
                     <div className='flex justify-end my-5'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-col items-end  max-md:items-center'>
+            <div className='w-full flex flex-col items-end pt-20 max-md:pt-32 max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
                     {error != '' && <ErrorMess text={error}/>}
                 </div>

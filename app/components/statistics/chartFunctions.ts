@@ -50,7 +50,7 @@ export const generateChartData = (students: Student[], period: Period): ChartDat
     labels,
     datasets: [
       {
-        label: 'Количество постов всех студентов',
+        label: '',
         data,
         backgroundColor: 'rgba(100, 150, 200, 0.8)',
         borderColor: 'rgba(100, 150, 200, 0.8)',

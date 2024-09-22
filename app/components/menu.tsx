@@ -156,7 +156,7 @@ const Menu: React.FC<MenuProps> = ({ setMenuShow, HandleMenuAppirance }) => {
                         {user ? (
                             <>
                                 { userName?.role.name === "Authenticated" &&
-                                    <Link href={`/myprofile`}>
+                                    <Link href={`/myprofile/${id}`}>
                                         <span className={"menu-nav-elenemt hover:text-gray-400"}>Профиль</span>
                                     </Link>
                                 }

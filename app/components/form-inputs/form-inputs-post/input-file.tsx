@@ -6,10 +6,11 @@ import { isValidFileSize } from '@/lib/utils/validationUtils'
 
 
 interface Props {
-    setFormDataFile: any
+    setFormDataFile: any;
+    existingFile: any;
 }
 
-export default function InputFile({ setFormDataFile }: Props ) {
+export default function InputFile({ setFormDataFile, existingFile }: Props ) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [blobFile, setBlobFile] = useState<File | null>(null);
@@ -50,11 +51,21 @@ export default function InputFile({ setFormDataFile }: Props ) {
                 >
                     Выбрать файл
                 </button>
-                <Link href={blobFile ? URL.createObjectURL(blobFile) : ''} target='_blank' className="rounded-r-xl px-3 flex items-center w-1/2">
+                <Link
+                    href={blobFile ? URL.createObjectURL(blobFile) : ''}
+                    target='_blank'
+                    className="rounded-r-xl px-3 flex items-center w-1/2"
+                >
                     <button
                         onClick={handleClickFile}
                         className='overflow-hidden whitespace-nowrap text-ellipsis w-11/12 cursor-pointer outline-none text-gray-600 text-sm'>                    
-                        {blobFile ? <p>{blobFile.name}</p> : 'Файл не выбран'}
+                        {existingFile ? (
+                            <p>{existingFile}</p>
+                        ) : blobFile ? (
+                            <p>{blobFile.name}</p>
+                        ) : (
+                            <p>Файл не выбран</p>
+                        )}
                     </button>
                 </Link>
                 <input

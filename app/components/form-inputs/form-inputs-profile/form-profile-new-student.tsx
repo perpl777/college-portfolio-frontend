@@ -69,11 +69,14 @@ export default function FormProfileNewStudent() {
             setError('Курс должен быть от 1 до 4');
         } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
             setError('Специализация не может быть пустой');
-        } else if (formData.about_info && !isLengthValid(formData.about_info, 10, 500)) {
+        } else if (!isLengthValid(formData.about_info, 10, 500)) {
             setError('Информация о себе должна содержать от 10 до 500 символов');
         } else if (selectedTechnologies.length === 0) {
             setError('Технологии не могут быть пустыми');
-        } else {
+        } else if (!formDataPhoto) {
+            setError('Фотография обязательна');
+        }
+        else {
             // Проверяем доступность URL
             const urlsToCheck = {
                 github: formData.url_github,
@@ -82,7 +85,6 @@ export default function FormProfileNewStudent() {
             };
             
             const results = checkUrls(urlsToCheck.github, urlsToCheck.behance, urlsToCheck.vk);
-
             
             if (!results.github || !results.behance || !results.vk) {
                 let errorMessages = [];
@@ -93,8 +95,6 @@ export default function FormProfileNewStudent() {
                 setError(`Некорректная ссылка для: ${errorMessages.join(', ')}`);
                 return;
             }
-            
-            // Если все проверки пройдены успешно, сбрасываем ошибку
             setError('');
         }
     }
@@ -112,13 +112,15 @@ export default function FormProfileNewStudent() {
         event.preventDefault()
         dataCheck()
         try {
-            const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-        
-            const uploadedImage = responsePhoto.data[0];
+            let uploadedImage;
+            if (formDataPhoto) {
+                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                uploadedImage = responsePhoto.data[0];
+            }
 
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students`, {
                 method: 'POST',
@@ -132,19 +134,19 @@ export default function FormProfileNewStudent() {
                         user: id,
                         surname: formData.surname,
                         name: formData.name,
-                        patronymic: formData.patronymic,
                         course: selectedCourse,
                         specialization: selectedSpecialization,
                         about_info: formData.about_info,
                         technologies: selectedTechnologies,
-                        url_github: formData.url_github,
-                        url_behance: formData.url_behance,
-                        url_vk: formData.url_vk,
-                        photo: uploadedImage
+                        ...(formData.url_github && { url_github: formData.url_github }),
+                        ...(formData.url_behance && { url_behance: formData.url_behance }),
+                        ...(formData.url_vk && { url_vk: formData.url_vk }),
+                        ...(formData.patronymic && { patronymic: formData.patronymic }),
+                        ...(uploadedImage && { photo: uploadedImage })
                     }
                 }),
             });
-            window.location.href = `/myprofile`;
+            window.location.href = `/myprofile/${id}`;
         } 
         catch (error) {
             console.error('Error adding student:', error);

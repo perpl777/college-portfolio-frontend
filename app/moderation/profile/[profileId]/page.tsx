@@ -28,7 +28,7 @@ interface DataStudent {
         name: string,
         course: number,
         about_info: string,
-        published: boolean,
+        published?: boolean,
         technologies: {
             data: {
                 attributes: {
@@ -125,15 +125,15 @@ export default function Profile({ params: {profileId}}: Props) {
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${jwt}`,
-                },
                 body: JSON.stringify({
                     data: {
                         published: null
                     }
                 }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwt}`,
+                },
             });
             if (response.error) {
                 console.error('Error:', response.error);

@@ -65,7 +65,15 @@ interface DataStudent {
     url_github?: string;
     url_behance?: string;
     url_vk?: string;
-    photo: any;
+    photo?: {
+        data: {
+            id: number;
+            attributes: {
+                name: string;
+                url: string
+            }
+        }
+    }
     published: boolean;
 }
 
@@ -118,7 +126,6 @@ export default function FormProfileEditStudent({studentId}: Props) {
         } else if (selectedTechnologies.length === 0) {
             setError('Технологии не могут быть пустыми');
         } else {
-            // Проверяем доступность URL
             const urlsToCheck = {
                 github: formData.url_github,
                 behance: formData.url_behance,
@@ -136,16 +143,12 @@ export default function FormProfileEditStudent({studentId}: Props) {
                 setError(`Некорректная ссылка для: ${errorMessages.join(', ')}`);
                 return;
             }
-            
-            // Если все проверки пройдены успешно, сбрасываем ошибку
             dataOk = true
             setError('');
         }
         return dataOk
     }
 
-
-     //фетч
     useEffect(() => {     
         const fetchData = async () => {       
             const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}?populate=*`);
@@ -181,13 +184,15 @@ export default function FormProfileEditStudent({studentId}: Props) {
         event.preventDefault();
         if (await dataCheck()) {
             try {
-                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-            
-                const uploadedImage = responsePhoto.data[0];
+                let uploadedImage;
+                if (formDataPhoto) {
+                    const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+                    uploadedImage = responsePhoto.data[0];
+                }
 
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}`, {
                     method: 'PUT', 
@@ -209,18 +214,17 @@ export default function FormProfileEditStudent({studentId}: Props) {
                             url_github: formData.url_github || student?.attributes.url_github,
                             url_behance: formData.url_behance || student?.attributes.url_behance,
                             url_vk: formData.url_vk || student?.attributes.url_vk,
-                            photo: uploadedImage || student?.attributes.photo,
+                            ...(uploadedImage && { photo: uploadedImage })
                         }
                     }),
                 });
-                window.location.href = `/myprofile`;
+                window.location.href = `/myprofile/${id}`;
             } 
             catch (error) {
                 console.error('Error:', error);
             }
         }
     };
-
 
     return (
     <div>
@@ -237,7 +241,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                     </div>
                 </div>
                 <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
-                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
+                <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={student?.attributes.photo?.data?.attributes?.url} />
                 </div>
             </div>
 
@@ -252,15 +256,15 @@ export default function FormProfileEditStudent({studentId}: Props) {
             </div>
 
             <p className='pb-12 pt-9 max-sm:py-7'>Статус:  
-            {student?.attributes.published === false &&
-                <span className='text-yellow-500 pl-2'>На рассмотрении</span> 
-            }
-            {student?.attributes.published === null && 
-                <span className='text-blue-900 pl-2'>Отклонен</span>
-            }
-            {student?.attributes.published &&
-                <span className='text-green-900 pl-2'>Опубликован</span> 
-            }
+                {student?.attributes.published === false &&
+                    <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
+                }
+                {student?.attributes.published === null && 
+                    <span className='text-blue-900 pl-2'>Отклонен</span>
+                }
+                {student?.attributes.published &&
+                    <span className='text-green-900 pl-2'>Опубликован</span> 
+                }
             </p>
             <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
