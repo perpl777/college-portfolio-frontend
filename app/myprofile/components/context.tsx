@@ -24,16 +24,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('контекст юзэффект',user)
+
     const fetchData = async () => {
+      console.log('контекст fetchData',user)
+
         const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
         setUser(userDataResponse);
             
-        setUserRole(userDataResponse.role.name);
+        setUserRole(userDataResponse?.role?.name);
         setLoading(false);
     };
 
     fetchData();
-  }, [id]);
+  }, [id, user]);
 
   return (
     <UserContext.Provider value={{ id, jwt, user, role, loading }}>

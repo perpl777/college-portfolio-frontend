@@ -17,8 +17,10 @@ export default function MyProfilePage() {
         setSelectedBtn(value);
         localStorage.setItem('selectedCategory', value)
     };
+    
 
     useEffect(() => {
+        console.log('MyProfilePage', user)
         const savedCategory = localStorage.getItem('selectedCategory');
 
         if (savedCategory) {
@@ -28,10 +30,6 @@ export default function MyProfilePage() {
 
     if (loading) {
         return <Suspense />;
-    }
-
-    if (!user) {
-        return <div>Ошибка сервера, попробуйте перезайти на аккаунт</div>;
     }
 
 

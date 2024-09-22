@@ -4,6 +4,7 @@ import { fetcher } from '@/lib/api';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
+import { getAuthData, setAuthData } from "@/lib/auth";
 
 
 interface ModalProps {
@@ -42,12 +43,15 @@ const ModalRegister = ({
             setError('Пароль должен содержать не менее 6 символов и хотя бы одну заглавную букву.');
         }
           // Проверка настоящего email
-        else if (!isValidEmail(data.email)) {
-            setError('Пожалуйста, введите настоящий email.');
-        }
         else if (response.length !== 0) {
             setError('Пользователь с таким email уже существует.');
         }
+        else if (!isValidEmail(data.email)) {
+            console.log(data)
+            console.log(!isValidEmail(data.email))
+            setError('Пожалуйста, введите настоящий email.');
+        }
+        
 
         else {
             try {
@@ -62,11 +66,16 @@ const ModalRegister = ({
                         password: data.password
                     }),
                 });
+                console.log(response)
                 if (response.error) {
                     console.error('Error:', response.error);
                     return;
                 }
-                window.location.href = '/myprofile';
+                else {
+                    // Установить данные авторизации
+                    setAuthData(response);
+                    window.location.href = '/myprofile';
+                }
             }
             catch (error) {
                 console.error('Error:', error);
@@ -129,3 +138,7 @@ const ModalRegister = ({
 };
 
 export default ModalRegister;
+
+function setUserName(userDataResponse: any) {
+    throw new Error("Function not implemented.");
+}
