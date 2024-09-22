@@ -1,10 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
-
 import { getAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
-
 import Header from "../../components/header";
 import Navbar from '../../components/navbar';
 import MyProfile from '../../components/students/my-profile';
@@ -63,12 +61,12 @@ export default function MyProfilePage({ params: { userId } }: Props) {
             { user && 
             <>
                 { userRole?.role.name === "Authenticated" &&
-                    <div className='space-y-12 max-sm:space-y-8'>
+                    <div className='space-y-14 max-sm:space-y-10'>
                         <Header />
-                        <div className='px-11 flex justify-end max-sm:px-6'>
+                        <div className='px-11 flex justify-end max-sm:px-4'>
                             <Navbar values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
                         </div>
-                        <div className='px-11 max-sm:px-6 pb-24'>
+                        <div className='px-11 max-sm:px-4 pb-24'>
                             { selectedBtn === 'Профиль' &&
                                 <MyProfile />
                             }

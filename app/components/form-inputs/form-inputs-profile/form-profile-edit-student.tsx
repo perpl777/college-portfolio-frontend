@@ -1,8 +1,9 @@
 'use client'
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
+import Loading from '@/app/loading'
 
 import GithubIcon from '@/public/contacts-icons/bxl-github 2.svg'
 import VkIcon from '@/public/contacts-icons/bxl-vk 2.svg'
@@ -105,11 +106,10 @@ export default function FormProfileEditStudent({studentId}: Props) {
         url_github: '',
         url_behance: '',
         url_vk: '',
-        photo: null,
+        photo: undefined,
         published: false
     });
 
-    
     const dataCheck = async () => {
         let dataOk = false
 
@@ -228,55 +228,57 @@ export default function FormProfileEditStudent({studentId}: Props) {
 
     return (
     <div>
-        <form onSubmit={handleSubmit}>
-            <div className='grid grid-cols-2 gap-16 max-lg:grid-cols-1'>
-                <div className='space-y-10'>
-                    <InputText placeholder={student?.attributes.surname ? student?.attributes.surname : 'Фамилия..'} name={'surname'} value={formData.surname} onChange={(e: any) => handleInputChange(e)}/>
-                    <InputText placeholder={student?.attributes.name ? student?.attributes.name :  'Имя..'} name={'name'} value={formData.name} onChange={(e: any) => handleInputChange(e)}/>
-                    <InputText placeholder={student?.attributes.patronymic ? student?.attributes.patronymic :  'Отчество..'} name={'patronymic'}  value={formData.patronymic} onChange={(e: any) => handleInputChange(e)}/>
-                    <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
-                    <div className='flex gap-8 max-sm:flex-col'>
-                        <InputSpecializations selectedSpecialization={selectedSpecialization} setSelectedSpecialization={setSelectedSpecialization} />
-                        <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
+        <Suspense fallback={<Loading />}>
+            <form onSubmit={handleSubmit}>
+                <div className='grid grid-cols-2 gap-14 max-lg:grid-cols-1'>
+                    <div className='space-y-10'>
+                            <InputText placeholder={student?.attributes.surname ? student?.attributes.surname : 'Фамилия..'} name={'surname'} value={formData.surname} onChange={(e: any) => handleInputChange(e)}/>
+                            <InputText placeholder={student?.attributes.name ? student?.attributes.name :  'Имя..'} name={'name'} value={formData.name} onChange={(e: any) => handleInputChange(e)}/>
+                            <InputText placeholder={student?.attributes.patronymic ? student?.attributes.patronymic :  'Отчество..'} name={'patronymic'}  value={formData.patronymic} onChange={(e: any) => handleInputChange(e)}/>
+                            <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
+                            <div className='flex gap-8 max-sm:flex-col'>
+                                <InputSpecializations selectedSpecialization={selectedSpecialization} setSelectedSpecialization={setSelectedSpecialization} />
+                                <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
+                            </div>
+                    </div>
+                    <div className='h-96 mb-10 flex justify-center max-sm:h-64'>
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={student?.attributes.photo?.data?.attributes?.url} />
                     </div>
                 </div>
-                <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
-                <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={student?.attributes.photo?.data?.attributes?.url} />
+
+                <div className='pt-16'>
+                    <Textarea placeholder={student?.attributes.about_info ? student?.attributes.about_info :  'О себе..'} name={'about_info'} required={true} value={formData.about_info} onChange={(e: any) => handleInputChange(e)}/>
                 </div>
-            </div>
 
-            <div className='pt-14'>
-                <Textarea placeholder={student?.attributes.about_info ? student?.attributes.about_info :  'О себе..'} name={'about_info'} required={true} value={formData.about_info} onChange={(e: any) => handleInputChange(e)}/>
-            </div>
-
-            <div className='pt-6'>
-                <InputContacts srcImage={BehanceIcon} placeholder={student?.attributes.url_behance ? student?.attributes.url_behance : 'Ссылка на Behance..'} name='url_behance' value={formData.url_behance} onChange={(e: any) => handleInputChange(e)}/>
-                <InputContacts srcImage={GithubIcon} placeholder={student?.attributes.url_github ? student?.attributes.url_github : 'Ссылка на Github..'} name='url_github' value={formData.url_github} onChange={(e: any) => handleInputChange(e)}/>
-                <InputContacts srcImage={VkIcon} placeholder={student?.attributes.url_vk ? student?.attributes.url_vk : 'Ссылка на Vk..'} name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>
-            </div>
-
-            <p className='pb-12 pt-9 max-sm:py-7'>Статус:  
-                {student?.attributes.published === false &&
-                    <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
-                }
-                {student?.attributes.published === null && 
-                    <span className='text-blue-900 pl-2'>Отклонен</span>
-                }
-                {student?.attributes.published &&
-                    <span className='text-green-900 pl-2'>Опубликован</span> 
-                }
-            </p>
-            <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
-                <div className='w-72 max-sm:w-full'>
-                    {error != '' && <ErrorMess text={error}/>}
+                <div className='pt-2'>
+                    <InputContacts srcImage={BehanceIcon} placeholder={student?.attributes.url_behance ? student?.attributes.url_behance : 'Ссылка на Behance..'} name='url_behance' value={formData.url_behance} onChange={(e: any) => handleInputChange(e)}/>
+                    <InputContacts srcImage={GithubIcon} placeholder={student?.attributes.url_github ? student?.attributes.url_github : 'Ссылка на Github..'} name='url_github' value={formData.url_github} onChange={(e: any) => handleInputChange(e)}/>
+                    <InputContacts srcImage={VkIcon} placeholder={student?.attributes.url_vk ? student?.attributes.url_vk : 'Ссылка на Vk..'} name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>
                 </div>
-                <button 
-                    type='submit'
-                    className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
-                        Сохранить
-                </button>
-            </div>
-        </form>
+
+                <p className='max-sm:pb-6s pt-9 max-sm:py-7'>Статус:  
+                    {student?.attributes.published === false &&
+                        <span className='text-yellow-700 pl-2'>Проверяется</span> 
+                    }
+                    {student?.attributes.published === null && 
+                        <span className='text-blue-800 pl-2'>Отклонен</span>
+                    }
+                    {student?.attributes.published &&
+                        <span className='text-green-700 pl-2'>Опубликован</span> 
+                    }
+                </p>
+                <div className='w-full flex flex-col items-end pt-2 max-md:pt-6 max-md:items-center'>
+                    <div className='w-72 max-sm:w-full'>
+                        {error != '' && <ErrorMess text={error}/>}
+                    </div>
+                    <button 
+                        type='submit'
+                        className=" w-72 h-14 max-sm:w-full font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                            Сохранить
+                    </button>
+                </div>
+            </form>
+        </Suspense>
     </div>
     );
 }

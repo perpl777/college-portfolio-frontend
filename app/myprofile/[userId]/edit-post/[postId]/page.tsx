@@ -184,7 +184,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
             </Link>
         </div>
         <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
-            <div className='grid grid-cols-2 gap-16 max-lg:grid-cols-1'>
+            <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
                 <div className='space-y-10'>
                     <InputText placeholder={post?.attributes.title ? post?.attributes.title : 'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
                     <Textarea placeholder={post?.attributes.description ? post?.attributes.description : 'Описание..'} name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
@@ -194,26 +194,26 @@ export default function EditPostPage({ params: {postId}}: Props) {
                 </div>
                 <div className='h-96 max-sm:h-64'>
                     <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={post?.attributes.photo?.data?.attributes?.url} />
-                    <div className='flex justify-end my-5'>
+                    <div className='flex justify-end my-2'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>
                 </div>
             </div>
-            <p className='pt-16 max-sm:pt-32'>Статус:  
+            <p className='pt-16 max-sm:pt-40'>Статус:  
                 {post?.attributes.published === false &&
                     <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
                 }
                 {post?.attributes.published === null && 
-                    <span className='text-blue-900 pl-2'>Отклонен</span>
+                    <span className='text-blue-800 pl-2'>Отклонен</span>
                 }
                 {post?.attributes.published &&
-                    <span className='text-green-900 pl-2'>Опубликован</span> 
+                    <span className='text-green-700 pl-2'>Опубликован</span> 
                 }
             </p>
-            <div className='w-full flex justify-end pt-12  max-md:justify-center'>
+            <div className='w-full flex justify-end max-sm:pt-10 max-md:justify-center'>
                 <button 
                     type='submit'
-                    className=" w-72  h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                    className=" w-72 max-sm:w-full h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
                         Сохранить
                 </button>
             </div>

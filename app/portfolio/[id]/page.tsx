@@ -181,7 +181,7 @@ export default function Portfolio({ params: { id } }: Props) {
             <div className="flex flex-col">
                 <Header />
                 
-                <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-6">
+                <div className="pt-20 max-lg:m-auto p-11 max-lg:pt-11 max-lg:px-4">
                     {student &&
                         <StudentCard 
                             surname={student.attributes?.surname}
@@ -197,13 +197,13 @@ export default function Portfolio({ params: { id } }: Props) {
                     }
                 </div>
 
-                <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-8">
+                <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-2 max-lg:pb-10">
                     <div className='w-4/6 max-[480px]:w-10/12 text-overflow-ellipsis'>
                         {student?.attributes?.about_info}
                     </div>
                 </div>
 
-                <div className="flex max-lg:flex-col justify-between px-11 pb-4 max-sm:pb-1 max-sm:px-4">
+                <div className="flex max-lg:flex-col justify-between px-11 pb-4 max-sm:pb-8 max-sm:px-4">
                     <SliderWithCheckbox values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
                     <Search setSearchQuery={setSearchQuery} placeholder='Поиск по тегам'></Search>
                 </div>

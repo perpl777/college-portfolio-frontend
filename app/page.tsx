@@ -176,7 +176,7 @@ export default function Home() {
   return (
     <div>
       <Header /> 
-      <div className='px-11 pt-12 pb-12 space-y-10 max-sm:p-6 max-sm:pb-5 max-sm:pt-10 max-sm:space-y-5 max-lg:space-y-10'>
+      <div className='px-11 pt-12 pb-12 space-y-9 max-sm:p-4 max-sm:pb-5 max-sm:pt-8 max-sm:space-y-4 max-lg:space-y-10'>
         <SliderWithCheckbox 
           values={categories} 
           setSelectedCategory={setSelectedCategory} 
@@ -190,7 +190,7 @@ export default function Home() {
           selectedTags={selectedTags}
         />
       </div>
-      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-6 max-xl:grid-cols-2 max-sm:grid-cols-1'>
+      <div className='px-11 pb-10 grid grid-cols-3 gap-4 max-sm:gap-6 max-sm:p-4 max-xl:grid-cols-2 max-sm:grid-cols-1'>
         {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post: any) => {
           return (
             <Suspense fallback={<Loading />} key={post.id}>

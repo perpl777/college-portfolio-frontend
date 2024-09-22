@@ -66,15 +66,19 @@ const ImagePost = ({ href, studentId, postId, photo, title }: DataPost) => {
             <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 {photo ? (
                 <div className='cursor-pointer'>
-                    <Image  src={blob ? URL.createObjectURL(blob) : ''} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                    {blob ? (
+                        <Image src={URL.createObjectURL(blob)} alt="image" className="relative bg-slate-200 object-cover aspect-square w-full" width={500} height={500} quality={75} />
+                    ) : (
+                        <div className="cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50"/>
+                    )}
                     <div ref={divRef} className='bg-white bg-opacity-70 backdrop-blur-sm w-full absolute bottom-0 items-center'>
-                    <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
+                        <p className='text-3xl titlePost uppercase py-5 px-7 max-lg:text-2xl'>{title}</p>
                     </div>
                 </div>
                 ) : (
                 <div className='cursor-pointer border border-gray-400 rounded-sm aspect-square w-full transition-colors hover:bg-gray-200/50'>
                     <div className='w-full absolute bottom-0 items-center'>
-                    <p className='text-3xl titlePost uppercase py-6 px-6 max-lg:text-2xl'>{title}</p>
+                        <p className='text-3xl titlePost uppercase py-6 px-6 max-lg:text-2xl'>{title}</p>
                     </div>
                 </div>
                 )}

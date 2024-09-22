@@ -28,15 +28,15 @@ export default function PostPage({postId, title, description, publishedAt, workt
                 padding-bottom: 4rem;
                 color: #0e7490;
             " target="_blank" rel="noopener noreferrer">${url}</a>`);
-      }
+    }
 
     return (
-        <div className='px-11 my-10 flex flex-col justify-between gap-8 max-sm:p-7 max-sm:my-2'>
+        <div className='px-11 my-12 flex flex-col justify-between gap-6 max-sm:p-4 max-sm:my-4'>
             <Link href={`#${postId}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
 
-            <div className='flex justify-between'>
+            <div className='flex justify-between pt-4 max-sm:pt-0'>
                 <p className='text-sm uppercase'>{worktype}</p>
                 <p className='text-sm opacity-50'>@{publishedAt.slice(0, 4)}</p>
             </div>
