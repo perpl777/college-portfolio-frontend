@@ -1,6 +1,6 @@
 
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 
 import Header from "../components/header";
 import Navbar from '../components/navbar';
@@ -15,11 +15,11 @@ export default function MyProfilePage() {
     const values = ['Активность', 'Профиль', 'Работы'];
     const handleCategoryClick = (value: string) => {
         setSelectedBtn(value);
+        localStorage.setItem('selectedCategory', value)
     };
 
     useEffect(() => {
         const savedCategory = localStorage.getItem('selectedCategory');
-        const savedIndex = localStorage.getItem('activeButtonIndex');
 
         if (savedCategory) {
             setSelectedBtn(savedCategory);
@@ -27,7 +27,7 @@ export default function MyProfilePage() {
     }, []);
 
     if (loading) {
-        return <div>Загрузка...</div>; // Простое сообщение о загрузке
+        return <Suspense />;
     }
 
     if (!user) {
