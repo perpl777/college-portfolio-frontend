@@ -146,28 +146,28 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             </Link>
         </div>
         <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
-            <div className='grid grid-cols-2 gap-16 max-lg:grid-cols-1'>
+            <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
                 <div className='space-y-10'>
                     <InputText placeholder={'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
                     <Textarea placeholder='Описание..' name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
                     <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
                     <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile setFormDataFile={setFormDataFile} />
+                    <InputFile setFormDataFile={setFormDataFile} existingFile={null}/>
                 </div>
                 <div className='h-96 max-sm:h-64'>
-                <InputPhoto setFormDataPhoto={setFormDataPhoto} />
-                    <div className='flex justify-end my-5'>
+                <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={null} />
+                    <div className='flex justify-end my-3'>
                         <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-col items-end pt-20 max-md:pt-32 max-md:items-center'>
+            <div className='w-full flex flex-col items-end max-sm:pt-20 max-md:pt-32 max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
                     {error != '' && <ErrorMess text={error}/>}
                 </div>
                 <button 
                     type='submit'
-                    className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                    className=" w-72 h-14 max-sm:mt-16 max-sm:w-full font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
                         Сохранить
                 </button>
             </div>

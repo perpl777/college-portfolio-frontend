@@ -169,11 +169,11 @@ export default function FormProfileNewStudent() {
                     </div>
                 </div>
                 <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
-                    <InputPhoto setFormDataPhoto={setFormDataPhoto} />
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={null} />
                 </div>
             </div>
 
-            <div className='pt-14'>
+            <div className='pt-16'>
                 <Textarea placeholder='О себе..' name={'about_info'} required={true} value={formData.about_info} onChange={(e: any) => handleInputChange(e)}/>
             </div>
 
@@ -183,13 +183,13 @@ export default function FormProfileNewStudent() {
                 <InputContacts srcImage={VkIcon} placeholder='Ссылка на Vk..' name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>
             </div>
 
-            <div className='w-full flex flex-col items-end pt-2 max-md:pt-10 max-md:items-center'>
+            <div className='w-full flex flex-col items-end pt-2 max-md:pt-6 max-md:items-center'>
                 <div className='w-72 max-sm:w-full'>
                     {error != '' && <ErrorMess text={error}/>}
                 </div>
                 <button 
                     type='submit'
-                    className=" w-72 h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                    className=" w-72 h-14 max-sm:w-full font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
                         Сохранить
                 </button>
             </div>
