@@ -6,7 +6,7 @@ import { fetcher } from "@/lib/api"
 
 
 const StatisticsStudent = () => {
-    let [students, setStudents] = useState<Student[]>([]);
+    let [student, setStudent] = useState<Student[]>([]);
     
     // const oneYearAgoISO = new Date();
     // oneYearAgoISO.setFullYear(oneYearAgoISO.getFullYear() - 1);
@@ -17,23 +17,26 @@ const StatisticsStudent = () => {
             try {
                 const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
                 const studentsData = responseStudents.data;
-                setStudents(studentsData);
+                setStudent(studentsData);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
         };
         fetchData();   
     }, []);
+    useEffect(() => {     
+        console.log(student)
+    }, [student]);
 
 return (
     <div className=''>
-        {students ? (
-                <StatisticsChart students={students} />
+        {student ? (
+                <StatisticsChart students={student} />
             ) : (
                 <p>Loading...</p>
             )}
     </div>
-);
+    );
 };
 
 export default StatisticsStudent;

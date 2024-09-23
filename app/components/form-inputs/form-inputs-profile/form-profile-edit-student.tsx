@@ -170,6 +170,9 @@ export default function FormProfileEditStudent({studentId}: Props) {
         }
     }, [student]);
 
+    useEffect(() => {     
+        console.log('selectedTechnologies', selectedTechnologies)
+    }, [selectedTechnologies, setSelectedTechnologies]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
