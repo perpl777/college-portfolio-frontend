@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
 
@@ -19,6 +19,7 @@ import Header from '@/app/components/header';
 
 import { isNotEmpty, isLengthValid } from '@/lib/utils/validationUtils'
 import ErrorMess from '@/app/components/errorMess';
+import Loading from '@/app/loading';
 
 
 interface DataStudent {
@@ -138,40 +139,42 @@ export default function AddPostPage({ params: {studentId}}: Props) {
     };
     
     return (
-    <div className='pb-10'>
-        <Header />
-        <div className='px-11 pt-12 pb-5 max-sm:px-6 max-sm:pt-12'>
-            <Link href={`#${studentId}`} onClick={() => window.history.back()}>
-                <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
-            </Link>
-        </div>
-        <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
-            <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
-                <div className='space-y-10'>
-                    <InputText placeholder={'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
-                    <Textarea placeholder='Описание..' name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
-                    <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
-                    <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                    <InputFile setFormDataFile={setFormDataFile} existingFile={null}/>
-                </div>
-                <div className='h-96 max-sm:h-64'>
-                <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={null} />
-                    <div className='flex justify-end my-3'>
-                        <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
+    <Suspense fallback={<Loading />}>
+        <div className='pb-10'>
+            <Header />
+            <div className='px-11 pt-12 pb-5 max-sm:px-6 max-sm:pt-12'>
+                <Link href={`#${studentId}`} onClick={() => window.history.back()}>
+                    <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
+                </Link>
+            </div>
+            <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
+                <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
+                    <div className='space-y-10'>
+                        <InputText placeholder={'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
+                        <Textarea placeholder='Описание..' name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
+                        <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
+                        <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+                        <InputFile setFormDataFile={setFormDataFile} existingFile={null}/>
+                    </div>
+                    <div className='h-96 max-sm:h-64'>
+                    <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={null} />
+                        <div className='flex justify-end my-3'>
+                            <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className='w-full flex flex-col items-end max-sm:pt-20 max-md:pt-32 max-md:items-center'>
-                <div className='w-72 max-sm:w-full'>
-                    {error != '' && <ErrorMess text={error}/>}
+                <div className='w-full flex flex-col items-end max-sm:pt-20 max-md:pt-32 max-md:items-center'>
+                    <div className='w-72 max-sm:w-full'>
+                        {error != '' && <ErrorMess text={error}/>}
+                    </div>
+                    <button 
+                        type='submit'
+                        className=" w-72 h-14 max-sm:mt-16 max-sm:w-full font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                            Сохранить
+                    </button>
                 </div>
-                <button 
-                    type='submit'
-                    className=" w-72 h-14 max-sm:mt-16 max-sm:w-full font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
-                        Сохранить
-                </button>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    </Suspense>
     );
 }
