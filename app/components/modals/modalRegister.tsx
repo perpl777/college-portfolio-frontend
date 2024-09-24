@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
+import { setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
@@ -66,7 +67,8 @@ const ModalRegister = ({
                     console.error('Error:', response.error);
                     return;
                 }
-                window.location.href = '/myprofile';
+                setAuthData(response);
+                window.location.href = '/';
             }
             catch (error) {
                 console.error('Error:', error);
