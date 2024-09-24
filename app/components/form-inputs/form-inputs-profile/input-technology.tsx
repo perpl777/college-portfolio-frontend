@@ -2,13 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetcher } from '@/lib/api';
 
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 
 
 interface TechnologiesProps {
@@ -44,13 +38,17 @@ export default function InputTechnology({ selectedTechnologies, setSelectedTechn
     }, [selectedTechnologies]);
 
     const handleCheckboxChange = (id: number | string) => {
-        if (selectedTechnologies.includes(id)) {
-            setSelectedTechnologies((prevSelected: number[] | string[]) => prevSelected.filter((techId) => techId !== id));
-        } else {
-            if (selectedTechnologies.length < 4) {
-                setSelectedTechnologies((prevSelected: number[] | string[]) => [...prevSelected, id]);
+        setSelectedTechnologies((prevSelected: (string | number)[]) => {
+            let updatedSelection;
+            if (prevSelected.includes(id)) {
+                updatedSelection = prevSelected.filter((techId) => techId !== id);
+            } else {
+                updatedSelection = [...prevSelected, id];
             }
-        }
+            // Log updated selection to console
+            console.log("Selected Technologies IDs:", updatedSelection);
+            return updatedSelection;
+        });
     };
 
     const handleChange = (event: any) => {

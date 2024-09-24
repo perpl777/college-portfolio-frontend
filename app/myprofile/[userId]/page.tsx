@@ -15,6 +15,7 @@ interface Props {
 
 interface UserRoleProps {
     student: {
+        id: number
         name: string
     }
     role: {
@@ -26,7 +27,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     const { id } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [userRole, setUserRole] = useState<UserRoleProps>();
+    const [userRoleAndStudent, setUserRoleAndStudent] = useState<UserRoleProps>();
 
     const [activeButton, setActiveButton] = useState<number>(2);
     const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
@@ -45,7 +46,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
-            setUserRole(userDataResponse)
+            setUserRoleAndStudent(userDataResponse)
         };
         fetchData();   
     }, []);
@@ -60,7 +61,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
         <>
             { user && 
             <>
-                { userRole?.role.name === "Authenticated" &&
+                { userRoleAndStudent?.role.name === "Authenticated" &&
                     <div className='space-y-14 max-sm:space-y-10'>
                         <Header />
                         <div className='px-11 flex justify-end max-sm:px-4'>
@@ -74,7 +75,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
                                 <div><MyPosts /></div>
                             }
                             { selectedBtn === 'Активность' &&
-                                <div><StatisticsStudent /></div>
+                                <div><StatisticsStudent studentId={userRoleAndStudent.student.id} /></div>
                             }
                         </div>
                     </div>

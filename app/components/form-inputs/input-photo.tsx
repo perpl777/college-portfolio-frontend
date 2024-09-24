@@ -33,9 +33,9 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
         if (!file) {
             return;
         }
-        const isValid = await isValidImageSize(file, 800, 2000, 800, 2000);
+        const isValid = await isValidImageSize(file, 500, 2000, 800, 5000);
         if (!isValid) {
-            setError('Изображение должно быть от 1000х1000 до 2000х2000 пикселей');
+            setError('Изображение должно быть от 500х500 до 5000х5000 пикселей');
             setBlob(null);
         } else {
             setError('');

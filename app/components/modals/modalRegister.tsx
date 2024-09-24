@@ -124,7 +124,7 @@ const ModalLogin = ({
                         <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalRegister}
-                        >У меня нет аккаунта</button>
+                        >У меня есть аккаунт</button>
                     </div>
                 </form>
             </div>

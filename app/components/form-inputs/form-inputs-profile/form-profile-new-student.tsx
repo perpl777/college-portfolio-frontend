@@ -68,7 +68,7 @@ export default function FormProfileNewStudent() {
         } else if (!isInRange(selectedCourse, 1, 4)) {
             setError('Курс должен быть от 1 до 4');
         } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
-            setError('Специализация не может быть пустой');
+            setError('Специальность не может быть пустой');
         } else if (!isLengthValid(formData.about_info, 10, 500)) {
             setError('Информация о себе должна содержать от 10 до 500 символов');
         } else if (selectedTechnologies.length === 0) {
@@ -95,7 +95,15 @@ export default function FormProfileNewStudent() {
                 setError(`Некорректная ссылка для: ${errorMessages.join(', ')}`);
                 return;
             }
+            
             setError('');
+        }
+
+        if (error === '') {
+            return true
+        }
+        else {
+            return false
         }
     }
 
@@ -110,46 +118,50 @@ export default function FormProfileNewStudent() {
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
-        dataCheck()
-        try {
-            let uploadedImage;
-            if (formDataPhoto) {
-                const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+        if(await dataCheck()) {
+            try {
+                let uploadedImage;
+                console.log('uploadedImage')
+                if (formDataPhoto) {
+                    console.log('formDataPhoto')
+                    const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+                    uploadedImage = responsePhoto.data[0];
+                }
+    
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students`, {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`,
                     },
+                    body: JSON.stringify({
+                        data: {
+                            published: false,
+                            user: id,
+                            surname: formData.surname,
+                            name: formData.name,
+                            course: selectedCourse,
+                            specialization: selectedSpecialization,
+                            about_info: formData.about_info,
+                            technologies: selectedTechnologies,
+                            ...(formData.url_github && { url_github: formData.url_github }),
+                            ...(formData.url_behance && { url_behance: formData.url_behance }),
+                            ...(formData.url_vk && { url_vk: formData.url_vk }),
+                            ...(formData.patronymic && { patronymic: formData.patronymic }),
+                            ...(uploadedImage && { photo: uploadedImage })
+                        }
+                    }),
                 });
-                uploadedImage = responsePhoto.data[0];
+                
+                window.location.href = `/myprofile/${id}`;
+            } 
+            catch (error) {
+                console.error('Error adding student:', error);
             }
-
-            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${jwt}`,
-                },
-                body: JSON.stringify({
-                    data: {
-                        published: false,
-                        user: id,
-                        surname: formData.surname,
-                        name: formData.name,
-                        course: selectedCourse,
-                        specialization: selectedSpecialization,
-                        about_info: formData.about_info,
-                        technologies: selectedTechnologies,
-                        ...(formData.url_github && { url_github: formData.url_github }),
-                        ...(formData.url_behance && { url_behance: formData.url_behance }),
-                        ...(formData.url_vk && { url_vk: formData.url_vk }),
-                        ...(formData.patronymic && { patronymic: formData.patronymic }),
-                        ...(uploadedImage && { photo: uploadedImage })
-                    }
-                }),
-            });
-            window.location.href = `/myprofile/${id}`;
-        } 
-        catch (error) {
-            console.error('Error adding student:', error);
         }
     };
 

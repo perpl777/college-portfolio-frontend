@@ -92,7 +92,7 @@ const StatisticsChart: React.FC<StatisticsData> = ({ students }) => {
 			  className='relative'
 			  key={JSON.stringify(chartData)}
 			  data={chartData}
-			  options={{}} // добавьте ваши параметры для графика
+			  options={options} // добавьте ваши параметры для графика
 			/>
 		  </div>
 		</div>
