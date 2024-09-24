@@ -61,6 +61,7 @@ export default function FormProfileNewStudent() {
     });
 
     const dataCheck = async () => {
+        let dataOk = false
         if (!isNotEmpty(formData.surname) || !isLengthValid(formData.surname, 2, 30)) {
             setError('Фамилия не может быть пустой');
         } else if (!isNotEmpty(formData.name) && !isLengthValid(formData.name, 2, 30)) {
@@ -95,16 +96,10 @@ export default function FormProfileNewStudent() {
                 setError(`Некорректная ссылка для: ${errorMessages.join(', ')}`);
                 return;
             }
-            
+            dataOk = true
             setError('');
         }
-
-        if (error === '') {
-            return true
-        }
-        else {
-            return false
-        }
+        return dataOk
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
