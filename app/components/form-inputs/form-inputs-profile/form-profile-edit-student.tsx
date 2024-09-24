@@ -89,7 +89,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
     const { jwt } = getAuthData();
     let [student, setStudent] = useState<OldDataStudent>();
     
-
+    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
     const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes.specialization.data.id ?? 0);
@@ -185,6 +185,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
     
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault();
+        setLoading(true)
         if (await dataCheck()) {
             try {
                 let uploadedImage;
@@ -221,17 +222,26 @@ export default function FormProfileEditStudent({studentId}: Props) {
                         }
                     }),
                 });
-                window.location.href = `/myprofile/${id}`;
+                //window.location.href = `/myprofile/${id}`;
+                window.location.reload();
             } 
             catch (error) {
                 console.error('Error:', error);
             }
+            finally {
+                setLoading(false)
+            }
+        }
+        else {
+            setLoading(false)
         }
     };
 
     return (
     <div>
-        <Suspense fallback={<Loading />}>
+        {loading ? ( 
+            <Loading /> // Компонент загрузки
+        ) : (
             <form onSubmit={handleSubmit}>
                 <div className='grid grid-cols-2 gap-14 max-lg:grid-cols-1'>
                     <div className='space-y-10'>
@@ -281,7 +291,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                     </button>
                 </div>
             </form>
-        </Suspense>
+        )}
     </div>
     );
 }
