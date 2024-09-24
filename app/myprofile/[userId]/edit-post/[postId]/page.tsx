@@ -116,6 +116,10 @@ export default function EditPostPage({ params: {postId}}: Props) {
             const selectedTechIds = post.attributes.tags.data.map((tags: { id: number }) => tags.id);
             setSelectedTags(selectedTechIds);
         }
+        if (post?.attributes.worktype?.data?.id) {
+            const selectedWorktype = post.attributes.worktype.data.id
+            setSelectedWorktype(selectedWorktype);
+        }
     }, [post]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

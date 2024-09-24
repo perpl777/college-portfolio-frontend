@@ -83,6 +83,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             ...formData,
             [name]: value
         });
+
         setError('');
     };
 
@@ -92,6 +93,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
             try {
                 let uploadedImage;
                 let uploadedFile;
+
     
                 if (formDataPhoto) {
                     const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
