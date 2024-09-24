@@ -4,20 +4,18 @@ import StatisticsChart from '@/app/components/statistics/chart';
 import { Student } from '@/app/components/interfaces/statistics';
 import { fetcher } from "@/lib/api"
 
+interface Props {
+    studentId: number;
+}
 
-const StatisticsStudent = () => {
+const StatisticsStudent = ({studentId}: Props) => {
     let [student, setStudent] = useState<Student[]>([]);
-    
-    // const oneYearAgoISO = new Date();
-    // oneYearAgoISO.setFullYear(oneYearAgoISO.getFullYear() - 1);
-
-    //Получение данных из бд
     useEffect(() => {     
         const fetchData = async () => {       
             try {
-                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
+                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}?populate=*`);
                 const studentsData = responseStudents.data;
-                setStudent(studentsData);
+                setStudent([studentsData]);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
