@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { getAuthData } from '@/lib/auth';
 import { fetcher  } from '@/lib/api';
+import Loading from '@/app/loading'
 
 import GithubIcon from '@/public/contacts-icons/bxl-github 2.svg'
 import VkIcon from '@/public/contacts-icons/bxl-vk 2.svg'
