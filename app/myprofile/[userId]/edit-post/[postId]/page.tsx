@@ -88,6 +88,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
     const { jwt } = getAuthData();
     let [post, setPost] = useState<OldDataPost>();
 
+    const [loading, setLoading] = useState<boolean>(false);
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [selectedWorktype, setSelectedWorktype] = useState<number>(post?.attributes.worktype?.data?.id ?? 0);
     const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
@@ -132,6 +133,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
 
     const handleSubmit = async (event: React.FormEvent<any>) => {
         event.preventDefault()
+        setLoading(true)
         try {
             let uploadedImage;
             let uploadedFile;
@@ -178,54 +180,61 @@ export default function EditPostPage({ params: {postId}}: Props) {
         catch (error) {
             console.error('Error', error);
         }
+        finally {
+            setLoading(false)
+        }
     };
     
     return (
-    <Suspense fallback={<Loading />}>
-        <div className='pb-10'>
-            <Header />
-            <div className='px-11 pt-14 pb-8 max-sm:p-6 max-sm:pt-12 max-sm:pb-4'>
-                <Link href={`#${postId}`} onClick={() => window.history.back()}>
-                    <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
-                </Link>
-            </div>
-            <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
-                <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
-                    <div className='space-y-10'>
-                        <InputText placeholder={post?.attributes.title ? post?.attributes.title : 'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
-                        <Textarea placeholder={post?.attributes.description ? post?.attributes.description : 'Описание..'} name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
-                        <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
-                        <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                        <InputFile setFormDataFile={setFormDataFile} existingFile={post?.attributes.file?.data?.attributes?.name} />
-                    </div>
-                    <div className='h-96 max-sm:h-64'>
-                        <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={post?.attributes.photo?.data?.attributes?.url} />
-                        <div className='flex justify-end my-2'>
-                            <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
+    <div>
+        {loading ? ( 
+            <Loading /> // Компонент загрузки
+        ) : (
+            <div className='pb-10'>
+                <Header />
+                <div className='px-11 pt-14 pb-8 max-sm:p-6 max-sm:pt-12 max-sm:pb-4'>
+                    <Link href={`#${postId}`} onClick={() => window.history.back()}>
+                        <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
+                    </Link>
+                </div>
+                <form onSubmit={handleSubmit} className='px-11 py-10 max-sm:p-6'>
+                    <div className='grid grid-cols-2 gap-6 max-lg:grid-cols-1'>
+                        <div className='space-y-10'>
+                            <InputText placeholder={post?.attributes.title ? post?.attributes.title : 'Название..'} name={'title'} value={formData.title} onChange={(e: any) => handleInputChange(e)}/>
+                            <Textarea placeholder={post?.attributes.description ? post?.attributes.description : 'Описание..'} name={'description'} required={true} value={formData.description} onChange={(e: any) => handleInputChange(e)}/>
+                            <InputWorktype selectedWorktype={selectedWorktype} setSelectedWorktype={setSelectedWorktype}/>
+                            <InputTags selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+                            <InputFile setFormDataFile={setFormDataFile} existingFile={post?.attributes.file?.data?.attributes?.name} />
+                        </div>
+                        <div className='h-96 max-sm:h-64'>
+                            <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={post?.attributes.photo?.data?.attributes?.url} />
+                            <div className='flex justify-end my-2'>
+                                <CheckDiploma name={'background'} checked={formData.background} onChange={(e: any) => setFormData({ ...formData, background: e.target.checked })}/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <p className='pt-16 max-sm:pt-40'>Статус:  
-                    {post?.attributes.published === false &&
-                        <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
-                    }
-                    {post?.attributes.published === null && 
-                        <span className='text-blue-800 pl-2'>Отклонен</span>
-                    }
-                    {post?.attributes.published &&
-                        <span className='text-green-700 pl-2'>Опубликован</span> 
-                    }
-                </p>
-                <div className='w-full flex justify-end max-sm:pt-10 max-md:justify-center'>
-                    <button 
-                        type='submit'
-                        className=" w-72 max-sm:w-full h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
-                            Сохранить
-                    </button>
-                </div>
-            </form>
-        </div>
-    </Suspense>
+                    <p className='pt-16 max-sm:pt-40'>Статус:  
+                        {post?.attributes.published === false &&
+                            <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
+                        }
+                        {post?.attributes.published === null && 
+                            <span className='text-blue-800 pl-2'>Отклонен</span>
+                        }
+                        {post?.attributes.published &&
+                            <span className='text-green-700 pl-2'>Опубликован</span> 
+                        }
+                    </p>
+                    <div className='w-full flex justify-end max-sm:pt-10 max-md:justify-center'>
+                        <button 
+                            type='submit'
+                            className=" w-72 max-sm:w-full h-14 font-semibold text-lg text-white bg-zinc-900 hover:bg-white hover:text-black hover:border-black hover:border transition-all">
+                                Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        )}
+    </div>
         
     );
 }
