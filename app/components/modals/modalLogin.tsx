@@ -5,7 +5,7 @@ import { fetcher } from '@/lib/api';
 import { getAuthData, setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
-
+import Loading from '@/app/loading'
 
 
 interface ModalProps {
@@ -30,9 +30,11 @@ const ModalLogin = ({
             "password": ""
         }
     )
+    const [loading, setLoading] = useState<boolean>(false);
     
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setLoading(true)
 
         if (data.password.length < 6) {
             setError('Неверный пароль');
@@ -68,7 +70,7 @@ const ModalLogin = ({
             }
         }
     };
-    
+
     const defineRole = async () => {
         const { id } = getAuthData()
         const fetchData = async () => {     
@@ -92,6 +94,7 @@ const ModalLogin = ({
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>
+            {loading ? ( <Loading />) : (
             <div className="modal-box py-10 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-3 right-6">
                     <form method="dialog">
@@ -123,14 +126,12 @@ const ModalLogin = ({
                             {error && <ErrorMess text={error}></ErrorMess>}
                         </div>
                     </div>
-
                     <button
                         type="submit"
                         className="bg-black mt-12 text-slate-50 w-full h-14 text-lg transition-colors hover:bg-white hover:border hover:text-black hover:border-black"
                     >
                         Войти
                     </button>
-
                     <div className="mt-3 flex justify-end w-full">
                         {/* <button
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
@@ -143,6 +144,7 @@ const ModalLogin = ({
                     </div>
                 </form>
             </div>
+            )}
         </dialog>
     );
 };

@@ -5,6 +5,7 @@ import { getAuthData, setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
+import Loading from '@/app/loading'
 
 
 interface ModalProps {
@@ -27,6 +28,7 @@ const ModalRegister = ({
         }
     )
     const [error, setError] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
 
     const handleChange = (e: any) => {
@@ -36,6 +38,7 @@ const ModalRegister = ({
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setLoading(true)
 
         const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
 
@@ -96,6 +99,7 @@ const ModalRegister = ({
     
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
+            {loading ? ( <Loading />) : (
             <div className="modal-box py-12 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-2 right-6">
                     <form method="dialog">
@@ -144,6 +148,7 @@ const ModalRegister = ({
                     </div>
                 </form>
             </div>
+            )}
         </dialog>
     );
 };
