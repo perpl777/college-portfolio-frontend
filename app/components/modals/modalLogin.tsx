@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 
 import { fetcher } from '@/lib/api';
-import { setAuthData } from '@/lib/auth';
+import { getAuthData, setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
 
@@ -14,7 +14,6 @@ interface ModalProps {
     handleOpenModalRegister: any
     handleOpenModalRecovery: any
 }
-
 
 const ModalLogin = ({ 
     openModalLogin, 
@@ -31,7 +30,7 @@ const ModalLogin = ({
             "password": ""
         }
     )
-
+    
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
@@ -60,7 +59,8 @@ const ModalLogin = ({
                     return;
                 }
                 setAuthData(response);
-                window.location.href = '/';
+                const page = await defineRole()
+                window.location.href = `/${page}`;
             } 
             catch (error) {
                 setError('Неверная почта или пароль');
@@ -69,11 +69,26 @@ const ModalLogin = ({
         }
     };
     
+    const defineRole = async () => {
+        const { id } = getAuthData()
+        const fetchData = async () => {     
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+            return response.role.name
+        }
+        const userRole = await fetchData()
+        
+        if (userRole === "Moderator") {
+            return "moderation"
+        }
+        else {
+            return `myprofile/${id}`
+        }
+        
+    }
     
     const handleChange = (e: any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
-    
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>

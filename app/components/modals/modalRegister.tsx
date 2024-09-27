@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
-import { setAuthData } from '@/lib/auth';
+import { getAuthData, setAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
@@ -68,13 +68,31 @@ const ModalRegister = ({
                     return;
                 }
                 setAuthData(response);
-                window.location.href = '/';
+                const page = await defineRole()
+                window.location.href = `/${page}`;
             }
             catch (error) {
                 console.error('Error:', error);
             }
         }
     };
+
+    const defineRole = async () => {
+        const { id } = getAuthData()
+        const fetchData = async () => {     
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+            return response.role.name
+        }
+        const userRole = await fetchData()
+        
+        if (userRole === "Moderator") {
+            return "moderation"
+        }
+        else {
+            return `myprofile/${id}`
+        }
+        
+    }
     
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
