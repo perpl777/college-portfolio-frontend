@@ -6,7 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { useEffect, useState } from 'react'
 
 interface Props {
-    selectedCourse: number | null;
+    selectedCourse: number | undefined;
     setSelectedCourse: (course: number) => void;
 }
 

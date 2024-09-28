@@ -126,6 +126,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
         } else if (selectedTechnologies.length === 0) {
             setError('Технологии не могут быть пустыми');
         } else {
+            // Проверяем доступность URL
             const urlsToCheck = {
                 github: formData.url_github,
                 behance: formData.url_behance,
@@ -169,10 +170,6 @@ export default function FormProfileEditStudent({studentId}: Props) {
             setSelectedTechnologies(selectedTechIds);
         }
     }, [student]);
-
-    useEffect(() => {     
-        console.log('selectedTechnologies', selectedTechnologies)
-    }, [selectedTechnologies, setSelectedTechnologies]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
