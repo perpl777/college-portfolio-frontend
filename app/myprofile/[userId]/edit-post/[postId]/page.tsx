@@ -215,7 +215,7 @@ export default function EditPostPage({ params: {postId}}: Props) {
                     </div>
                     <p className='pt-16 max-sm:pt-40'>Статус:  
                         {post?.attributes.published === false &&
-                            <span className='text-yellow-700 pl-2'>На рассмотрении</span> 
+                            <span className='text-yellow-700 pl-2'>Проверяется</span> 
                         }
                         {post?.attributes.published === null && 
                             <span className='text-blue-800 pl-2'>Отклонен</span>
