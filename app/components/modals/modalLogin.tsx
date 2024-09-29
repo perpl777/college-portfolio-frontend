@@ -122,6 +122,7 @@ const ModalLogin = ({
                             onClick={handleOpenModalRecovery}
                         >Забыли пароль</button> */}
                         <button
+                            type="button"
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalRegister}
                         >У меня нет аккаунта</button>

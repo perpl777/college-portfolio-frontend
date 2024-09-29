@@ -33,24 +33,34 @@ const ModalRegister = ({
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
+    const validatePassword = (password:string) => {
+        if (password.length < 6) {
+          return 'Пароль должен содержать минимум 6 символов.';
+        }
+        if (!/[a-z]/.test(password)) {
+          return 'Пароль должен содержать минимум одну строчную букву.';
+        }
+        if (!/[A-Z]/.test(password)) {
+          return 'Пароль должен содержать минимум одну заглавную букву.';
+        }
+        if (!/\d/.test(password)) {
+          return 'Пароль должен содержать минимум одну цифру.';
+        }
+        return null;
+      };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users?filters[email][$eq]=${data.email}`);
-
-        if (data.password.length < 6) {
-            setError('Пароль должен содержать не менее 6 символов и хотя бы одну заглавную букву.');
-        }
-          // Проверка настоящего email
-        else if (!isValidEmail(data.email)) {
+        const validationError = validatePassword(data.password);
+        if (validationError) {
+            setError(validationError);
+        } else if (!isValidEmail(data.email)) {
             setError('Пожалуйста, введите настоящий email.');
-        }
-        else if (response.length !== 0) {
+        } else if (response.length !== 0) {
             setError('Пользователь с таким email уже существует.');
-        }
-
-        else {
+        } else {
             try {
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`, {
                     method: 'POST',
@@ -120,6 +130,7 @@ const ModalRegister = ({
 
                     <div className="mt-3 flex justify-end w-full">
                         <button
+                            type="button"
                             className="text-gray-800 font-light hover:text-zinc-400 max-sm:text-sm"
                             onClick={handleOpenModalLogin}
                         >У меня есть аккаунт</button>
