@@ -20,8 +20,6 @@ export default function MyProfile() {
     const { id } = getAuthData();
     const [user, setUser] = useState<UserProps>();
 
-
-    //фетч к юзеру
     useEffect(() => {     
         const fetchData = async () => {     
             const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
@@ -34,7 +32,7 @@ export default function MyProfile() {
         <div>
             { user?.student != null ? (
                 <Suspense fallback={<Loading />}>
-                    <FormProfileEditStudent studentId={user.student.id}/>
+                    <FormProfileEditStudent studentId={user.student?.id}/>
                 </Suspense>
                 ) : (
                 <FormProfileNewStudent />

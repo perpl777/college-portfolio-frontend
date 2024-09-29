@@ -4,36 +4,37 @@ import StatisticsChart from '@/app/components/statistics/chart';
 import { Student } from '@/app/components/interfaces/statistics';
 import { fetcher } from "@/lib/api"
 
+interface Props {
+    studentId: number;
+}
 
-const StatisticsStudent = () => {
-    let [students, setStudents] = useState<Student[]>([]);
-    
-    // const oneYearAgoISO = new Date();
-    // oneYearAgoISO.setFullYear(oneYearAgoISO.getFullYear() - 1);
-
-    //Получение данных из бд
+const StatisticsStudent = ({studentId}: Props) => {
+    let [student, setStudent] = useState<Student[]>([]);
     useEffect(() => {     
         const fetchData = async () => {       
             try {
-                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
+                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${studentId}?populate=*`);
                 const studentsData = responseStudents.data;
-                setStudents(studentsData);
+                setStudent([studentsData]);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
         };
         fetchData();   
     }, []);
+    useEffect(() => {     
+        console.log(student)
+    }, [student]);
 
 return (
     <div className=''>
-        {students ? (
-                <StatisticsChart students={students} />
+        {student ? (
+                <StatisticsChart students={student} />
             ) : (
                 <p>Loading...</p>
             )}
     </div>
-);
+    );
 };
 
 export default StatisticsStudent;

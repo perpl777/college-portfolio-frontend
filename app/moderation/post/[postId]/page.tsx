@@ -210,7 +210,7 @@ export default function Post({ params: {postId}}: Props) {
                             publishedAt={post?.attributes.publishedAt}
                             worktype={post?.attributes.worktype.data.attributes.name}
                             photo={blobPhoto ? URL.createObjectURL(blobPhoto) : ''}
-                            file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : null}
+                            file={fileLoaded ? blobFile ? URL.createObjectURL(blobFile) : '' : undefined}
                             studentName={post.attributes.student.data.attributes.name}
                             studentId={post.attributes.student.data.id}
                         />
