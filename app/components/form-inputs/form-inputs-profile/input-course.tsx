@@ -15,7 +15,7 @@ export default function InputCourse({ selectedCourse, setSelectedCourse }: Props
     const course = [1, 2, 3, 4];
 
     useEffect(() => {
-        if (selectedCourse !== null && course.includes(selectedCourse)) {
+        if (selectedCourse !== undefined && course.includes(selectedCourse)) {
             setDisplayedCourse(selectedCourse);
         }
     }, [course, selectedCourse]);
