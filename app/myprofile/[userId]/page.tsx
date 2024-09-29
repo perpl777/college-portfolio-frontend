@@ -32,9 +32,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     const [activeButton, setActiveButton] = useState<number>(2);
     const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
     const [values, setValues] = useState(['Активность', 'Профиль', 'Работы'])
-    //const values = ['Активность', 'Профиль', 'Работы']
-    // const values = ['Профиль', 'Работы']
-
+   
    //получение email user
     useEffect(() => {
         const userData = Cookies.get('email');
@@ -55,6 +53,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     useEffect(() => {
         if (userRoleAndStudent?.student === null) {
             setValues(['Профиль', 'Работы'])
+            setActiveButton(1)
         }
     }, [userRoleAndStudent])
 
