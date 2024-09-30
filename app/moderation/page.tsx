@@ -14,7 +14,7 @@ interface userInfoProps {
         name: string;
         course: any;
         full_name: string;
-    }
+    }[]
     student: {
         name: string
     }
@@ -112,7 +112,7 @@ export default function ModerationPage() {
 
     const convergenceNames = userInfo.convergences?.map((convergence: any) => convergence.name);
         const filteredData = students.data?.filter((student) =>
-            convergenceNames.some((convergenceName: any) =>
+            convergenceNames?.some((convergenceName: any) =>
                 student.attributes?.convergence?.data?.attributes?.name === convergenceName
             )
         );
