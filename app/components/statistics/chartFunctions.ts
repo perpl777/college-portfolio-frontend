@@ -30,14 +30,16 @@ export const generateChartData = (students: Student[], period: Period): ChartDat
     students.forEach(student => {
       const { posts } = student.attributes;
       posts.data.forEach(post => {
-        const postDate = new Date(post.attributes.publishedAt);
-        if (period === 'неделя' || period === 'месяц') {
-          if (format(postDate, 'dd-MM') === label) {
-            count++;
-          }
-        } else if (period === 'год') {
-          if (format(postDate, 'MM-yyyy') === label) {
-            count++;
+        if (post.attributes.published) {
+          const postDate = new Date(post.attributes.publishedAt);
+          if (period === 'неделя' || period === 'месяц') {
+            if (format(postDate, 'dd-MM') === label) {
+              count++;
+            }
+          } else if (period === 'год') {
+            if (format(postDate, 'MM-yyyy') === label) {
+              count++;
+            }
           }
         }
       });
