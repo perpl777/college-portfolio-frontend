@@ -142,7 +142,7 @@ export default function ModerationPage() {
             { userInfo?.role.name === "Moderator" &&
                 <div>
                     <Header />
-                    <div className="flex justify-between flex-wrap gap-12 lg:flex-nowrap px-11 pt-12 pb-10 max-sm:pt-10 max-sm:pb-4 max-sm:px-6">
+                    <div className="flex justify-between flex-wrap gap-12 lg:flex-nowrap px-11 pt-16 pb-10 max-sm:pt-10 max-sm:pb-2 max-sm:px-4">
                         <SliderWithoutCheckbox values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
                     </div>
                     { selectedBtn === "Профили" 

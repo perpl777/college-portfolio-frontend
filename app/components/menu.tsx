@@ -139,7 +139,7 @@ const Menu: React.FC<MenuProps> = ({ setMenuShow, HandleMenuAppirance }) => {
                     
                 <div className='flex justify-between align-text-bottom items-center py-3 border-b tracking-wide border-black'>
                     
-                    <div className='ml-12 space-x-12 max-sm:ml-6 max-sm:space-x-6 max-sm:text-sm'>
+                    <div className='ml-10 space-x-12 max-sm:ml-6 max-sm:space-x-6 max-sm:text-sm'>
                         <Link href={`/`}>
                             <span className={"menu-nav-elenemt hover:text-gray-400"}>
                                 Главная
@@ -152,7 +152,7 @@ const Menu: React.FC<MenuProps> = ({ setMenuShow, HandleMenuAppirance }) => {
                         </Link>
                     </div>
 
-                    <div className='mr-12 space-x-12 max-sm:mr-6 max-sm:space-x-6 max-sm:text-sm'>
+                    <div className='mr-10 space-x-12 max-sm:mr-6 max-sm:space-x-6 max-sm:text-sm'>
                         {user ? (
                             <>
                                 { userName?.role.name === "Authenticated" &&

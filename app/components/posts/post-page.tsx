@@ -31,12 +31,12 @@ export default function PostPage({postId, title, description, publishedAt, workt
     }
 
     return (
-        <div className='px-11 my-12 flex flex-col justify-between gap-6 max-sm:p-4 max-sm:my-4'>
+        <div className='px-11 my-12 flex flex-col justify-between gap-6 max-sm:p-4 max-sm:my-5'>
             <Link href={`#${postId}`} onClick={() => window.history.back()}>
                 <Image src={ArrowIcon} alt="Arrow Icon" width={25} />
             </Link>
 
-            <div className='flex justify-between pt-4 max-sm:pt-0'>
+            <div className='flex justify-between pt-6 max-sm:pt-4'>
                 <p className='text-sm uppercase'>{worktype}</p>
                 <p className='text-sm opacity-50'>@{publishedAt.slice(0, 4)}</p>
             </div>
@@ -45,10 +45,10 @@ export default function PostPage({postId, title, description, publishedAt, workt
     
             <div className='flex justify-between items-end  max-sm:gap-7'>
                 <div className='w-7/12 max-sm:w-10/12'>
-                    {description && <p className='text-sm opacity-70 pb-14'>{<p dangerouslySetInnerHTML={{ __html: makeLinksClickable(description) }} />}</p>}
+                    {description && <p className='text-sm opacity-70 pb-20'>{<p dangerouslySetInnerHTML={{ __html: makeLinksClickable(description) }} />}</p>}
 
                     <Link href={`/portfolio/${studentId}`}>
-                        <span className='text-sm opacity-70 pb-16 hover:text-cyan-800 transition-colors'>Автор: {studentName}</span>
+                        <span className='text-sm opacity-70 pb-20 hover:text-cyan-800 transition-colors'>Автор: {studentName}</span>
                     </Link>
                 </div>
     
