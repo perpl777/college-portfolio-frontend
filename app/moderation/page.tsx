@@ -10,9 +10,10 @@ import SliderWithoutCheckbox from '../components/slider-without-checkbox/slider-
 
 
 interface userInfoProps {
-    course: any;
-    specialization: {
+    convergences?: {
         name: string;
+        course: any;
+        full_name: string;
     }
     student: {
         name: string
@@ -33,12 +34,13 @@ interface DataStudents {
         name: string;
         patronymic: string;
         pubslished: boolean;
-        course: any;
-        specialization: {
+        convergence?: {
             data: {
                 id: number;
                 attributes: {
                     name: string;
+                    course: any;
+                    full_name: string;
                 }
             }
         }
@@ -88,7 +90,7 @@ export default function ModerationPage() {
 
     useEffect(() => {     
         const fetchData = async () => {     
-            const userInfoResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=specialization,role,student`);
+            const userInfoResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=convergences,role,student`);
             setUserInfo(userInfoResponse)
         };
         fetchData();   
@@ -109,10 +111,9 @@ export default function ModerationPage() {
         if (!students) return [];
         let filteredData = students.data;
 
-        if (userInfo && userInfo.specialization) {
+        if (userInfo && userInfo.convergences) {
             const searchResults = filteredData?.filter(student =>
-                student.attributes?.course === userInfo?.course &&
-                student.attributes?.specialization?.data?.attributes?.name?.toLowerCase() === userInfo?.specialization?.name.toLowerCase()    
+                student.attributes?.convergence?.data?.attributes?.name === userInfo?.convergences?.name   
             );
             filteredData = searchResults;
         }
