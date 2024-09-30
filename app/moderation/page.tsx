@@ -108,18 +108,16 @@ export default function ModerationPage() {
     }, []);
 
     const filteredStudents = useMemo(() => {
-        if (!students) return [];
-        let filteredData = students.data;
+        if (!students || !userInfo) return [];
 
-        if (userInfo && userInfo.convergences) {
-            const searchResults = filteredData?.filter(student =>
-                student.attributes?.convergence?.data?.attributes?.name === userInfo?.convergences?.name   
-            );
-            filteredData = searchResults;
-        }
-    
+    const convergenceNames = userInfo.convergences?.map((convergence: any) => convergence.name);
+        const filteredData = students.data?.filter((student) =>
+            convergenceNames.some((convergenceName: any) =>
+                student.attributes?.convergence?.data?.attributes?.name === convergenceName
+            )
+        );
         return filteredData;
-    }, [students]);
+    }, [students, userInfo]);
     
     const filteredStudentIds = useMemo(() => (
         filteredStudents?.map(student => student.id)
