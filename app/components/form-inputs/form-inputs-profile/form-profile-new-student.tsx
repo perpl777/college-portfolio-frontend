@@ -124,9 +124,7 @@ export default function FormProfileNewStudent() {
         if(await dataCheck()) {
             try {
                 let uploadedImage;
-                console.log('uploadedImage')
                 if (formDataPhoto) {
-                    console.log('formDataPhoto')
                     const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
                         headers: {
                             'Content-Type': 'multipart/form-data',

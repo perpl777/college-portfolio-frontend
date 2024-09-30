@@ -41,11 +41,12 @@ export interface ChartData {
 }
 
 interface Post {
+  id: number;
   attributes: {
-    id: number;
+    title: string;
+    published: boolean;
     publishedAt: string;
     createdAt: string;
-    title: string;
   }
 }
 
