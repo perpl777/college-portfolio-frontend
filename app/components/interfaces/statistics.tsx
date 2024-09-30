@@ -9,8 +9,16 @@ export interface Student {
       name: string;
       surname: string;
       patronymic: string;
-      course: number;
-      specialization: Specialization;
+      convergence?: {
+        data: {
+            id: number;
+            attributes: {
+                name: string;
+                course: any;
+                full_name: string;
+            }
+        }
+      }
       posts: {
         data: Post[];
       }
@@ -33,11 +41,12 @@ export interface ChartData {
 }
 
 interface Post {
+  id: number;
   attributes: {
-    id: number;
+    title: string;
+    published: boolean;
     publishedAt: string;
     createdAt: string;
-    title: string;
   }
 }
 

@@ -27,12 +27,13 @@ export default function StudentsPage() {
         "Все специальности",
         "Информационные системы и программирование", 
         "Реклама", 
-        "Дизайн (по отраслям)", 
+        "Дизайн", 
         "Графический дизайн", 
         "Документационное обеспечение", 
         "Полиграфическое производство",
         "Печатное дело", 
         "Издательское дело",
+        "Издательское дело и реклама",
         "Производство изделий из бумаги и картона", 
     ]
     
@@ -53,7 +54,7 @@ export default function StudentsPage() {
         
         // Фильтрация по специальности
         if (filteredSpecialty) {
-        filteredData = filteredData.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
+        filteredData = filteredData.filter(student => student.attributes.convergence?.data.attributes.full_name === filteredSpecialty);
         }
 
         // Поиск по запросу
@@ -73,7 +74,7 @@ export default function StudentsPage() {
         <div>
             <Header />
 
-            <div className="flex justify-between px-11 pt-24 pb-10 flex-wrap gap-10 lg:flex-nowrap max-sm:p-4 max-sm:pt-14 max-sm:pb-2">
+            <div className="flex justify-between px-11 pt-24 pb-12 flex-wrap gap-10 lg:flex-nowrap max-sm:p-4 max-sm:pt-16 max-sm:pb-2">
                 <Search setSearchQuery={setSearchQuery} placeholder='Найти студента' />
                 <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
             </div>

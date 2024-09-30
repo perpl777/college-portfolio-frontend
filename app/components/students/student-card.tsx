@@ -14,7 +14,7 @@ interface DataStudent {
     url_behance?: string,
     url_github?: string,
     url_vk?: string,
-    specialization: string,
+    specialization?: string,
     photo?: string,
 }
 

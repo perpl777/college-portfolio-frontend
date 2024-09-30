@@ -10,8 +10,7 @@ import VkIcon from '@/public/contacts-icons/bxl-vk 2.svg'
 import BehanceIcon from '@/public/contacts-icons/bxl-behance 2.svg'
 
 import InputTechnology from './input-technology';
-import InputSpecializations from './input-specilalizations';
-import InputCourse from './input-course';
+import InputConvergence from './input-convergence';
 import InputPhoto from '../input-photo';
 import InputText from '../input-text';
 import Textarea from '../textarea';
@@ -27,7 +26,16 @@ interface OldDataStudent {
         surname: string,
         name: string,
         patronymic: string
-        course: number,
+        convergence?: {
+            data: {
+                id: number;
+                attributes: {
+                    name: string;
+                    course: any;
+                    full_name: string;
+                }
+            }
+        }
         about_info: string,
         published: boolean,
         technologies: {
@@ -36,14 +44,6 @@ interface OldDataStudent {
         url_behance?: string,
         url_github?: string,
         url_vk?: string,
-        specialization: {
-            data: {
-                id: number
-                attributes: {
-                    name: string
-                }
-            }
-        },
         photo: any;
     }
 }
@@ -58,9 +58,17 @@ interface Technology {
 interface DataStudent {
     surname: string;
     name: string;
-    patronymic?: string;
-    course: number | undefined;
-    specialization: string
+    patronymic: string;
+    convergence?: {
+        data: {
+            id: number;
+            attributes: {
+                name: string;
+                course: any;
+                full_name: string;
+            }
+        }
+    }
     technologies: string
     about_info: string;
     url_github?: string;
@@ -92,15 +100,13 @@ export default function FormProfileEditStudent({studentId}: Props) {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
-    const [selectedSpecialization, setSelectedSpecialization] = useState<number>(student?.attributes.specialization.data.id ?? 0);
-    const [selectedCourse, setSelectedCourse] = useState<number>(student?.attributes.course ?? 0);
+    const [selectedConvergence, setSelectedConvergence] = useState<number>(student?.attributes?.convergence?.data.id ?? 0);
     const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
     const [formData, setFormData] = useState<DataStudent>({
         surname: '',
         name: '',
         patronymic: '',
-        course: undefined,
-        specialization: '',
+        convergence: undefined,
         about_info: '',
         technologies: '',
         url_github: '',
@@ -117,10 +123,10 @@ export default function FormProfileEditStudent({studentId}: Props) {
             setError('В фамилии не хватает символов');
         } else if (formData.name && !isLengthValid(formData.name, 2, 30)) {
             setError('В имени не хватает символов');
-        } else if (selectedCourse && !isInRange(selectedCourse, 1, 4)) {
-            setError('Курс должен быть от 1 до 4');
-        } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
-            setError('Специализация не может быть пустой');
+        } else if (formData.patronymic && !isLengthValid(formData.patronymic, 2, 60)) {
+            setError('В отчестве не хватает символов');
+        } else if (selectedConvergence === undefined || selectedConvergence === null) {
+            setError('Группа не может быть пустой');
         } else if (formData.about_info && !isLengthValid(formData.about_info, 10, 500)) {
             setError('Информация о себе должна содержать от 10 до 500 символов');
         } else if (selectedTechnologies.length === 0) {
@@ -159,11 +165,8 @@ export default function FormProfileEditStudent({studentId}: Props) {
     }, []);
 
     useEffect(() => {
-        if (student?.attributes?.specialization) {
-            setSelectedSpecialization(student?.attributes.specialization.data.id);
-        }
-        if (student?.attributes?.course) {
-            setSelectedCourse(student.attributes.course);
+        if (student?.attributes?.convergence) {
+            setSelectedConvergence(student?.attributes.convergence.data.id);
         }
         if (student?.attributes?.technologies?.data) {
             const selectedTechIds = student.attributes.technologies.data.map((tech: { id: number }) => tech.id);
@@ -208,8 +211,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
                             surname: formData.surname || student?.attributes.surname,
                             name: formData.name || student?.attributes.name,
                             patronymic: formData.patronymic || student?.attributes.patronymic,
-                            course: selectedCourse || student?.attributes.course,
-                            specialization: selectedSpecialization || student?.attributes.specialization,
+                            convergence: selectedConvergence || student?.attributes.convergence,
                             about_info: formData.about_info || student?.attributes.about_info,
                             technologies: selectedTechnologies || student?.attributes.technologies,
                             url_github: formData.url_github || student?.attributes.url_github,
@@ -219,7 +221,6 @@ export default function FormProfileEditStudent({studentId}: Props) {
                         }
                     }),
                 });
-                //window.location.href = `/myprofile/${id}`;
                 window.location.reload();
             } 
             catch (error) {
@@ -237,7 +238,7 @@ export default function FormProfileEditStudent({studentId}: Props) {
     return (
     <div>
         {loading ? ( 
-            <Loading /> // Компонент загрузки
+            <Loading />
         ) : (
             <form onSubmit={handleSubmit}>
                 <div className='grid grid-cols-2 gap-14 max-lg:grid-cols-1'>
@@ -247,12 +248,11 @@ export default function FormProfileEditStudent({studentId}: Props) {
                             <InputText placeholder={student?.attributes.patronymic ? student?.attributes.patronymic :  'Отчество..'} name={'patronymic'}  value={formData.patronymic} onChange={(e: any) => handleInputChange(e)}/>
                             <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
                             <div className='flex gap-8 max-sm:flex-col'>
-                                <InputSpecializations selectedSpecialization={selectedSpecialization} setSelectedSpecialization={setSelectedSpecialization} />
-                                <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
+                                <InputConvergence selectedConvergence={selectedConvergence} setSelectedConvergence={setSelectedConvergence} />
                             </div>
                     </div>
                     <div className='h-96 mb-10 flex justify-center max-sm:h-64'>
-                    <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={student?.attributes.photo?.data?.attributes?.url} />
+                        <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={student?.attributes.photo?.data?.attributes?.url} />
                     </div>
                 </div>
 

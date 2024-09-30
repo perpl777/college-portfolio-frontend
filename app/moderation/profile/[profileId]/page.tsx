@@ -26,7 +26,6 @@ interface DataStudent {
     attributes: {
         surname: string,
         name: string,
-        course: number,
         about_info: string,
         published?: boolean,
         technologies: {
@@ -39,13 +38,16 @@ interface DataStudent {
         url_behance?: string,
         url_github?: string,
         url_vk?: string,
-        specialization: {
+        convergence?: {
             data: {
+                id: number;
                 attributes: {
-                    name: string
+                    name: string;
+                    course: any;
+                    full_name: string;
                 }
             }
-        },
+        }
         photo?: {
             data: {
                 id: number,
@@ -187,12 +189,12 @@ export default function Profile({ params: {profileId}}: Props) {
                             <StudentCard 
                                 surname={student.attributes?.surname}
                                 name={student.attributes?.name}
-                                course={student.attributes?.course}
+                                course={student.attributes?.convergence?.data.attributes.course}
                                 technologies={technologiesString}
                                 url_behance={student.attributes?.url_behance}
                                 url_github={student.attributes?.url_github}
                                 url_vk={student.attributes?.url_vk}
-                                specialization={student.attributes.specialization.data.attributes.name}
+                                specialization={student.attributes?.convergence?.data.attributes.full_name}
                                 photo={blob ? URL.createObjectURL(blob) : ''}
                             /> 
                         }

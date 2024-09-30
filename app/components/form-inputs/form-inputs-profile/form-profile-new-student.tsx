@@ -10,8 +10,7 @@ import VkIcon from '@/public/contacts-icons/bxl-vk 2.svg'
 import BehanceIcon from '@/public/contacts-icons/bxl-behance 2.svg'
 
 import InputTechnology from './input-technology';
-import InputSpecializations from './input-specilalizations';
-import InputCourse from './input-course';
+import InputConvergence from './input-convergence';
 import InputPhoto from '../input-photo';
 import InputText from '../input-text';
 import Textarea from '../textarea';
@@ -24,9 +23,17 @@ import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/l
 interface DataStudent {
     surname: string;
     name: string;
-    patronymic?: string;
-    course: number | undefined;
-    specialization: string
+    patronymic: string;
+    convergence?: {
+        data: {
+            id: number;
+            attributes: {
+                name: string;
+                course: any;
+                full_name: string;
+            }
+        }
+    }
     technologies: string
     about_info: string;
     url_github?: string;
@@ -44,16 +51,14 @@ export default function FormProfileNewStudent() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [selectedTechnologies, setSelectedTechnologies] = useState<number[]>([]);
-    const [selectedSpecialization, setSelectedSpecialization] = useState<number>();
-    const [selectedCourse, setSelectedCourse] = useState<number>();
+    const [selectedConvergence, setSelectedConvergence] = useState<number>();
 
     const [formDataPhoto, setFormDataPhoto] = useState<FormData | null>(null);
     const [formData, setFormData] = useState<DataStudent>({
         surname: '',
         name: '',
         patronymic: '',
-        course: undefined,
-        specialization: '',
+        convergence: undefined,
         about_info: '',
         technologies: '',
         url_github: '',
@@ -68,10 +73,10 @@ export default function FormProfileNewStudent() {
             setError('Фамилия не может быть пустой');
         } else if (!isNotEmpty(formData.name) && !isLengthValid(formData.name, 2, 30)) {
             setError('Имя не может быть пустым');
-        } else if (!isInRange(selectedCourse, 1, 4)) {
-            setError('Курс должен быть от 1 до 4');
-        } else if (selectedSpecialization === undefined || selectedSpecialization === null) {
-            setError('Специальность не может быть пустой');
+        } else if (!isNotEmpty(formData.patronymic) && !isLengthValid(formData.patronymic, 2, 60)) {
+            setError('В отчестве не хватает символов');
+        } else if (selectedConvergence === undefined || selectedConvergence === null) {
+            setError('Группа не может быть пустой');
         } else if (!isLengthValid(formData.about_info, 10, 500)) {
             setError('Информация о себе должна содержать от 10 до 500 символов');
         } else if (selectedTechnologies.length === 0) {
@@ -119,9 +124,7 @@ export default function FormProfileNewStudent() {
         if(await dataCheck()) {
             try {
                 let uploadedImage;
-                console.log('uploadedImage')
                 if (formDataPhoto) {
-                    console.log('formDataPhoto')
                     const responsePhoto = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_URL_UPLOAD}`, formDataPhoto, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
@@ -142,8 +145,7 @@ export default function FormProfileNewStudent() {
                             user: id,
                             surname: formData.surname,
                             name: formData.name,
-                            course: selectedCourse,
-                            specialization: selectedSpecialization,
+                            convergence: selectedConvergence,
                             about_info: formData.about_info,
                             technologies: selectedTechnologies,
                             ...(formData.url_github && { url_github: formData.url_github }),
@@ -176,27 +178,26 @@ export default function FormProfileNewStudent() {
             <Loading /> // Компонент загрузки
         ) : (
             <form onSubmit={handleSubmit}>
-                <div className='grid grid-cols-2 gap-16 max-lg:grid-cols-1'>
+                <div className='grid grid-cols-2 gap-14 max-lg:grid-cols-1'>
                     <div className='space-y-10'>
                         <InputText placeholder={'Фамилия..'} name={'surname'} value={formData.surname} onChange={(e: any) => handleInputChange(e)}/>
                         <InputText placeholder={'Имя..'} name={'name'} value={formData.name} onChange={(e: any) => handleInputChange(e)}/>
                         <InputText placeholder={'Отчество..'} name={'patronymic'}  value={formData.patronymic} onChange={(e: any) => handleInputChange(e)}/>
                         <InputTechnology selectedTechnologies={selectedTechnologies} setSelectedTechnologies={setSelectedTechnologies}/>
                         <div className='flex gap-8 max-sm:flex-col'>
-                            <InputSpecializations selectedSpecialization={selectedSpecialization} setSelectedSpecialization={setSelectedSpecialization} />
-                            <InputCourse selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
+                            <InputConvergence selectedConvergence={selectedConvergence} setSelectedConvergence={setSelectedConvergence} />
                         </div>
                     </div>
-                    <div className='h-96  mb-10 flex justify-center max-sm:h-64'>
+                    <div className='h-96  mb-8 flex justify-center max-sm:h-64 max-sm:mb-14'>
                         <InputPhoto setFormDataPhoto={setFormDataPhoto} existingPhoto={null} />
                     </div>
                 </div>
 
-                <div className='pt-16'>
+                <div className='pt-14'>
                     <Textarea placeholder='О себе..' name={'about_info'} required={true} value={formData.about_info} onChange={(e: any) => handleInputChange(e)}/>
                 </div>
 
-                <div className='pt-6'>
+                <div className='pt-8'>
                     <InputContacts srcImage={BehanceIcon} placeholder='Ссылка на Behance..' name='url_behance' value={formData.url_behance} onChange={(e: any) => handleInputChange(e)}/>
                     <InputContacts srcImage={GithubIcon} placeholder='Ссылка на Github..' name='url_github' value={formData.url_github} onChange={(e: any) => handleInputChange(e)}/>
                     <InputContacts srcImage={VkIcon} placeholder='Ссылка на Vk..' name='url_vk' value={formData.url_vk} onChange={(e: any) => handleInputChange(e)}/>

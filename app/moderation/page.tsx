@@ -1,20 +1,20 @@
 'use client'
-
 import React, { useEffect, useState, useMemo } from 'react';
-
 import {fetcher} from "@/lib/api"
-
 import { getAuthData } from '@/lib/auth';
 import Cookies from 'js-cookie';
-import Filter from '../components/filter'
-
 import Header from "../components/header";
 import UnpublishedPosts from '../components/posts/unpublished-posts';
 import UnpublishedProfiles from '../components/students/unpublished-profiles';
 import SliderWithoutCheckbox from '../components/slider-without-checkbox/slider-without-checkbox';
 
 
-interface UserRoleProps {
+interface userInfoProps {
+    convergences?: {
+        name: string;
+        course: any;
+        full_name: string;
+    }
     student: {
         name: string
     }
@@ -34,10 +34,13 @@ interface DataStudents {
         name: string;
         patronymic: string;
         pubslished: boolean;
-        specialization: {
+        convergence?: {
             data: {
+                id: number;
                 attributes: {
-                    name: string
+                    name: string;
+                    course: any;
+                    full_name: string;
                 }
             }
         }
@@ -68,7 +71,7 @@ export default function ModerationPage() {
     const { id } = getAuthData();
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [userRole, setUserRole] = useState<UserRoleProps>();
+    const [userInfo, setUserInfo] = useState<userInfoProps>();
 
     const [activeButton, setActiveButton] = useState<number>(0);
     const [selectedBtn, setSelectedBtn] = useState<string>('Профили');
@@ -76,32 +79,19 @@ export default function ModerationPage() {
 
     const [students, setStudents] = useState<StudentsProps>();
     const [posts, setPosts] = useState<PostsProps>();
-    const [filteredSpecialty, setFilteredSpecialty] = useState<string | null>(null);
-    const specialty = [
-        "Все специальности",
-        "Информационные системы и программирование", 
-        "Реклама", 
-        "Дизайн (по отраслям)", 
-        "Графический дизайн", 
-        "Документационное обеспечение", 
-        "Полиграфическое производство",
-        "Печатное дело", 
-        "Издательское дело",
-        "Производство изделий из бумаги и картона", 
-    ]
-
+    
     useEffect(() => {
-        const userData = Cookies.get('email');
-        if (userData) {
-            setUser(userData);
+        const userInfo = Cookies.get('email');
+        if (userInfo) {
+            setUser(userInfo);
         }
         setLoading(false);
     }, []);
 
     useEffect(() => {     
         const fetchData = async () => {     
-            const userDataResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
-            setUserRole(userDataResponse)
+            const userInfoResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=convergences,role,student`);
+            setUserInfo(userInfoResponse)
         };
         fetchData();   
     }, []);
@@ -117,29 +107,21 @@ export default function ModerationPage() {
         fetchData();   
     }, []);
 
-    const filteredStudentsBySpecialization = useMemo(() => {
-        if (!students) return [];
-        let filteredData = students.data;
-        if (filteredSpecialty) {
-            filteredData = filteredData?.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
-        }
-        return filteredData;
-    }, [students, filteredSpecialty]);
-
     const filteredStudents = useMemo(() => {
-        if (!students) return [];
-        let filteredData = students.data?.filter((student: any) => { 
-            return (student.attributes.published === false)
-        });
-        if (filteredSpecialty) {
-            filteredData = filteredData?.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
-        }
-        return filteredData;
-    }, [students, filteredSpecialty]);
+        if (!students || !userInfo) return [];
 
+    const convergenceNames = userInfo.convergences?.map((convergence: any) => convergence.name);
+        const filteredData = students.data?.filter((student) =>
+            convergenceNames.some((convergenceName: any) =>
+                student.attributes?.convergence?.data?.attributes?.name === convergenceName
+            )
+        );
+        return filteredData;
+    }, [students, userInfo]);
+    
     const filteredStudentIds = useMemo(() => (
-        filteredStudentsBySpecialization?.map(student => student.id)
-    ), [filteredStudentsBySpecialization]);
+        filteredStudents?.map(student => student.id)
+    ), [filteredStudents]);
     
     const filteredPosts = useMemo(() => {
         if (!posts) return [];
@@ -157,12 +139,11 @@ export default function ModerationPage() {
         <>
         { user && 
             <>
-            { userRole?.role.name === "Moderator" &&
+            { userInfo?.role.name === "Moderator" &&
                 <div>
                     <Header />
-                    <div className="flex justify-between flex-wrap gap-12 lg:flex-nowrap px-11 pt-12 pb-10 max-sm:pt-10 max-sm:pb-4 max-sm:px-6">
+                    <div className="flex justify-between flex-wrap gap-12 lg:flex-nowrap px-11 pt-16 pb-10 max-sm:pt-10 max-sm:pb-2 max-sm:px-4">
                         <SliderWithoutCheckbox values={values} handleCategoryClick={handleCategoryClick} activeButton={activeButton}/>
-                        <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
                     </div>
                     { selectedBtn === "Профили" 
                     ?

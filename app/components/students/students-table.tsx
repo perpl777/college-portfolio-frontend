@@ -12,10 +12,13 @@ interface DataStudents {
         surname: string;
         name: string;
         patronymic: string;
-        specialization: {
+        convergence?: {
             data: {
+                id: number;
                 attributes: {
-                    name: string
+                    name: string;
+                    course: any;
+                    full_name: string;
                 }
             }
         }
@@ -73,9 +76,9 @@ const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
                                                 {`${student.attributes.surname} 
                                                 ${student.attributes.name} 
                                                 ${student.attributes?.patronymic ? student.attributes?.patronymic : ''}`}
-                                            <p className='pt-4 sm:hidden max-sm:text-gray-500'>{student.attributes.specialization.data.attributes.name}</p>
+                                            <p className='pt-4 sm:hidden max-sm:text-gray-500'>{student.attributes?.convergence?.data?.attributes?.full_name}</p>
                                         </td>
-                                        <td className='w-5/12 max-sm:hidden'>{student.attributes.specialization.data.attributes.name}</td>
+                                        <td className='w-5/12 max-sm:hidden'>{student.attributes?.convergence?.data?.attributes?.full_name}</td>
                                         <td className='max-sm:flex max-sm:items-start'>
                                             {(index === 0 || index === 1 || index === 2)  &&
                                                 <div className='max-sm:w-20 max-sm:text-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>

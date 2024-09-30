@@ -36,12 +36,13 @@ const StatisticsPage = () => {
         "Все специальности",
         "Информационные системы и программирование", 
         "Реклама", 
-        "Дизайн (по отраслям)", 
+        "Дизайн", 
         "Графический дизайн", 
         "Документационное обеспечение", 
         "Полиграфическое производство",
         "Печатное дело", 
         "Издательское дело",
+        "Издательское дело и реклама",
         "Производство изделий из бумаги и картона", 
     ]
 
@@ -82,7 +83,7 @@ const StatisticsPage = () => {
         let filteredData = students;
         
         if (filteredSpecialty) {
-        filteredData = filteredData.filter(student => student.attributes.specialization.data.attributes.name === filteredSpecialty);
+        filteredData = filteredData.filter(student => student.attributes.convergence?.data.attributes.full_name === filteredSpecialty);
         }
 
         return getRatingStudents(filteredData);
