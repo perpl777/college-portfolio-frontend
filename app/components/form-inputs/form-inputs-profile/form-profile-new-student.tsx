@@ -23,7 +23,7 @@ import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/l
 interface DataStudent {
     surname: string;
     name: string;
-    patronymic?: string;
+    patronymic: string;
     convergence?: {
         data: {
             id: number;
@@ -73,6 +73,8 @@ export default function FormProfileNewStudent() {
             setError('Фамилия не может быть пустой');
         } else if (!isNotEmpty(formData.name) && !isLengthValid(formData.name, 2, 30)) {
             setError('Имя не может быть пустым');
+        } else if (!isNotEmpty(formData.patronymic) && !isLengthValid(formData.patronymic, 2, 60)) {
+            setError('В отчестве не хватает символов');
         } else if (selectedConvergence === undefined || selectedConvergence === null) {
             setError('Группа не может быть пустой');
         } else if (!isLengthValid(formData.about_info, 10, 500)) {
