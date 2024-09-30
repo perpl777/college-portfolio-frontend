@@ -34,7 +34,6 @@ const ModalLogin = ({
     
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setLoading(true)
 
         if (data.password.length < 6) {
             setError('Неверный пароль');
@@ -60,6 +59,7 @@ const ModalLogin = ({
                     setError('Неверная почта или пароль');
                     return;
                 }
+                setLoading(true)
                 setAuthData(response);
                 const page = await defineRole()
                 window.location.href = `/${page}`;
@@ -67,6 +67,7 @@ const ModalLogin = ({
             catch (error) {
                 setError('Неверная почта или пароль');
                 console.error('Error:', error);
+                setLoading(false)
             }
         }
     };
