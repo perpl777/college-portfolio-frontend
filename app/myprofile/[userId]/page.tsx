@@ -29,10 +29,14 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     const [loading, setLoading] = useState(true);
     const [userRoleAndStudent, setUserRoleAndStudent] = useState<UserRoleProps>();
 
-    const [activeButton, setActiveButton] = useState<number>(2);
     const [selectedBtn, setSelectedBtn] = useState<string>('Работы');
     const [values, setValues] = useState(['Активность', 'Профиль', 'Работы'])
-   
+    const [activeButton, setActiveButton] = useState<number>(() => {
+        // Читаем из куков значение индекса активной кнопки.
+        const storedIndex = Cookies.get('activeButton');
+        return storedIndex ? parseInt(storedIndex, 10) : 2;
+      });
+    
    //получение email user
     useEffect(() => {
         const userData = Cookies.get('email');
@@ -60,6 +64,7 @@ export default function MyProfilePage({ params: { userId } }: Props) {
     const handleCategoryClick = (index: number, value: string) => {
         setActiveButton(index);
         setSelectedBtn(value);
+        Cookies.set('activeButton', index.toString());
     };
 
     return (
