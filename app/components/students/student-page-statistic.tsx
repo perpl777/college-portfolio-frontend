@@ -22,9 +22,6 @@ const StatisticsStudent = ({studentId}: Props) => {
         };
         fetchData();   
     }, []);
-    useEffect(() => {     
-        console.log(student)
-    }, [student]);
 
 return (
     <div className=''>

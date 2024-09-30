@@ -45,8 +45,6 @@ export default function InputTechnology({ selectedTechnologies, setSelectedTechn
             } else {
                 updatedSelection = [...prevSelected, id];
             }
-            // Log updated selection to console
-            console.log("Selected Technologies IDs:", updatedSelection);
             return updatedSelection;
         });
     };

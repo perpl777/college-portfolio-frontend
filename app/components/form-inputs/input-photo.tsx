@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { ChangeEvent, useRef } from 'react';
-import { isValidImageSize } from '@/lib/utils/validationUtils';
+import { isValidFileSize } from '@/lib/utils/validationUtils'
 import ErrorMess from '../errorMess';
 
 interface Props {
@@ -33,9 +33,10 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
         if (!file) {
             return;
         }
-        const isValid = await isValidImageSize(file, 500, 2000, 800, 5000);
-        if (!isValid) {
-            setError('Изображение должно быть от 500х500 до 5000х5000 пикселей');
+        const isValidSize = await isValidFileSize(file, 20 )
+
+        if (!isValidSize) {
+            setError('Слишком большой файл');
             setBlob(null);
         } else {
             setError('');
@@ -66,7 +67,7 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
             </div>
             <div className="absolute flex flex-col items-center" onClick={handleClick}>
                 <button className="w-48 bg-white h-11 border rounded-[4px] border-gray-500  font-semibold text-base text-black hover:bg-black hover:text-white transition-all">
-                Выбрать файл
+                    Выбрать файл
                 </button>
             </div>
             <div className='overflow-hidden flex justify-center items-center w-full min-h-80 max-h-96'>

@@ -41,17 +41,19 @@ const SliderWithCheckbox = ({values, setSelectedCategory, checkboxChecked, setCh
     }
 
     return  (
-        <div className={`flex items-center space-x-7 ${stylesAdaptive.menu}`}>
-            {values && values.map((value: any, index: any) => (
-                <button
-                    onClick={() => handleCategoryClick(index, value)}
-                    key={index}
-                    className={`text-left text-lg text-black p-2 capitalize ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
-                >
-                    {value}
-                </button>
-            ))}
-            <Checkbox onChange={handleCheckboxChange} checked={checkboxChecked}/>
+        <div>
+            <div className={`flex items-center space-x-7 ${stylesAdaptive.menu}`}>
+                {values && values.map((value: any, index: any) => (
+                    <button
+                        onClick={() => handleCategoryClick(index, value)}
+                        key={index}
+                        className={`text-left text-lg text-black p-2 capitalize ${index === activeButton ? 'border-b-2 border-black' : ''} ${stylesAdaptive.button}`}
+                    >
+                        {value}
+                    </button>
+                ))}
+                <Checkbox onChange={handleCheckboxChange} checked={checkboxChecked}/>
+            </div>
         </div>
     )
 }

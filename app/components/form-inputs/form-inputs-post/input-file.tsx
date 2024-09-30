@@ -1,6 +1,6 @@
 'use client'
 import React, {useState} from 'react';
-import { ChangeEvent, useRef } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link'
 import { isValidFileSize } from '@/lib/utils/validationUtils'
 
@@ -21,7 +21,7 @@ export default function InputFile({ setFormDataFile, existingFile }: Props ) {
         if (!file) {
         return;
         }
-        const isValidSize = await isValidFileSize(file, 10 )
+        const isValidSize = await isValidFileSize(file, 20 )
 
         if (!isValidSize) {
             setError('Слишком большой файл');
