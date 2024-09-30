@@ -199,13 +199,13 @@ export default function Portfolio({ params: { id } }: Props) {
                     }
                 </div>
 
-                <div className="flex justify-end pt-14 pb-20 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-2 max-lg:pb-10">
+                <div className="flex justify-end pt-14 pb-24 px-11 font-light text-xl max-lg:text-lg max-lg:px-6 max-lg:pt-6 max-lg:pb-16">
                     <div className='w-4/6 max-[480px]:w-10/12 text-overflow-ellipsis'>
                         {student?.attributes?.about_info}
                     </div>
                 </div>
 
-                <div className="flex max-lg:flex-col justify-between px-11 pb-4 max-sm:pb-8 max-sm:px-4">
+                <div className="flex max-lg:flex-col justify-between px-11 pb-6 max-sm:pb-10 max-sm:px-4 max-sm:gap-2">
                     <SliderWithCheckbox values={worktypes} setSelectedCategory={setFilteredPost} setCheckboxChecked={setCheckboxChecked} checkboxChecked={checkboxChecked}/>
                     <Search setSearchQuery={setSearchQuery} placeholder='Поиск по тегам'></Search>
                 </div>

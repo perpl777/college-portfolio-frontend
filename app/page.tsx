@@ -176,7 +176,7 @@ export default function Home() {
   return (
     <div>
       <Header /> 
-      <div className='px-11 pt-12 pb-12 space-y-9 max-sm:p-4 max-sm:pb-5 max-sm:pt-8 max-sm:space-y-4 max-lg:space-y-10'>
+      <div className='px-11 pt-14 pb-11 space-y-9 max-sm:p-4 max-sm:pb-5 max-sm:pt-9 max-sm:space-y-5 max-lg:space-y-10'>
         <SliderWithCheckbox 
           values={categories} 
           setSelectedCategory={setSelectedCategory} 

@@ -58,7 +58,7 @@ interface Technology {
 interface DataStudent {
     surname: string;
     name: string;
-    patronymic?: string;
+    patronymic: string;
     convergence?: {
         data: {
             id: number;
@@ -123,6 +123,8 @@ export default function FormProfileEditStudent({studentId}: Props) {
             setError('В фамилии не хватает символов');
         } else if (formData.name && !isLengthValid(formData.name, 2, 30)) {
             setError('В имени не хватает символов');
+        } else if (formData.patronymic && !isLengthValid(formData.patronymic, 2, 60)) {
+            setError('В отчестве не хватает символов');
         } else if (selectedConvergence === undefined || selectedConvergence === null) {
             setError('Группа не может быть пустой');
         } else if (formData.about_info && !isLengthValid(formData.about_info, 10, 500)) {
