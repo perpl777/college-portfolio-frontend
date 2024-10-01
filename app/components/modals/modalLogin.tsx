@@ -5,7 +5,7 @@ import { fetcher } from '@/lib/api';
 import { setAuthData, getAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
-
+import Loading from '@/app/loading'
 
 
 interface ModalProps {
@@ -31,6 +31,7 @@ const ModalLogin = ({
             "password": ""
         }
     )
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -59,6 +60,7 @@ const ModalLogin = ({
                     setError('Неверная почта или пароль');
                     return;
                 }
+                setLoading(true)
                 setAuthData(response);
                 const page = await defineRole()
                 window.location.href = `/${page}`;
@@ -66,6 +68,7 @@ const ModalLogin = ({
             catch (error) {
                 setError('Неверная почта или пароль');
                 console.error('Error:', error);
+                setLoading(false)
             }
         }
     };
@@ -97,6 +100,7 @@ const ModalLogin = ({
 
     return (
         <dialog className="modal bg-black/70" open={openModalLogin}>
+            {loading ? ( <Loading />) : (
             <div className="modal-box py-10 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-3 right-6">
                     <form method="dialog">
@@ -149,6 +153,7 @@ const ModalLogin = ({
                     </div>
                 </form>
             </div>
+            )}
         </dialog>
     );
 };
