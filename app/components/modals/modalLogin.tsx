@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 
 import { fetcher } from '@/lib/api';
-import { setAuthData } from '@/lib/auth';
+import { setAuthData, getAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 import ErrorMess from "../errorMess";
 
@@ -60,7 +60,8 @@ const ModalLogin = ({
                     return;
                 }
                 setAuthData(response);
-                window.location.href = '/';
+                const page = await defineRole()
+                window.location.href = `/${page}`;
             } 
             catch (error) {
                 setError('Неверная почта или пароль');
@@ -68,6 +69,25 @@ const ModalLogin = ({
             }
         }
     };
+
+
+    const defineRole = async () => {
+        const { id } = getAuthData()
+        const fetchData = async () => {     
+            const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=*`);
+            return response.role.name
+        }
+        const userRole = await fetchData()
+        switch (userRole) {
+            case "Moderator": {
+                return "moderation"
+            }
+            case "Statistic": {
+                return "statistic"
+            }
+        }
+        return `myprofile/${id}`
+    }
     
     
     const handleChange = (e: any) => {
