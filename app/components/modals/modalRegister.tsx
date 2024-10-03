@@ -1,10 +1,11 @@
 'use client'
 import React, { useState } from "react";
 import { fetcher } from '@/lib/api';
-import { setAuthData } from '@/lib/auth';
+import { setAuthData, getAuthData } from '@/lib/auth';
 import { isValidEmail } from '@/lib/utils/validationUtils';
 
 import ErrorMess from "../errorMess";
+import Loading from '@/app/loading'
 
 
 interface ModalProps {
@@ -27,6 +28,7 @@ const ModalRegister = ({
         }
     )
     const [error, setError] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
 
     const handleChange = (e: any) => {
@@ -77,17 +79,21 @@ const ModalRegister = ({
                     console.error('Error:', response.error);
                     return;
                 }
+                setLoading(true)
                 setAuthData(response);
-                window.location.href = '/';
+                const { id } = getAuthData()
+                window.location.href = `/myprofile/${id}`;
             }
             catch (error) {
                 console.error('Error:', error);
+                setLoading(false)
             }
         }
     };
     
     return (
         <dialog className="modal bg-black/70" open={openModalRegister}>
+            {loading ? ( <Loading />) : (
             <div className="modal-box py-12 max-sm:w-full rounded-none flex items-center justify-center m-10">
                 <div className="modal-action absolute -top-2 right-6">
                     <form method="dialog">
@@ -137,6 +143,7 @@ const ModalRegister = ({
                     </div>
                 </form>
             </div>
+            )}
         </dialog>
     );
 };
