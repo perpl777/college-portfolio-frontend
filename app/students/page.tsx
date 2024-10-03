@@ -88,6 +88,4 @@ export default function StudentsPage() {
     );
 }
 
-function getRatingStudents(filteredData: Student[]): any {
-    throw new Error('Function not implemented.')
-}
+
