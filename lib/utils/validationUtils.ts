@@ -82,32 +82,53 @@ export const isInRange = (value: number | undefined, min: number, max: number): 
 };
 
 /**
- * Проверяет, соответствует ли изображение заданным размерам
+ * Проверяет, соответствует ли изображение заданным размерам и имеет ли соотношение 16:9
  * @param {File} file - Файл изображения для проверки
- * @param {number} requiredWidthFrom - Требуемая ширина изображения
- * @param {number} requiredWidthTo - Требуемая ширина изображения
- * @param {number} requiredHeightFrom - Требуемая высота изображения
- * @param {number} requiredHeightTo - Требуемая высота изображения
- * @returns {Promise<boolean>} - Возвращает true, если размеры соответствуют, иначе false
+ * @param {number} aspectRatioTolerance - Допустимое отклонение для соотношения сторон (в процентах)
+ * @returns {Promise<Object>} - Возвращает объект с результатами проверки
  */
-export const isValidImageSize = (file: File, requiredWidthFrom: number, requiredWidthTo: number, requiredHeightFrom: number, requiredHeightTo: number): Promise<boolean> => {
+export const isValidImageSizeWithAspect = (
+    file: File, 
+    aspectRatioTolerance: number = 0.05 // допустимое отклонение 5%
+): Promise<{
+    isValidSize: boolean; 
+    isAspectRatioValid: boolean; 
+    errors: string[]; // Указываем тип для массива ошибок
+}> => {
     return new Promise((resolve) => {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         
         img.onload = () => {
-            const isValid = img.width >= requiredWidthFrom 
-            && img.width <= requiredWidthTo
-            && img.height >= requiredHeightFrom
-            && img.height <= requiredHeightTo;
-            resolve(isValid);
+            const results = {
+                isValidSize: true,
+                isAspectRatioValid: true,
+                errors: [] as string[],
+            };
+
+            // Проверка соотношения сторон
+            const aspectRatio = 16 / 9;
+            const actualAspectRatio = img.width / img.height;
+            if (Math.abs((actualAspectRatio / aspectRatio) - 1) > aspectRatioTolerance) {
+                results.isAspectRatioValid = false;
+                results.errors.push('Соотношение сторон должно быть примерно 16:9');
+            }
+
+            resolve(results);
         };
 
         img.onerror = () => {
-            resolve(false); // Если произошла ошибка загрузки изображения
+            resolve({
+                isValidSize: false,
+                isAspectRatioValid: false,
+                errors: ['Ошибка загрузки изображения'],
+            });
         };
     });
 };
+
+
+  
 
 /**
  * Проверяет, соответствует ли размер файла заданным ограничениям
