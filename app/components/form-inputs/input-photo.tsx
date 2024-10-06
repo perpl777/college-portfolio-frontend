@@ -39,16 +39,16 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
         // Проверка размера файла
         const isValidSize = await isValidFileSize(file, 20);
         // Проверка разрешения изображения
-        const isValidResolution = await isValidImageSizeWithAspect(
-            file,
-            aspectRatioTolerance
-        );
+        // const isValidResolution = await isValidImageSizeWithAspect(
+        //     file,
+        //     aspectRatioTolerance
+        // );
 
 
         if (!isValidSize) {
             setError('Слишком большой файл');
             setBlob(null);
-        } else if (isValidSize && isValidResolution.isValidSize && isValidResolution.isAspectRatioValid) {            
+        } else {            
             // Установка состояния для успешной загрузки
             setError('');
             setBlob(file);
@@ -56,16 +56,6 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
             const formDataFile = new FormData();
             formDataFile.append('files', file);
             setFormDataPhoto(formDataFile);
-        } else {
-            // Обработка ошибок
-            if (!isValidSize) {
-                setError('Слишком большой файл');
-                setBlob(null);
-            }
-    
-            if (!isValidResolution.isValidSize || !isValidResolution.isAspectRatioValid) {
-                setError(isValidResolution.errors.join(', ')); // Устанавливаем ошибки в состояние
-            }
         }
     };
 
@@ -75,7 +65,7 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
     };
 
     return (
-        <div className={`relative flex items-center justify-center m-y-4 border border-gray-500 min-h-80 max-h-96 min-w-full`}>
+        <div className={`relative flex items-center justify-center m-y-4 border border-gray-500 max-h-96 min-w-full`}>
             <input 
                 type="file"
                 accept=".png, .jpg, .jpeg"
