@@ -7,6 +7,7 @@ import SliderWithCheckbox from '@/app/components/slider-with-checkbox/slider-wit
 import StudentCard from '@/app/components/students/student-card';
 import Posts from '@/app/components/posts/posts';
 import Search from '@/app/components/search';
+import { useSearchParams } from 'next/navigation';
 
 
 interface Props {
@@ -122,6 +123,11 @@ export default function Portfolio({ params: { id } }: Props) {
     const [checkboxChecked, setCheckboxChecked] = useState<boolean>(true);
     const [technologiesString, setTechnologiesString] = useState("");
 
+    // Полученный топ студента через query-параметр
+    const searchParams = useSearchParams();
+    const top = searchParams.get("top");
+
+
     useEffect(() => {
         const fetchData = async () => {
             const [postsResponse, studentResponse, worktypesResponse] = await Promise.all([
@@ -195,6 +201,7 @@ export default function Portfolio({ params: { id } }: Props) {
                             url_vk={student.attributes?.url_vk}
                             specialization={student.attributes?.convergence?.data.attributes.full_name}
                             photo={blob ? URL.createObjectURL(blob) : ''}
+                            top={Number(top)}
                         /> 
                     }
                 </div>
