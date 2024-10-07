@@ -95,7 +95,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFiltersChange }) =>
                 <label key={filter} className="block px-3 py-1 flex row items-start border-t-2 border-slate-200">
                   <input
                     type="checkbox"
-                    checked={true}
+                    defaultChecked={true}
                     className="checkbox checkbox-xs m-1"
                     onChange={() => toggleFilter(filter)}
                   />
@@ -121,7 +121,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFiltersChange }) =>
                           <label key={item} className="block flex row items-start">
                             <input
                               type="checkbox"
-                              checked={selectedFilters.includes(item)}
+                              defaultChecked={selectedFilters.includes(item)}
                               className="checkbox checkbox-xs m-1"
                               onChange={() => toggleFilter(item)}
                             />

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { ChangeEvent, useRef } from 'react';
-import { isValidFileSize } from '@/lib/utils/validationUtils'
+import { isValidFileSize, isValidImageSizeWithAspect } from '@/lib/utils/validationUtils'
 import ErrorMess from '../errorMess';
 
 interface Props {
@@ -33,15 +33,26 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
         if (!file) {
             return;
         }
-        const isValidSize = await isValidFileSize(file, 20 )
+
+        const aspectRatioTolerance = 0.2;  // 10% допустимого отклонения
+
+        // Проверка размера файла
+        const isValidSize = await isValidFileSize(file, 20);
+        // Проверка разрешения изображения
+        // const isValidResolution = await isValidImageSizeWithAspect(
+        //     file,
+        //     aspectRatioTolerance
+        // );
+
 
         if (!isValidSize) {
             setError('Слишком большой файл');
             setBlob(null);
-        } else {
+        } else {            
+            // Установка состояния для успешной загрузки
             setError('');
             setBlob(file);
-
+    
             const formDataFile = new FormData();
             formDataFile.append('files', file);
             setFormDataPhoto(formDataFile);
@@ -54,7 +65,7 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
     };
 
     return (
-        <div className={`relative flex items-center justify-center m-y-4 border border-gray-500 min-h-80 max-h-96 min-w-full`}>
+        <div className={`relative flex items-center justify-center m-y-4 border border-gray-500 max-h-96 min-w-full`}>
             <input 
                 type="file"
                 accept=".png, .jpg, .jpeg"
@@ -67,7 +78,7 @@ export default function InputPhoto({ setFormDataPhoto, existingPhoto }: Props ) 
             </div>
             <div className="absolute flex flex-col items-center" onClick={handleClick}>
                 <button className="w-48 bg-white h-11 border rounded-[4px] border-gray-500  font-semibold text-base text-black hover:bg-black hover:text-white transition-all">
-                    Выбрать файл
+                    Выбрать фото
                 </button>
             </div>
             <div className='overflow-hidden flex justify-center items-center w-full min-h-80 max-h-96'>
