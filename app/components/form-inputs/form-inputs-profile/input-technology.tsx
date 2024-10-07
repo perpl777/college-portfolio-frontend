@@ -24,7 +24,7 @@ export default function InputTechnology({ selectedTechnologies, setSelectedTechn
 
     useEffect(() => {
         const fetchData = async () => {
-            const techResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/technologies`);
+            const techResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/technologies?pagination[start]=0&pagination[limit]=100`);
             setTechnologies(techResponse.data);
 
             // После получения данных, установка displayedTechnologies на основе selectedTechnologies

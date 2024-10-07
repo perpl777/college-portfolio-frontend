@@ -65,7 +65,7 @@ const StatisticsPage = () => {
     useEffect(() => {     
         const fetchData = async () => {       
             try {
-                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
+                const responseStudents = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*&pagination[start]=0&pagination[limit]=2000`);
                 setStudents(responseStudents.data);
             } catch (error) {
                 console.error("Error fetching data: ", error);
