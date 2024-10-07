@@ -26,7 +26,7 @@ export default function InputConvergence({selectedConvergence, setSelectedConver
 
     useEffect(() => {
         const fetchData = async () => {
-            const convResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/convergences`);
+            const convResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/convergences?pagination[start]=0&pagination[limit]=50`);
             if (convResponse.data && convResponse.data.length > 0) {
                 setConvergence(convResponse.data);
                 const defaultSpec = convResponse.data.find((spec: { id: any }) => spec.id === selectedConvergence);

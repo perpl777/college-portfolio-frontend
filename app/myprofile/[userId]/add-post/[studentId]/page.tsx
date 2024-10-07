@@ -115,7 +115,7 @@ export default function AddPostPage({ params: {studentId}}: Props) {
                     uploadedFile = responseFile.data[0];
                 }
 
-                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts`, {
+                const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?pagination[start]=0&pagination[limit]=25000`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

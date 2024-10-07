@@ -98,10 +98,10 @@ export default function ModerationPage() {
 
     useEffect(() => {     
         const fetchData = async () => {       
-            const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*`);
+            const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*&pagination[start]=0&pagination[limit]=2000`);
             setStudents(studentsResponse);  
 
-            const postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=*`);
+            const postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=*&pagination[start]=0&pagination[limit]=25000`);
             setPosts(postsResponse);
         };
         fetchData();   
