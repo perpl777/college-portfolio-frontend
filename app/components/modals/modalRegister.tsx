@@ -37,19 +37,13 @@ const ModalRegister = ({
 
     const validatePassword = (password:string) => {
         if (password.length < 6) {
-          return 'Пароль должен содержать минимум 6 символов.';
+            return 'Пароль должен содержать минимум 6 символов';
         }
-        if (!/[a-z]/.test(password)) {
-          return 'Пароль должен содержать минимум одну строчную букву.';
-        }
-        if (!/[A-Z]/.test(password)) {
-          return 'Пароль должен содержать минимум одну заглавную букву.';
-        }
-        if (!/\d/.test(password)) {
-          return 'Пароль должен содержать минимум одну цифру.';
+        if (!/[a-zA-Z]/.test(password)) {
+            return 'Пароль должен содержать хотя бы одну букву';
         }
         return null;
-      };
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -59,9 +53,9 @@ const ModalRegister = ({
         if (validationError) {
             setError(validationError);
         } else if (!isValidEmail(data.email)) {
-            setError('Пожалуйста, введите настоящий email.');
+            setError('Пожалуйста, введите настоящий email');
         } else if (response.length !== 0) {
-            setError('Пользователь с таким email уже существует.');
+            setError('Пользователь с таким email уже существует');
         } else {
             try {
                 const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`, {

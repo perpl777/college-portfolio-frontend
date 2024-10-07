@@ -22,7 +22,7 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags`);
+            const tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?pagination[start]=0&pagination[limit]=100`);
             setTags(tagsResponse.data);
         };
         fetchData();
