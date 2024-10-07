@@ -16,10 +16,11 @@ interface DataStudent {
     url_vk?: string,
     specialization?: string,
     photo?: string,
+    top: number
 }
 
 
-const StudentCard = ({surname, name, course, technologies, url_behance, url_github, url_vk, specialization, photo}: DataStudent) => {
+const StudentCard = ({surname, name, course, technologies, url_behance, url_github, url_vk, specialization, photo, top}: DataStudent) => {
     return (
         <div className='flex max-h-[566px] max-lg:inline-block max-lg:max-h-max'>
             {photo && 
@@ -34,8 +35,10 @@ const StudentCard = ({surname, name, course, technologies, url_behance, url_gith
             }
             <div className="bg-gray-50 flex flex-col flex-auto justify-between py-10 px-6">
                 <div className='flex justify-end max-sm:pb-4'>
-                    <p className='w-20 text-gray-500 border border-gray-400 uppercase p-1 text-center montserrat text-sm max-sm:text-xs'>топ 1</p>
-                </div>
+                    {top >= 1 && top <= 3 &&
+                        <p className='w-20 text-gray-500 border border-gray-400 uppercase p-1 text-center montserrat text-sm max-sm:text-xs'>топ {top}</p>
+                    }
+                </div>              
                 <div>
                     <h1 className='titleName font-medium text-6xl max-sm:text-4xl'>
                         {`${name} ${surname}`}

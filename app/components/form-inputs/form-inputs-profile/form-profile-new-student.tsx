@@ -17,7 +17,7 @@ import Textarea from '../textarea';
 import InputContacts from './input-contacts';
 import ErrorMess from '../../errorMess';
 
-import { isNotEmpty, isLengthValid, isValidURL, checkUrls, isInRange } from '@/lib/utils/validationUtils'
+import { isNotEmpty, isLengthValid, checkUrls } from '@/lib/utils/validationUtils'
 
 
 interface DataStudent {
@@ -175,7 +175,7 @@ export default function FormProfileNewStudent() {
     return (
     <div>
         {loading ? ( 
-            <Loading /> // Компонент загрузки
+            <Loading />
         ) : (
             <form onSubmit={handleSubmit}>
                 <div className='grid grid-cols-2 gap-14 max-lg:grid-cols-1'>

@@ -99,10 +99,10 @@ export default function Home() {
   //фетчи
   useEffect(() => {
     const fetchData = async () => {
-        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,photo,student&fields=title&fields=published`);    
+        let postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=worktype,tags,photo,student&fields=title&fields=published&pagination[start]=0&pagination[limit]=250000`);    
         setPosts(postsResponse);
         
-        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=category&fields=name`);        
+        let tagsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=category&fields=name&pagination[start]=0&pagination[limit]=100`);        
         setTags(tagsResponse.data)  
 
         const namesTags = tagsResponse.data.map((tag: any) => tag.attributes.name);      
