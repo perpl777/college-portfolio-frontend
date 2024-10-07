@@ -42,7 +42,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFiltersChange }) =>
   //Получение данных из бд
   useEffect(() => {     
     const fetchData = async () => {       
-    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=*`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags?populate=*&pagination[start]=0&pagination[limit]=100`);
     const data = await response.json();
     setTags(data.data);
     };
