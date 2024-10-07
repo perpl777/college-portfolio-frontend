@@ -41,10 +41,15 @@ interface TableProps {
 const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
     const router = useRouter(); // Используйте useRouter
 
-    const handleRowClick = (studentId: number) => {
+    const handleRowClick = (studentId: number, index: number) => {
         // Программный переход на другую страницу
         if (studentLinks) {
-            router.push(`/${studentLinks.href}/${studentId}`);
+            const href = `/${studentLinks.href}/${studentId}`;
+            
+            // Добавляем index как query-параметр, если он от 0 до 2 (от топ 1 до топ 3)
+            const urlWithQuery = (index >= 0 && index <= 2) ? `${href}?top=${index+1}` : href
+            
+            router.push(urlWithQuery);
         }
     };
 
@@ -69,7 +74,7 @@ const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
                                     <tr 
                                         key={student.id} 
                                         className={`border-b border-black hover:bg-stone-100 hover:cursor-pointer transition-all active:bg-gray-800 active:text-gray-300 active:duration-75`}
-                                        onClick={() => handleRowClick(student.id)}
+                                        onClick={() => handleRowClick(student.id, index)}
                                     >
                                         <td className='w-2/12 max-sm:w-8 max-sm:flex max-sm:items-start'>{index + 1}</td>
                                         <td className='w-4/12 max-sm:w-auto max-sm:pr-0'> 
