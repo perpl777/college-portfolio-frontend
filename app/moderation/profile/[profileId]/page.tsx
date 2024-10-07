@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Header from '@/app/components/header';
 import StudentCard from '@/app/components/students/student-card';
 import Buttons from '@/app/components/btns/accept-reject-btns';
+import { useSearchParams } from 'next/navigation';
 
 interface Props {
     params: {
@@ -123,6 +124,10 @@ export default function Profile({ params: {profileId}}: Props) {
         fetchPhoto();     
     }, [student?.attributes?.photo?.data?.attributes?.url])
 
+   // Полученный топ студента через query-параметр
+   const searchParams = useSearchParams();
+   const top = searchParams.get("top");
+
     const handleRejectStudent = async () => {
         try {
             const response = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students/${profileId}`, {
@@ -195,7 +200,8 @@ export default function Profile({ params: {profileId}}: Props) {
                                 url_github={student.attributes?.url_github}
                                 url_vk={student.attributes?.url_vk}
                                 specialization={student.attributes?.convergence?.data.attributes.full_name}
-                                photo={blob ? URL.createObjectURL(blob) : ''}
+                                photo={blob ? URL.createObjectURL(blob) : '' }
+                                top={Number(top)}
                             /> 
                         }
                     </div>
