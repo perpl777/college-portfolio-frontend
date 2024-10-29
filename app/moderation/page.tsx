@@ -93,18 +93,36 @@ export default function ModerationPage() {
         const fetchData = async () => {     
             const userInfoResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=convergences,role,student`);
             setUserInfo(userInfoResponse) // info moderator
-
-            const unpublishedStudentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*&filters[published][$eq]=false&pagination[start]=0&pagination[limit]=2000`);
-            setUnpublishedStudents(unpublishedStudentsResponse.data); // unpublishedStudents
         };
         fetchData();   
     }, [id]);
 
     useEffect(() => {
-        const fetchUnpublishedPosts = async () => {
+        const fetchData = async () => {
             if (userInfo && userInfo.convergences) {
                 const convergenceNames = userInfo.convergences.map((convergence: any) => convergence.name);
-                const query = qs.stringify({
+                
+                const queryStudent = qs.stringify({
+                    filters: {
+                        published: {
+                            $eq: false
+                        },
+                        convergence: {
+                            name: {
+                                $in: convergenceNames
+                            }
+                        }
+                    },
+                    pagination: {
+                        start: 0,
+                        limit: 25000
+                    },
+                    populate: '*'
+                }, { encodeValuesOnly: true });
+                const unpublishedStudentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?${queryStudent}`);
+                setUnpublishedStudents(unpublishedStudentsResponse.data); // unpublishedStudents
+
+                const queryPost = qs.stringify({
                     filters: {
                         published: {
                             $eq: false
@@ -123,14 +141,13 @@ export default function ModerationPage() {
                     },
                     populate: '*'
                 }, { encodeValuesOnly: true });
-                
-                const unpublishedPostsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?${query}`);
+                const unpublishedPostsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?${queryPost}`);
                 setUnpublishedPosts(unpublishedPostsResponse.data);
             }
         };
     
         if (userInfo) {
-            fetchUnpublishedPosts();
+            fetchData();
         }
     }, [userInfo]);
     
