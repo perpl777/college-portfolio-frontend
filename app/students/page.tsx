@@ -104,7 +104,7 @@ export default function StudentsPage() {
                 <Loading />
             ) : (
                 <div className='px-11 max-sm:p-6'>
-                    <Table students={students?.data} studentLinks={{ href: "portfolio" }}/>
+                    <Table students={students?.data} studentLinks={{ href: "portfolio" }} startIndex={(currentPage-1)*itemsPerPage}/>
                 </div> 
             )}
 
