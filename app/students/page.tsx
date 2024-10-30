@@ -87,6 +87,7 @@ export default function StudentsPage() {
 
 
     const handlePagination = (event: React.ChangeEvent, page: number) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setCurrentPage(page);
     }
 
