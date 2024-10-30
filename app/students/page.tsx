@@ -44,52 +44,52 @@ export default function StudentsPage() {
         "Издательское дело и реклама",
         "Производство изделий из бумаги и картона", 
     ]
-    
-    //фетч
-    // Функция запроса студентов с фильтрами и пагинацией
-    const fetchStudents = async () => {
-        setLoading(true)
-
-        const start = (currentPage - 1) * itemsPerPage;
-        let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*&pagination[start]=${start}&pagination[limit]=${itemsPerPage}`;
-
-        // Добавляем фильтр по специальности, если он выбран
-        if (filteredSpecialty && filteredSpecialty !== "Все специальности") {
-            url += `&filters[convergence][full_name][$eq]=${filteredSpecialty}`;
-        }
-
-        // Добавляем поисковый запрос
-        if (searchQuery) {
-            url += `&filters[$or][0][surname][$containsi]=${searchQuery}&filters[$or][1][name][$containsi]=${searchQuery}`;
-        }
-
-        const response = await fetcher(url);
-        setStudents(response);
-
-        // Обновление общего количества страниц
-        const totalItems = response.meta.pagination.total;
-        setTotalPages(Math.ceil(totalItems / itemsPerPage));
-
-        setLoading(false)
-    };
-
 
     // Обновляем данные при изменении фильтров, поискового запроса или текущей страницы
     useEffect(() => {
+        const fetchStudents = async () => {
+            setLoading(true)
+    
+            const start = (currentPage - 1) * itemsPerPage;
+            let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*&pagination[start]=${start}&pagination[limit]=${itemsPerPage}`;
+    
+            // Добавляем фильтр по специальности, если он выбран
+            if (filteredSpecialty && filteredSpecialty !== "Все специальности") {
+                url += `&filters[convergence][full_name][$eq]=${filteredSpecialty}`;
+            }
+    
+            // Добавляем поисковый запрос
+            if (searchQuery) {
+                url += `&filters[$or][0][surname][$containsi]=${searchQuery}&filters[$or][1][name][$containsi]=${searchQuery}`;
+            }
+    
+            const response = await fetcher(url);
+            setStudents(response);
+    
+            // Обновление общего количества страниц
+            const totalItems = response.meta.pagination.total;
+            setTotalPages(Math.ceil(totalItems / itemsPerPage));
+    
+            setLoading(false)
+        };
         fetchStudents();
     }, [currentPage, filteredSpecialty, searchQuery]);
-
 
     // Сброс текущей страницы при изменении фильтров или поискового запроса
     useEffect(() => {
         setCurrentPage(1);
     }, [filteredSpecialty, searchQuery]);
 
-
-    const handlePagination = (event: React.ChangeEvent, page: number) => {
+    const handlePagination = (event: React.ChangeEvent<unknown>, page: number) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setCurrentPage(page);
     }
+
+    // локальная фильтрация по рейтингу
+    const filteredStudents = useMemo(() => {
+        if (!students) return []
+        return getFiltredStudents(students.data)
+    }, [students])
 
 
     return (
@@ -105,7 +105,7 @@ export default function StudentsPage() {
                 <Loading />
             ) : (
                 <div className='px-11 max-sm:p-6'>
-                    <Table students={students?.data} studentLinks={{ href: "portfolio" }} startIndex={(currentPage-1)*itemsPerPage}/>
+                    <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} startIndex={(currentPage-1)*itemsPerPage}/>
                 </div> 
             )}
 
