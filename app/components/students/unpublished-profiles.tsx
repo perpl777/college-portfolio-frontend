@@ -12,7 +12,7 @@ export default function UnpublishedProfiles({ filteredStudents }: Props) {
             {filteredStudents && filteredStudents.length !== 0
             ?
                 <Suspense fallback={<Loading />}>
-                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }}/>
+                    <Table students={filteredStudents} studentLinks={{ href: `moderation/profile` }} enableRating={false}/>
                 </Suspense>
             :
                 (<div className="text-center text-zinc-400 text-lg mt-16">Все профили проверены</div>)

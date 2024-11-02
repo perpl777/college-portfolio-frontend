@@ -73,7 +73,7 @@ export default function InputTechnology({ selectedTechnologies, setSelectedTechn
                 >
                     {technologies.map((tech: TechnologiesProps) => (
                         <MenuItem key={tech.attributes.name} value={tech.attributes.name} onClick={() => handleCheckboxChange(tech.id)}>
-                            <Checkbox checked={displayedTechnologies.includes(tech.attributes.name)} />
+                            <Checkbox defaultChecked={displayedTechnologies.includes(tech.attributes.name)} />
                             <ListItemText primary={tech.attributes.name} />
                         </MenuItem>
                     ))}

@@ -35,19 +35,22 @@ interface StudentLinkProps {
 interface TableProps {
     students?: DataStudents[];
     studentLinks?: StudentLinkProps;
+    enableRating?: boolean
 }
 
 
-const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
+const Table:FC<TableProps> = ({ students, studentLinks, enableRating = true}: TableProps) => {
     const router = useRouter(); // Используйте useRouter
 
     const handleRowClick = (studentId: number, index: number) => {
         // Программный переход на другую страницу
         if (studentLinks) {
             const href = `/${studentLinks.href}/${studentId}`;
-            
-            // Добавляем index как query-параметр, если он от 0 до 2 (от топ 1 до топ 3)
-            const urlWithQuery = (index >= 0 && index <= 2) ? `${href}?top=${index+1}` : href
+           
+            // Добавляем index в URL, если enableRating включен и index в пределах топ-3
+            const urlWithQuery = enableRating && index >= 0 && index <= 2 
+                ? `${href}?top=${index + 1}` 
+                : href;
             
             router.push(urlWithQuery);
         }
@@ -63,7 +66,9 @@ const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'>Студент</th>
                             <th className='border-b border-black text-sm text-slate-400  font-normal leading-6 max-sm:hidden'>Специальность</th>
-                            <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
+                            {enableRating &&
+                                <th className='border-b border-black text-sm text-slate-400  font-normal leading-6'></th>
+                            }
                         </tr>
                     }
                     </thead>
@@ -84,11 +89,13 @@ const Table:FC<TableProps> = ({ students, studentLinks}: TableProps) => {
                                             <p className='pt-4 sm:hidden max-sm:text-gray-500'>{student.attributes?.convergence?.data?.attributes?.full_name}</p>
                                         </td>
                                         <td className='w-5/12 max-sm:hidden'>{student.attributes?.convergence?.data?.attributes?.full_name}</td>
-                                        <td className='max-sm:flex max-sm:items-start'>
-                                            {(index === 0 || index === 1 || index === 2)  &&
-                                                <div className='max-sm:w-20 max-sm:text-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>
-                                            }
-                                        </td>
+                                        {enableRating &&
+                                            <td className='max-sm:flex max-sm:items-start'>
+                                                {(index === 0 || index === 1 || index === 2)  &&
+                                                    <div className='max-sm:w-20 max-sm:text-gray-500 py-1 text-center montserrat text-xs'>ТОП {index + 1}</div>
+                                                }
+                                            </td>
+                                        }
                                     </tr>
                                 )
                             })}
