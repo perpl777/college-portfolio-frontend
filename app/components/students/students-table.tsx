@@ -35,11 +35,13 @@ interface StudentLinkProps {
 interface TableProps {
     students?: DataStudents[];
     studentLinks?: StudentLinkProps;
+    startIndex?: number;
     enableRating?: boolean
+        
 }
 
 
-const Table:FC<TableProps> = ({ students, studentLinks, enableRating = true}: TableProps) => {
+const Table:FC<TableProps> = ({ students, studentLinks, startIndex=0}: TableProps) => {
     const router = useRouter(); // Используйте useRouter
 
     const handleRowClick = (studentId: number, index: number) => {
@@ -75,6 +77,8 @@ const Table:FC<TableProps> = ({ students, studentLinks, enableRating = true}: Ta
                     <tbody>
                         <Suspense fallback={<Loading />}>
                             {students && students.map((student: any, index: number) => {
+                                index += startIndex
+
                                 return (
                                     <tr 
                                         key={student.id} 

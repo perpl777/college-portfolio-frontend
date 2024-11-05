@@ -11,6 +11,9 @@ import Header from '../components/header'
 import { getFiltredStudents } from '../components/rating/rating';
 import { Student } from '../components/interfaces/statistics'
 
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 interface StudentProps {
     data: Student[];
@@ -18,10 +21,15 @@ interface StudentProps {
 
 
 export default function StudentsPage() {
+    const itemsPerPage = 30;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     
-    let [students, setStudents] = useState<StudentProps>();
+    const [students, setStudents] = useState<StudentProps>();
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredSpecialty, setFilteredSpecialty] = useState<string | null>(null);
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const specialty = [
         "Все специальности",
@@ -36,38 +44,52 @@ export default function StudentsPage() {
         "Издательское дело и реклама",
         "Производство изделий из бумаги и картона", 
     ]
+
+    // Обновляем данные при изменении фильтров, поискового запроса или текущей страницы
+    useEffect(() => {
+        const fetchStudents = async () => {
+            setLoading(true)
     
-    //фетч
-    useEffect(() => {     
-        const fetchData = async () => {       
-            const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*&pagination[start]=0&pagination[limit]=2000`);
-            setStudents(studentsResponse);
+            const start = (currentPage - 1) * itemsPerPage;
+            let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/students?filters[published][$eq]=true&populate=*&pagination[start]=${start}&pagination[limit]=${itemsPerPage}`;
+    
+            // Добавляем фильтр по специальности, если он выбран
+            if (filteredSpecialty && filteredSpecialty !== "Все специальности") {
+                url += `&filters[convergence][full_name][$eq]=${filteredSpecialty}`;
+            }
+    
+            // Добавляем поисковый запрос
+            if (searchQuery) {
+                url += `&filters[$or][0][surname][$containsi]=${searchQuery}&filters[$or][1][name][$containsi]=${searchQuery}`;
+            }
+    
+            const response = await fetcher(url);
+            setStudents(response);
+    
+            // Обновление общего количества страниц
+            const totalItems = response.meta.pagination.total;
+            setTotalPages(Math.ceil(totalItems / itemsPerPage));
+    
+            setLoading(false)
         };
-        fetchData();   
-    }, []);
+        fetchStudents();
+    }, [currentPage, filteredSpecialty, searchQuery]);
 
+    // Сброс текущей страницы при изменении фильтров или поискового запроса
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filteredSpecialty, searchQuery]);
 
-    //фильтр для студентов
+    const handlePagination = (event: React.ChangeEvent<unknown>, page: number) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setCurrentPage(page);
+    }
+
+    // локальная фильтрация по рейтингу
     const filteredStudents = useMemo(() => {
-        if (!students) return [];
-        let filteredData = students.data;
-        
-        // Фильтрация по специальности
-        if (filteredSpecialty) {
-        filteredData = filteredData.filter(student => student.attributes.convergence?.data.attributes.full_name === filteredSpecialty);
-        }
-
-        // Поиск по запросу
-        if (searchQuery) {
-        const searchResults = filteredData.filter(student => 
-            student.attributes.surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            student.attributes.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        filteredData = searchResults;
-        }
-
-        return getFiltredStudents(filteredData);
-    }, [students, filteredSpecialty, searchQuery]);
+        if (!students) return []
+        return getFiltredStudents(students.data)
+    }, [students])
 
 
     return (
@@ -79,11 +101,26 @@ export default function StudentsPage() {
                 <Filter values={specialty} updateFilteredValues={setFilteredSpecialty} type={'rounden-lg'}/>
             </div>
 
-            <div className='px-11 max-sm:p-6'>
-                <Suspense fallback={<Loading />}>
-                    <Table students={filteredStudents} studentLinks={{ href: "portfolio" }}/>
-                </Suspense>
-            </div> 
+            {loading ? ( 
+                <Loading />
+            ) : (
+                <div className='px-11 max-sm:p-6'>
+                    <Table students={filteredStudents} studentLinks={{ href: "portfolio" }} startIndex={(currentPage-1)*itemsPerPage}/>
+                </div> 
+            )}
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-10 mb-20 space-x-2">
+                <Stack spacing={2}>
+                    <Pagination 
+                        count={totalPages} 
+                        shape="rounded" 
+                        size='large' 
+                        page={currentPage} 
+                        onChange={handlePagination}
+                    />
+                </Stack>
+            </div>
         </div>
     );
 }
