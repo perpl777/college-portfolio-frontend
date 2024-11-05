@@ -52,7 +52,7 @@ const SliderWithCheckbox = ({values, setSelectedCategory, checkboxChecked, setCh
                         {value}
                     </button>
                 ))}
-                <Checkbox onChange={handleCheckboxChange} checked={checkboxChecked}/>
+                <Checkbox onChange={handleCheckboxChange} defaultChecked={checkboxChecked}/>
             </div>
         </div>
     )

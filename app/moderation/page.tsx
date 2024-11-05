@@ -8,13 +8,14 @@ import UnpublishedPosts from '../components/posts/unpublished-posts';
 import UnpublishedProfiles from '../components/students/unpublished-profiles';
 import SliderWithoutCheckbox from '../components/slider-without-checkbox/slider-without-checkbox';
 
+import qs from 'qs';
 
 interface userInfoProps {
     convergences?: {
         name: string;
         course: any;
         full_name: string;
-    }
+    }[]
     student: {
         name: string
     }
@@ -33,7 +34,7 @@ interface DataStudents {
         surname: string;
         name: string;
         patronymic: string;
-        pubslished: boolean;
+        published: boolean;
         convergence?: {
             data: {
                 id: number;
@@ -60,9 +61,9 @@ interface DataPosts {
     id: number,
     attributes: {
         student: {
-        data: {
-            id: number
-        }
+            data: {
+                id: number
+            }
         }
     }
 }
@@ -77,8 +78,8 @@ export default function ModerationPage() {
     const [selectedBtn, setSelectedBtn] = useState<string>('Профили');
     const values = ['Профили', 'Работы']
 
-    const [students, setStudents] = useState<StudentsProps>();
-    const [posts, setPosts] = useState<PostsProps>();
+    const [unpublishedStudents, setUnpublishedStudents] = useState<StudentsProps>();
+    const [unpublishedPosts, setUnpublishedPosts] = useState<PostsProps>();
     
     useEffect(() => {
         const userInfo = Cookies.get('email');
@@ -91,44 +92,66 @@ export default function ModerationPage() {
     useEffect(() => {     
         const fetchData = async () => {     
             const userInfoResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}?populate=convergences,role,student`);
-            setUserInfo(userInfoResponse)
+            setUserInfo(userInfoResponse) // info moderator
         };
         fetchData();   
-    }, []);
+    }, [id]);
 
-    useEffect(() => {     
-        const fetchData = async () => {       
-            const studentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?populate=*&pagination[start]=0&pagination[limit]=2000`);
-            setStudents(studentsResponse);  
+    useEffect(() => {
+        const fetchData = async () => {
+            if (userInfo && userInfo.convergences) {
+                const convergenceNames = userInfo.convergences.map((convergence: any) => convergence.name);
+                
+                const queryStudent = qs.stringify({
+                    filters: {
+                        published: {
+                            $eq: false
+                        },
+                        convergence: {
+                            name: {
+                                $in: convergenceNames
+                            }
+                        }
+                    },
+                    pagination: {
+                        start: 0,
+                        limit: 25000
+                    },
+                    populate: '*'
+                }, { encodeValuesOnly: true });
+                const unpublishedStudentsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/students?${queryStudent}`);
+                setUnpublishedStudents(unpublishedStudentsResponse.data); // unpublishedStudents
 
-            const postsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?populate=*&pagination[start]=0&pagination[limit]=25000`);
-            setPosts(postsResponse);
+                const queryPost = qs.stringify({
+                    filters: {
+                        published: {
+                            $eq: false
+                        },
+                        student: {
+                            convergence: {
+                                name: {
+                                    $in: convergenceNames
+                                }
+                            }
+                        }
+                    },
+                    pagination: {
+                        start: 0,
+                        limit: 25000
+                    },
+                    populate: '*'
+                }, { encodeValuesOnly: true });
+                const unpublishedPostsResponse = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/posts?${queryPost}`);
+                setUnpublishedPosts(unpublishedPostsResponse.data);
+            }
         };
-        fetchData();   
-    }, []);
-
-    const filteredStudents = useMemo(() => {
-        if (!students || !userInfo) return [];
-
-    const convergenceNames = userInfo.convergences?.map((convergence: any) => convergence.name);
-        const filteredData = students.data?.filter((student) =>
-            convergenceNames.some((convergenceName: any) =>
-                student.attributes?.convergence?.data?.attributes?.name === convergenceName
-            )
-        );
-        return filteredData;
-    }, [students, userInfo]);
     
-    const filteredStudentIds = useMemo(() => (
-        filteredStudents?.map(student => student.id)
-    ), [filteredStudents]);
+        if (userInfo) {
+            fetchData();
+        }
+    }, [userInfo]);
     
-    const filteredPosts = useMemo(() => {
-        if (!posts) return [];
-        return posts.data?.filter((post: any) => {
-            return post.attributes.published === false && filteredStudentIds?.includes(post.attributes.student.data.id);
-        });
-    }, [posts, filteredStudentIds]);
+    
     
     const handleCategoryClick = (index: number, value: string) => {
         setActiveButton(index);
@@ -147,9 +170,9 @@ export default function ModerationPage() {
                     </div>
                     { selectedBtn === "Профили" 
                     ?
-                        <UnpublishedProfiles filteredStudents={filteredStudents}/>
+                        <UnpublishedProfiles filteredStudents={unpublishedStudents}/>
                     :
-                        <UnpublishedPosts filteredPosts={filteredPosts}/>
+                        <UnpublishedPosts filteredPosts={unpublishedPosts}/>
                     }
                 </div>
             }

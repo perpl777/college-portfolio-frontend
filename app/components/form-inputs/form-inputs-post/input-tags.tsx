@@ -75,7 +75,7 @@ export default function InputTags({selectedTags, setSelectedTags}: Props) {
                         value={tag.attributes.name} 
                         onClick={() => handleCheckboxChange(tag.id)}
                     >
-                        <Checkbox checked={displayedTags.indexOf(tag.attributes.name) > -1} />
+                        <Checkbox defaultChecked={displayedTags.indexOf(tag.attributes.name) > -1} />
                         <ListItemText primary={tag.attributes.name} />
                     </MenuItem>
                 ))}

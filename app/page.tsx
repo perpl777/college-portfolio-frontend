@@ -123,7 +123,7 @@ export default function Home() {
     if (!checkboxChecked && selectedCategory != '') {
       let filteredData = tags.filter((tag: any) => {
         return (
-          tag.attributes.category.data.attributes.name === selectedCategory
+          tag.attributes.category.data?.attributes.name === selectedCategory
         )
       })
       let filteredDataNames = filteredData.map((tag: any) => tag.attributes.name)
@@ -148,7 +148,7 @@ export default function Home() {
         &&
         (checkboxChecked || selectedCategory != '' &&
           tags.some((tag: any) =>
-            tag.attributes.category.data.attributes.name === selectedCategory &&
+            tag.attributes.category.data?.attributes.name === selectedCategory &&
             post.attributes.tags.data.some((postTag: any) =>
               postTag.attributes.name === tag.attributes.name
             )
