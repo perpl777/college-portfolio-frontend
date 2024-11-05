@@ -37,11 +37,10 @@ interface TableProps {
     studentLinks?: StudentLinkProps;
     startIndex?: number;
     enableRating?: boolean
-        
 }
 
 
-const Table:FC<TableProps> = ({ students, studentLinks, startIndex=0}: TableProps) => {
+const Table:FC<TableProps> = ({ students, studentLinks, startIndex=0, enableRating = true}: TableProps) => {
     const router = useRouter(); // Используйте useRouter
 
     const handleRowClick = (studentId: number, index: number) => {
